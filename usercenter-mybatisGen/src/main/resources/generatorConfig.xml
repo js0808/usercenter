@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+
+<generatorConfiguration>
+    <properties resource="generator.properties"/>
+    <context id="MysqlTables" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.SliceTablePlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.SumSelectivePlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.UpdateSqlTextOfUpdateSelectivePlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.WhereSqlTextPlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.OptimisticLockAutoIncreasePlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.BatchInsertPlugin"/>
+        <plugin type="com.github.oceanc.mybatis3.generator.plugin.PaginationPlugin"/>
+
+        <!--去除注释-->
+        <commentGenerator type="DEFAULT">
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库连接-->
+        <jdbcConnection driverClass="${jdbc.driverClass}" connectionURL="${jdbc.url}"
+                        userId="${jdbc.userId}" password="${jdbc.password}"/>
+        <!--生成实体类 指定包名-->
+        <javaModelGenerator targetPackage="cn.org.bjca.footstone.usercenter.dao.model"
+                            targetProject="src/main/result">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成SQLMAP文件-->
+        <sqlMapGenerator targetPackage="mapping" targetProject="src/main/result">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+        <!--生成Dao文件 type属性和父节点的属性targetRuntime="MyBatis3"对应-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.org.bjca.footstone.usercenter.dao.mapper"
+                             targetProject="src/main/result">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <table tableName="test.t_user_info" domainObjectName="User"></table>
+    </context>
+</generatorConfiguration>
