@@ -1,4 +1,4 @@
-package cn.org.bjca.footstone.usercenter.web.controller;
+package cn.org.bjca.footstone.usercenter.web;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

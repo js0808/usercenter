@@ -1,5 +1,8 @@
 package cn.org.bjca.footstone.usercenter.web.interceptors;
 
+import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.LoggerFactory;
@@ -7,10 +10,6 @@ import org.slf4j.MDC;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.WebUtils;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 /**
  * @author: lvyong6
@@ -31,7 +30,7 @@ public class TraceIdInterceptor extends HandlerInterceptorAdapter {
         } catch (Exception e) {
             log.error("[mdc_error]", e);
         }
-        LoggerFactory.getLogger(getClass()).info("__trace_id :{}", traceId);
+        LoggerFactory.getLogger(getClass()).debug("__trace_id :{}", traceId);
         return true;
     }
 

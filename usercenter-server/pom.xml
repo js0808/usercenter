@@ -32,15 +32,15 @@
             </activation>
         </profile>
         <profile>
-            <id>uat</id>
+            <id>aliyun-sit</id>
             <properties>
-                <env>uat</env>
+                <env>aliyun-sit</env>
             </properties>
         </profile>
         <profile>
-            <id>release</id>
+            <id>aliyun-proc</id>
             <properties>
-                <env>release</env>
+                <env>aliyun-proc</env>
             </properties>
         </profile>
     </profiles>

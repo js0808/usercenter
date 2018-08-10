@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  **/
 @Api(value = "用户相关接口", consumes = MediaType.APPLICATION_JSON_VALUE, protocols = "HTTP", description = "用户相关接口")
 @RequestMapping("/demo/xxxx/v1/users")
-public interface UserFacade {
+public interface UserInfoFacade {
 
     @ApiOperation(value = "查询用户信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "查询用户信息")
     @ApiImplicitParams(value = {

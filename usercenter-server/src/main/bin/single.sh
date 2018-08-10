@@ -1,6 +1,6 @@
 #!/bin/bash
 
-APP_NAME="bjca-app-xxx-server"
+APP_NAME="bjca-app-usercenter"
 
 #取当前目录
 BASE_PATH=`cd "$(dirname "$0")"; pwd`
@@ -49,15 +49,15 @@ echo "APP_PATH=$APP_PATH"
 echo "BASE_PATH=$BASE_PATH"
 echo "DEFAULT_JAR=$DEFAULT_JAR"
 echo "CLASS_PATH=$CLASS_PATH"
-echo "LOG_PATH=$LOG_PATH"
-echo "JAVA_OPTS=$JAVA_OPTS"
+echo "LOG_PATH=LOG_PATH"
+echo "JAVA_OPTS=JAVA_OPTS"
 echo "=========env========"
 
 cd $APP_PATH
 ulimit -HSn ${ULIMIT}
 
 exist(){
-			if test $( pgrep -f "$APP_NAME" | wc -l ) -eq 0 
+			if test $( pgrep -f "$APP_NAME" | wc -l ) -eq 0
 			then
 				return 1
 			else
@@ -71,7 +71,7 @@ start(){
 				exit 1
 		else
 	    	cd $APP_PATH
-				nohup java $JAVA_OPTS -cp $CLASS_PATH -jar $DEFAULT_JAR $APP_NAME > $LOG_PATH/console.log 2>&1 &
+				nohup java $JAVA_OPTS -cp $CLASS_PATH -jar $DEFAULT_JAR $APP_NAME > $LOG_PATH/$APP_NAME-console.log 2>&1 &
 				echo "$APP_NAME is started."
 		fi
 }
