@@ -1,6 +1,8 @@
 package cn.org.bjca.footstone.usercenter.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
+import java.io.IOException;
+import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -13,9 +15,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-
 /**
  * @author LvYong
  **/
@@ -23,7 +22,7 @@ import java.io.IOException;
 public class DataSourceConfig {
 
     @Bean(name = "dataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.druid.xxxx")
+    @ConfigurationProperties(prefix = "spring.datasource.druid.default-datasource")
     @Primary
     public DataSource dataSource() {
         return DruidDataSourceBuilder.create().build();

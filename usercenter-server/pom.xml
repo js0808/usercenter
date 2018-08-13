@@ -19,6 +19,11 @@
             <artifactId>usercenter-api</artifactId>
             <version>${api.version}</version>
         </dependency>
+      <dependency>
+        <groupId>cn.org.bjca.footstone.usercenter</groupId>
+        <artifactId>usercenter-dao</artifactId>
+        <version>${api.version}</version>
+      </dependency>
     </dependencies>
 
     <profiles>

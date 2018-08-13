@@ -28,6 +28,7 @@
         <module>usercenter-api</module>
         <module>usercenter-server</module>
         <module>usercenter-mybatisGen</module>
+      <module>usercenter-dao</module>
     </modules>
 
   <dependencies>
