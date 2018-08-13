@@ -1,35 +1,34 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
-import cn.org.bjca.footstone.usercenter.api.vo.response.UserResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
-import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 /**
- * @author LvYong
- * @create 2018-03-06
- **/
+ * @author shuvigoss@gmail.com (ShuWei) 2018/8/13
+ * @since 1.0
+ */
 @Service
 public class UserInfoService {
 
-    @Autowired
-    private UserInfoMapper userInfoMapper;
+  private static final BeanCopier USERINFO_COPIER = BeanCopier
+      .create(UserInfoVo.class, UserInfo.class, false);
 
-    public UserResponse findById(Integer userId) {
-        UserInfoExample example = new UserInfoExample();
-        UserInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andIdEqualTo(userId);
-        List<UserInfo> users = userInfoMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(users)) {
-            return null;
-        }
-        UserInfo user = users.get(0);
-        UserResponse userResponse = new UserResponse();
-        userResponse.setId(user.getId());
-        return userResponse;
-    }
+  @Autowired
+  private UserInfoMapper userInfoMapper;
+
+  public void addUser(UserInfoVo userInfoVo) {
+    UserInfo userInfo = createUserInfo();
+    USERINFO_COPIER.copy(userInfoVo, userInfo, null);
+
+    int i = userInfoMapper.insertSelective(userInfo);
+  }
+
+  private UserInfo createUserInfo() {
+    return new UserInfo();
+  }
+
 }
