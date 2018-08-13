@@ -21,8 +21,8 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--数据库连接-->
-        <jdbcConnection driverClass="${jdbc.driverClass}" connectionURL="${jdbc.url}"
-                        userId="${jdbc.userId}" password="${jdbc.password}"/>
+        <jdbcConnection driverClass="${jdbc.driverClass}" connectionURL="${db.url}"
+                        userId="${db.username}" password="${db.password}"/>
         <!--生成实体类 指定包名-->
         <javaModelGenerator targetPackage="cn.org.bjca.footstone.usercenter.dao.model"
                             targetProject="src/main/result">
