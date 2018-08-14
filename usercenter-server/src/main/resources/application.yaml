@@ -53,6 +53,6 @@ server:
       request-attributes-enabled: false
       rotate: true
 swagger:
-  title: bjca-xxxx
+  title: bjca-usercenter
   description: Starter for swagger 2.x
   version: ${project.version}
