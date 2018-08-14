@@ -20,7 +20,8 @@ public enum ReturnCodeEnum {
 
     SIGN_VERIFY_ERROR(10904005, "验证请求签名错误"),
 
-    ERROR(10909999, "服务端异常");
+    ERROR(10909999, "服务端异常"),
+    MSG_SERVER_ERROR(11000003, "短信消息服务异常: %s"),;
 
 
     /**

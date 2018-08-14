@@ -5,6 +5,7 @@ import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -13,11 +14,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
@@ -65,6 +69,41 @@ public class GloableExceptionHandler {
         resultVo.setData(ImmutableMap.of(ERR_CODE, ReturnCodeEnum.REQ_PARAM_ERR.value(), ERR_MSG,
                                          JSON.toJSONString(fieldErrors)));
         return resultVo;
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public @ResponseBody
+    Object argumentNotvalid(MethodArgumentNotValidException e, HttpServletRequest request) {
+        String path = request.getServletPath();
+        log.error("request {} with parameter validation exception {}", path, e.getMessage());
+
+        return validateResponse(e.getBindingResult().getAllErrors());
+    }
+
+    private Object validateResponse(List<ObjectError> allErrors) {
+        String message;
+        if (CollectionUtils.isEmpty(allErrors)) {
+            message = "参数异常";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            for (ObjectError error : allErrors) {
+                String field;
+                if (error instanceof FieldError) {
+                    field = ((FieldError) error).getField();
+                } else {
+                    field = error.getObjectName();
+                }
+                sb.append("param ").append(field).append(" error ")
+                        .append(error.getDefaultMessage()).append("|");
+            }
+            String msg = sb.toString();
+            message = msg.substring(0, msg.length() - 1);
+        }
+        ReturnResult vo = new ReturnResult(ReturnCodeEnum.REQ_PARAM_ERR.value());
+        vo.setMessage(ReturnCodeEnum.REQ_PARAM_ERR.getDesc());
+        //noinspection unchecked
+        vo.setData(ImmutableMap.of(ERR_CODE, ReturnCodeEnum.REQ_PARAM_ERR.value(), ERR_MSG, message));
+        return vo;
     }
 
     private Map<String, String> processFieldErrors(List<FieldError> fieldErrors) {

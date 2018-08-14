@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/usercenter")
-@Validated
 @Slf4j
 public class AuthCodeController {
 
@@ -31,7 +30,7 @@ public class AuthCodeController {
     private AuthCodeService authCodeService;
 
     @RequestMapping(value = "/codeApply", method = RequestMethod.POST)
-    public ReturnResult codeApply(@RequestBody AuthCodeApplyRequest request) {
+    public ReturnResult codeApply(@Validated @RequestBody AuthCodeApplyRequest request) {
         MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "短信验证码申请交易");
         AuthCodeApplyResponse response = new AuthCodeApplyResponse();
         try {
