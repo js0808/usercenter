@@ -28,6 +28,12 @@ spring:
       FAIL_ON_EMPTY_BEANS: false
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  restpool:
+    max-total: @max.total@
+    max-per-router: @max.per.router@
+    socket-time-out: @socket.time.out@
+    connection-time-out: @connection.time.out@
+    connection-request-time-out: @connection.request.time.out@
 server:
   port: @server.port@
   connection-timeout: 40000
