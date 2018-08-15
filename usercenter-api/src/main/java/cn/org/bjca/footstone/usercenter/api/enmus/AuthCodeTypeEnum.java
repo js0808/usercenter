@@ -10,8 +10,8 @@ import java.util.HashSet;
  */
 public enum AuthCodeTypeEnum {
 
-    REGIST("REGIST", "注册"),
-    RESET("RESET", "重置密码");
+    REGIST("REGIST", "用户注册"),
+    RESET("RESET", "密码重置");
 
     /**
      * The value.
