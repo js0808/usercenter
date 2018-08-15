@@ -65,8 +65,10 @@ public class AuthCodeService {
             if (returnResult.getStatus() != 200) {
                 throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
             }
-            AuthCodeApplyResponse response = null;
-//            returnResult.getData();
+            log.info("data:[{}]", JSONObject.toJSONString(returnResult.getData()));
+
+            AuthCodeApplyResponse response = JSONObject.parseObject(JSONObject.toJSONString(returnResult.getData()),
+                    AuthCodeApplyResponse.class);
             return response;
         } else {
             log.error("status:[{}]", responseEntity.getStatusCode().value());
