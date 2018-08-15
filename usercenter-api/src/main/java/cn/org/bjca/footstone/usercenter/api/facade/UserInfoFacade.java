@@ -2,6 +2,7 @@ package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryUserInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
@@ -40,4 +41,10 @@ public interface UserInfoFacade {
   @ResponseBody
   ReturnResult<UserInfoResponse> modUserSimple(@PathVariable Integer uid,
       @RequestBody UserInfoSimpleVo userInfoSimpleVo);
+
+  @ApiOperation(value = "用户状态变更接口", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "用户状态变更接口")
+  @RequestMapping(value = "/{uid}/status", method = RequestMethod.PUT)
+  @ResponseBody
+  ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Integer uid,
+      @RequestBody UserInfoStatusVo userInfoStatusVo);
 }

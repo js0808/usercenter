@@ -8,6 +8,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryUserInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
@@ -120,7 +121,6 @@ public class UserInfoService {
     if (nonNull(userInfo)) {
       QueryUserInfoResponse rsp = new QueryUserInfoResponse();
       USERINFO2RESPONSE.copy(userInfo, rsp, null);
-      //noinspection unchecked
       return rsp;
     }
     return null;
@@ -136,6 +136,23 @@ public class UserInfoService {
     userInfo.setEmail(userInfoSimpleVo.getEmail());
     userInfo.setHeadImgUrl(userInfoSimpleVo.getHeadImgUrl());
     userInfo.setVersion(old.getVersion() + 1);
+    int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+    if (count != 1) {
+      throw new BaseException(REALNAME_NOT_EXIST, uid);
+    }
+    return buildRsp(userInfo);
+  }
+
+  public UserInfoResponse modUserStatus(Integer uid, UserInfoStatusVo userInfoStatusVo) {
+    UserInfo old = userInfoMapper.selectByPrimaryKey(uid);
+    if (isNull(old)) {
+      throw new BaseException(REALNAME_NOT_EXIST, uid);
+    }
+    UserInfo userInfo = new UserInfo();
+    userInfo.setId(uid);
+    userInfo.setStatus(userInfoStatusVo.getStatus().toString());
+    userInfo.setVersion(old.getVersion() + 1);
+
     int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
     if (count != 1) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);

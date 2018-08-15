@@ -29,7 +29,7 @@ public class RealNameChecker {
     if (Strings.isNullOrEmpty(type)) {
       return null;
     }
-    return context.getBean(type, RealNameVerify.class);
+    return context.getBean(type.toLowerCase(), RealNameVerify.class);
   }
 
 }

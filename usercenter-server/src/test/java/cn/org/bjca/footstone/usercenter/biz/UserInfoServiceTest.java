@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 
 import cn.org.bjca.footstone.usercenter.BaseTest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryUserInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
@@ -79,6 +81,21 @@ public class UserInfoServiceTest extends BaseTest {
     log.info("{}", JSON.toJSONString(userInfo));
     assertNotNull(modUser);
     assertEquals(vo.getEmail(), userInfo.getEmail());
+    userInfoMapper.deleteByPrimaryKey(modUser.getUid());
+  }
+
+  @Test
+  public void modUserStatus() {
+    UserInfoResponse response = addUserMock();
+    UserInfoStatusVo statusVo = new UserInfoStatusVo();
+    statusVo.setStatus(UserInfoStatusEnum.INVALID);
+
+    UserInfoResponse modUser = userInfoService.modUserStatus(response.getUid(), statusVo);
+
+    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(modUser.getUid());
+    log.info("{}", JSON.toJSONString(userInfo));
+    assertNotNull(modUser);
+    assertEquals(statusVo.getStatus().toString(), userInfo.getStatus());
     userInfoMapper.deleteByPrimaryKey(modUser.getUid());
   }
 }

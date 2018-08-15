@@ -10,6 +10,7 @@ import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
  * @create: 2018/8/13
  **/
 @Slf4j
+@Service
 public class EntInfoService {
 
   @Autowired
