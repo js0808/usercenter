@@ -21,6 +21,7 @@ public enum ReturnCodeEnum {
   SIGN_VERIFY_ERROR(10904005, "验证请求签名错误"),
 
   ERROR(10909999, "服务端异常"),
+  MSG_SERVER_ERROR(11000003, "短信消息服务异常: %s"),
 
   REALNAME_TYPE_ERROR(10904006, "错误的实名认证方式"),
   REALNAME_NOT_EXIST(10904007, "未找到实名认证信息uid {0}"),

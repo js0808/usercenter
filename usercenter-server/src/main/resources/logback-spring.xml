@@ -33,7 +33,7 @@
         <appender-ref ref="all_log"/>
     </appender>
     <root level="INFO">
-        <appender-ref ref="all_log"/>
-        <!--<appender-ref ref="STDOUT"/>-->
+        <!--<appender-ref ref="all_log"/>-->
+        <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

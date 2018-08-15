@@ -28,6 +28,21 @@ spring:
       FAIL_ON_EMPTY_BEANS: false
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  restpool:
+    max-total: @max.total@
+    max-per-router: @max.per.router@
+    socket-time-out: @socket.time.out@
+    connection-time-out: @connection.time.out@
+    connection-request-time-out: @connection.request.time.out@
+  redis:
+    host: @redis.host@
+    port: @redis.port@
+    password: @redis.password@
+    pool:
+      max-active: 16
+      max-idle: 16
+      max-wait: -1
+      min-idle: 0
 server:
   port: @server.port@
   connection-timeout: 40000
@@ -47,6 +62,16 @@ server:
       request-attributes-enabled: false
       rotate: true
 swagger:
-  title: bjca-xxxx
+  title: bjca-usercenter
   description: Starter for swagger 2.x
   version: ${project.version}
+authcode:
+  app-id: @authcode.appId@
+  template-id: @authcode.templateId@
+  sign-algo: @authcode.signAlgo@
+  sign-key: @authcode.signKey@
+  codeUrl: @authcode.codeUrl@
+  emailUrl: @authcode.emailUrl@
+  version: @authcode.version@
+  expire: @authcode.expire@
+  fromName: @authcode.fromName@
