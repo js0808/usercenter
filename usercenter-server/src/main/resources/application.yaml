@@ -77,3 +77,7 @@ authcode:
   expire: @authcode.expire@
   deviceId: @authcode.deviceId@
   fromName: @authcode.fromName@
+idservice:
+  user-name: @idservice.userName@
+  password: @idservice.password@
+  check-enterprise: @idservice.check.ent@
