@@ -1,11 +1,18 @@
 package cn.org.bjca.footstone.usercenter.biz.realname.impl;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import cn.org.bjca.footstone.usercenter.BaseTest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
+import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
+import cn.org.bjca.footstone.usercenter.biz.UserInfoService;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameChecker;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
+import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
+import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
@@ -16,13 +23,18 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 1.0
  */
 @Slf4j
-public class NameIdVerifyTest extends BaseTest{
+public class NameIdVerifyTest extends BaseTest {
+
+  @Autowired
+  private UserInfoService userInfoService;
+  @Autowired
+  private UserInfoMapper userInfoMapper;
 
   @Autowired
   private RealNameChecker checker;
 
   @Test
-  public void test(){
+  public void test() {
     RealNameVerify verify = checker.getVerify("name_and_id_num");
     UserInfoVo vo = new UserInfoVo();
     verify.setUserInfoVo(vo);
@@ -36,4 +48,30 @@ public class NameIdVerifyTest extends BaseTest{
     assertTrue(res1.getKey());
     log.info("{}", res1);
   }
+
+  @Test
+  public void testBusinessSuccess() {
+    UserInfoVo vo = new UserInfoVo();
+    vo.setRealNameType("name_and_id_num");
+    vo.setName("a");
+    vo.setIdNum("110101199003079251");
+    UserInfoResponse response = userInfoService.addUser(vo);
+    log.info(JSON.toJSONString(response));
+
+    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(response.getUid());
+    log.info(JSON.toJSONString(userInfo));
+
+    userInfoMapper.deleteByPrimaryKey(response.getUid());
+  }
+
+  @Test(expected = BaseException.class)
+  public void testBusinessFail() {
+    UserInfoVo vo = new UserInfoVo();
+    vo.setRealNameType("name_and_id_num");
+    vo.setName("a");
+    vo.setIdNum("110101199003079251123");
+    UserInfoResponse response = userInfoService.addUser(vo);
+    log.info(JSON.toJSONString(response));
+  }
+
 }

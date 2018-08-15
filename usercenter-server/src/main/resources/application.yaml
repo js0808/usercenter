@@ -75,3 +75,7 @@ authcode:
   version: @authcode.version@
   expire: @authcode.expire@
   fromName: @authcode.fromName@
+usercenter:
+  realname-host: @realname.host@
+  username: @realname.username@
+  password: @realname.password@

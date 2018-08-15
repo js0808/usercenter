@@ -25,7 +25,8 @@ public enum ReturnCodeEnum {
 
   REALNAME_TYPE_ERROR(10904006, "错误的实名认证方式"),
   REALNAME_NOT_EXIST(10904007, "未找到实名认证信息uid {0}"),
-  REALNAME_PARAM_ERROR(10904008, "实名认证参数错误 {0}");
+  REALNAME_PERSON_ERROR(10904008, "个人实名认证信息异常 {0}"),
+  REALNAME_PARAM_ERROR(10904009, "实名认证参数错误 {0}");
 
   /**
    * The value.

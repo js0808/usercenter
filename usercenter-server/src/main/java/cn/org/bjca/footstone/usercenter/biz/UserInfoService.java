@@ -56,7 +56,7 @@ public class UserInfoService {
       throw new BaseException(SQL_EXCEPTION);
     }
 
-    doVerify(userInfo);
+    doVerify(verify, userInfo);
 
     userInfoMapper.updateByPrimaryKeySelective(userInfo);
 
@@ -70,6 +70,7 @@ public class UserInfoService {
     }
     verify.setUserInfoVo(userInfoVo);
     Pair<Boolean, String> pass = verify.checkRequest();
+    log.info("校验基本信息{}", pass);
     if (!pass.getKey()) {
       throw new BaseException(REALNAME_PARAM_ERROR, pass.getValue());
     }
@@ -85,7 +86,8 @@ public class UserInfoService {
   /**
    * 实名认证
    */
-  private void doVerify(UserInfo userInfo) {
+  private void doVerify(RealNameVerify verify, UserInfo userInfo) {
+    verify.verify();
     userInfo.setRealNameFlag(1);
   }
 
