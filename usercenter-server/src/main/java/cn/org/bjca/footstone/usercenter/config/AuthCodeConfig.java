@@ -20,4 +20,6 @@ public class AuthCodeConfig {
     private String codeUrl;
     private String emailUrl;
     private String version;
+    private Integer expire;
+    private String fromName;
 }

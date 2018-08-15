@@ -5,6 +5,7 @@ import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeValidateResponse;
 import cn.org.bjca.footstone.usercenter.biz.AuthCodeService;
@@ -45,14 +46,14 @@ public class AuthCodeController {
         } finally {
             metrics.qps().rt().sr_incrTotal();
         }
-        return ReturnResult.success(null);
+        return ReturnResult.success(response);
     }
 
     @RequestMapping(value = "/emailCodeApply", method = RequestMethod.POST)
-    public ReturnResult emailCodeApply(@RequestBody AuthCodeApplyRequest request) {
+    public ReturnResult emailCodeApply(@RequestBody EmailCodeApplyRequest request) {
         MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "邮件验证码申请交易");
         try {
-            authCodeService.codeApply(request);
+            authCodeService.emailCodeApply(request);
             metrics.sr_incrSuccess();
         } catch (BjcaBizException ex) {
             log.error("emailCodeApply 异常信息", ex);
