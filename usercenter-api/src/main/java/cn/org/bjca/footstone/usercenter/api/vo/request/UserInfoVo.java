@@ -16,7 +16,7 @@ public class UserInfoVo {
   private String idType;
 
   private String idNum;
-  
+
   private String mobile;
 
   private String email;
@@ -30,5 +30,7 @@ public class UserInfoVo {
   private String idCardBackImageUrl;
 
   private String fromPlatform;
+
+  private String realNameType;
 
 }

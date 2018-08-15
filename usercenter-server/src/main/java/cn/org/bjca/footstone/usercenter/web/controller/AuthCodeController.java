@@ -5,6 +5,7 @@ import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeValidateResponse;
 import cn.org.bjca.footstone.usercenter.biz.AuthCodeService;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/usercenter")
-@Validated
 @Slf4j
 public class AuthCodeController {
 
@@ -31,7 +31,7 @@ public class AuthCodeController {
     private AuthCodeService authCodeService;
 
     @RequestMapping(value = "/codeApply", method = RequestMethod.POST)
-    public ReturnResult codeApply(@RequestBody AuthCodeApplyRequest request) {
+    public ReturnResult codeApply(@Validated @RequestBody AuthCodeApplyRequest request) {
         MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "短信验证码申请交易");
         AuthCodeApplyResponse response = new AuthCodeApplyResponse();
         try {
@@ -46,14 +46,14 @@ public class AuthCodeController {
         } finally {
             metrics.qps().rt().sr_incrTotal();
         }
-        return ReturnResult.success(null);
+        return ReturnResult.success(response);
     }
 
     @RequestMapping(value = "/emailCodeApply", method = RequestMethod.POST)
-    public ReturnResult emailCodeApply(@RequestBody AuthCodeApplyRequest request) {
+    public ReturnResult emailCodeApply(@RequestBody EmailCodeApplyRequest request) {
         MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "邮件验证码申请交易");
         try {
-            authCodeService.codeApply(request);
+            authCodeService.emailCodeApply(request);
             metrics.sr_incrSuccess();
         } catch (BjcaBizException ex) {
             log.error("emailCodeApply 异常信息", ex);

@@ -23,6 +23,7 @@
       <commons.lang.version>3.4</commons.lang.version>
       <commons.codec.version>1.10</commons.codec.version>
       <httpcomponents.version>4.3.6</httpcomponents.version>
+      <bouncycastle.version>1.46</bouncycastle.version>
     </properties>
 
     <modules>
@@ -57,6 +58,11 @@
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpclient</artifactId>
           <version>${httpcomponents.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.bouncycastle</groupId>
+          <artifactId>bcprov-jdk16</artifactId>
+          <version>${bouncycastle.version}</version>
       </dependency>
   </dependencies>
 

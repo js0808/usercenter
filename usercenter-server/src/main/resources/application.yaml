@@ -34,6 +34,15 @@ spring:
     socket-time-out: @socket.time.out@
     connection-time-out: @connection.time.out@
     connection-request-time-out: @connection.request.time.out@
+  redis:
+    host: @redis.host@
+    port: @redis.port@
+    password: @redis.password@
+    pool:
+      max-active: 16
+      max-idle: 16
+      max-wait: -1
+      min-idle: 0
 server:
   port: @server.port@
   connection-timeout: 40000
@@ -56,3 +65,13 @@ swagger:
   title: bjca-usercenter
   description: Starter for swagger 2.x
   version: ${project.version}
+authcode:
+  app-id: @authcode.appId@
+  template-id: @authcode.templateId@
+  sign-algo: @authcode.signAlgo@
+  sign-key: @authcode.signKey@
+  codeUrl: @authcode.codeUrl@
+  emailUrl: @authcode.emailUrl@
+  version: @authcode.version@
+  expire: @authcode.expire@
+  fromName: @authcode.fromName@
