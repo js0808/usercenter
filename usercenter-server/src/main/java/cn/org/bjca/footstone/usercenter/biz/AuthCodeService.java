@@ -21,7 +21,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.net.InetAddress;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -52,11 +51,11 @@ public class AuthCodeService {
         send.setMobile(request.getMobile());
         send.setParam("{}");
         send.setExtension("{}");
-        send.setDeviceId(InetAddress.getLocalHost().getHostAddress());
+        send.setDeviceId(authCodeConfig.getDeviceId());
         send.setTemplateId(authCodeConfig.getTemplateId());
         send.setTransId(String.valueOf(System.currentTimeMillis()));
         send.setSignAlgo(authCodeConfig.getSignAlgo());
-        String signStr = SignatureUtils.signatureBean(request, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
+        String signStr = SignatureUtils.signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
         send.setSignature(signStr);
         ResponseEntity<ReturnResult> responseEntity = null;
         responseEntity = post(authCodeConfig.getCodeUrl(), false, ReturnResult.class, send);
@@ -66,7 +65,8 @@ public class AuthCodeService {
             if (returnResult.getStatus() != 200) {
                 throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
             }
-            AuthCodeApplyResponse response = returnResult.getData();
+            AuthCodeApplyResponse response = null;
+//            returnResult.getData();
             return response;
         } else {
             log.error("status:[{}]", responseEntity.getStatusCode().value());
@@ -103,16 +103,21 @@ public class AuthCodeService {
         stringRedisTemplate.opsForValue().set(key, emailCode, authCodeConfig.getExpire(), TimeUnit.SECONDS);
     }
 
-    public void validate(AuthCodeValidateRequest request) {
+    public void validate(AuthCodeValidateRequest request) throws Exception {
         Pattern p = Pattern.compile(regexp);
         Matcher m = p.matcher(request.getUserName());
         if (m.matches()) {
             CodeValidateSend send = new CodeValidateSend();
             send.setAppId(authCodeConfig.getAppId());
+            send.setDeviceId(authCodeConfig.getDeviceId());
+            send.setSignAlgo(authCodeConfig.getSignAlgo());
             send.setMobile(request.getUserName());
             send.setTransId(String.valueOf(System.currentTimeMillis()));
             send.setTemplateId(authCodeConfig.getTemplateId());
+            send.setVersion(authCodeConfig.getVersion());
             send.setAuthCode(request.getAuthCode());
+            String signStr = SignatureUtils.signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
+            send.setSignature(signStr);
             ResponseEntity<ReturnResult> responseEntity = null;
             responseEntity = post(authCodeConfig.getValidateUrl(), false, ReturnResult.class, send);
             log.info("validate post return:[{}]", JSONObject.toJSONString(responseEntity));

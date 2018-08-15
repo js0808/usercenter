@@ -75,4 +75,5 @@ authcode:
   validateUrl: @authcode.validateUrl@
   version: @authcode.version@
   expire: @authcode.expire@
+  deviceId: @authcode.deviceId@
   fromName: @authcode.fromName@

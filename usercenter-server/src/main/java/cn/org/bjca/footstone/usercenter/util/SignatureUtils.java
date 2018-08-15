@@ -36,7 +36,7 @@ public class SignatureUtils {
     public static final String SIGN_ALGORITHMS_SHA1RSA = "SHA1WithRSA";
     public static final String SIGN_ALGORITHMS_SHA256RSA = "SHA256withRSA";
     public static final String SIGN_ALGORITHMS_MD5RSA = "MD5WithRSA";
-    public static final String SIGN_ALGORITHMS_HMAC = "HmacMD5";
+    public static final String SIGN_ALGORITHMS_HMAC = "HmacSHA256";
     //签名类型
     public static final String ALGORITHMS_RSA = "RSA";
     public static final String ENCODING_CHARSET_UTF8 = "UTF-8";
