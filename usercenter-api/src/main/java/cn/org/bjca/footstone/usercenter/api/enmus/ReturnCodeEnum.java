@@ -10,26 +10,29 @@ public enum ReturnCodeEnum {
 
   SUCCESS(200, "成功"),
 
-  REQ_PARAM_ERR(10904001, "请求参数错误"),
+  REQ_PARAM_ERR(60604001, "请求参数错误"),
 
-  SQL_EXCEPTION(10904002, "操作数据库异常"),
+  SQL_EXCEPTION(60604002, "操作数据库异常"),
 
-  APPID_NOT_EXIST(10904003, "接入方ID不存在"),
+  APPID_NOT_EXIST(60604003, "接入方ID不存在"),
 
-  APP_INFO_PUBKEY_ERROR(10904004, "获得接入方公钥错误"),
+  APP_INFO_PUBKEY_ERROR(60604004, "获得接入方公钥错误"),
 
-  SIGN_VERIFY_ERROR(10904005, "验证请求签名错误"),
+  SIGN_VERIFY_ERROR(60604005, "验证请求签名错误"),
 
-  ERROR(10909999, "服务端异常"),
-  MSG_SERVER_ERROR(11000003, "短信消息服务异常: %s"),
+  ERROR(60609999, "服务端异常"),
 
-  REALNAME_TYPE_ERROR(10904006, "错误的实名认证方式"),
-  REALNAME_NOT_EXIST(10904007, "未找到实名认证信息uid {0}"),
-  REALNAME_PARAM_ERROR(10904008, "实名认证参数错误 {0}"),
+  REALNAME_TYPE_ERROR(60604006, "错误的实名认证方式"),
 
-  ID_SERVICE_ERROR(60604006, "身份核实错误[%s]"),
+  REALNAME_NOT_EXIST(60604007, "未找到实名认证信息uid {0}"),
 
-  ID_SERVICE_CONN_ERROR(60604007, "身份核实服务通信异常");
+  REALNAME_PARAM_ERROR(60604008, "实名认证参数错误 {0}"),
+
+  ID_SERVICE_ERROR(60604009, "身份核实错误[%s]"),
+
+  ID_SERVICE_CONN_ERROR(60604010, "身份核实服务通信异常"),
+
+  MSG_SERVER_ERROR(60604011, "短信消息服务异常: %s");
 
   /**
    * The value.
