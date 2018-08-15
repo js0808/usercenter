@@ -19,6 +19,7 @@ public class AuthCodeConfig {
     private String signKey;
     private String codeUrl;
     private String emailUrl;
+    private String validateUrl;
     private String version;
     private Integer expire;
     private String fromName;

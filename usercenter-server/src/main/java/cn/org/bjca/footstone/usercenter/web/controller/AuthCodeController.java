@@ -50,7 +50,7 @@ public class AuthCodeController {
     }
 
     @RequestMapping(value = "/emailCodeApply", method = RequestMethod.POST)
-    public ReturnResult emailCodeApply(@RequestBody EmailCodeApplyRequest request) {
+    public ReturnResult emailCodeApply(@Validated @RequestBody EmailCodeApplyRequest request) {
         MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "邮件验证码申请交易");
         try {
             authCodeService.emailCodeApply(request);
@@ -64,15 +64,14 @@ public class AuthCodeController {
         } finally {
             metrics.qps().rt().sr_incrTotal();
         }
-        return ReturnResult.success(null);
+        return ReturnResult.success("success");
     }
 
     @RequestMapping(value = "/validate", method = RequestMethod.POST)
-    public ReturnResult<AuthCodeValidateResponse> validate(@RequestBody AuthCodeValidateRequest request) {
-        MetricsClient metrics = MetricsClient.newInstance("验证码服务器", "验证码服务", "验证码验证交易");
-        AuthCodeValidateResponse response = new AuthCodeValidateResponse();
+    public ReturnResult validate(@Validated @RequestBody AuthCodeValidateRequest request) {
+        MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码验证", "验证码验证交易");
         try {
-            response = authCodeService.validate(request);
+            authCodeService.validate(request);
             metrics.sr_incrSuccess();
         } catch (BjcaBizException ex) {
             log.error("validate 异常信息", ex);
@@ -83,6 +82,6 @@ public class AuthCodeController {
         } finally {
             metrics.qps().rt().sr_incrTotal();
         }
-        return ReturnResult.success(response);
+        return ReturnResult.success("success");
     }
 }

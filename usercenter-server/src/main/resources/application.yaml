@@ -72,6 +72,7 @@ authcode:
   sign-key: @authcode.signKey@
   codeUrl: @authcode.codeUrl@
   emailUrl: @authcode.emailUrl@
+  validateUrl: @authcode.validateUrl@
   version: @authcode.version@
   expire: @authcode.expire@
   fromName: @authcode.fromName@
