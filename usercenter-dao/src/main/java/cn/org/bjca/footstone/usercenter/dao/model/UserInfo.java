@@ -4,266 +4,255 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UserInfo implements Serializable {
+    private Integer id;
 
-  private Integer id;
+    private String headImgUrl;
 
-  private Integer uid;
+    private String name;
 
-  private String headImgUrl;
+    private String idType;
 
-  private String name;
+    private String idNum;
 
-  private String idType;
+    private String mobile;
 
-  private String idNum;
+    private String email;
 
-  private String mobile;
+    private Integer realNameFlag;
 
-  private String email;
+    private String realNameType;
 
-  private Integer realNameFlag;
+    private Boolean reviewFlag;
 
-  private String realNameType;
+    private String bankCardNum;
 
-  private Boolean reviewFlag;
+    private String faceIdImageUrl;
 
-  private String bankCardNum;
+    private String idCardFrontImageUrl;
 
-  private String faceIdImageUrl;
+    private String idCardBackImageUrl;
 
-  private String idCardFrontImageUrl;
+    private String fromPlatform;
 
-  private String idCardBackImageUrl;
+    private String status;
 
-  private String fromPlatform;
+    private String extField1;
 
-  private String status;
+    private String extField2;
 
-  private String extField1;
+    private String extField3;
 
-  private String extField2;
+    private String extField4;
 
-  private String extField3;
+    private String extConfig;
 
-  private String extField4;
+    private Integer version;
 
-  private String extConfig;
+    private Date createTime;
 
-  private Integer version;
+    private Date updateTime;
 
-  private Date createTime;
+    private static final long serialVersionUID = 1L;
 
-  private Date updateTime;
+    private String updateSql;
 
-  private static final long serialVersionUID = 1L;
+    public Integer getId() {
+        return id;
+    }
 
-  private String updateSql;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-  public Integer getId() {
-    return id;
-  }
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl == null ? null : headImgUrl.trim();
+    }
 
-  public Integer getUid() {
-    return uid;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setUid(Integer uid) {
-    this.uid = uid;
-  }
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
 
-  public String getHeadImgUrl() {
-    return headImgUrl;
-  }
+    public String getIdType() {
+        return idType;
+    }
 
-  public void setHeadImgUrl(String headImgUrl) {
-    this.headImgUrl = headImgUrl == null ? null : headImgUrl.trim();
-  }
+    public void setIdType(String idType) {
+        this.idType = idType == null ? null : idType.trim();
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getIdNum() {
+        return idNum;
+    }
 
-  public void setName(String name) {
-    this.name = name == null ? null : name.trim();
-  }
+    public void setIdNum(String idNum) {
+        this.idNum = idNum == null ? null : idNum.trim();
+    }
 
-  public String getIdType() {
-    return idType;
-  }
+    public String getMobile() {
+        return mobile;
+    }
 
-  public void setIdType(String idType) {
-    this.idType = idType == null ? null : idType.trim();
-  }
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
+    }
 
-  public String getIdNum() {
-    return idNum;
-  }
-
-  public void setIdNum(String idNum) {
-    this.idNum = idNum == null ? null : idNum.trim();
-  }
-
-  public String getMobile() {
-    return mobile;
-  }
-
-  public void setMobile(String mobile) {
-    this.mobile = mobile == null ? null : mobile.trim();
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email == null ? null : email.trim();
-  }
-
-  public Integer getRealNameFlag() {
-    return realNameFlag;
-  }
-
-  public void setRealNameFlag(Integer realNameFlag) {
-    this.realNameFlag = realNameFlag;
-  }
-
-  public String getRealNameType() {
-    return realNameType;
-  }
-
-  public void setRealNameType(String realNameType) {
-    this.realNameType = realNameType == null ? null : realNameType.trim();
-  }
-
-  public Boolean getReviewFlag() {
-    return reviewFlag;
-  }
-
-  public void setReviewFlag(Boolean reviewFlag) {
-    this.reviewFlag = reviewFlag;
-  }
-
-  public String getBankCardNum() {
-    return bankCardNum;
-  }
-
-  public void setBankCardNum(String bankCardNum) {
-    this.bankCardNum = bankCardNum == null ? null : bankCardNum.trim();
-  }
-
-  public String getFaceIdImageUrl() {
-    return faceIdImageUrl;
-  }
-
-  public void setFaceIdImageUrl(String faceIdImageUrl) {
-    this.faceIdImageUrl = faceIdImageUrl == null ? null : faceIdImageUrl.trim();
-  }
-
-  public String getIdCardFrontImageUrl() {
-    return idCardFrontImageUrl;
-  }
-
-  public void setIdCardFrontImageUrl(String idCardFrontImageUrl) {
-    this.idCardFrontImageUrl = idCardFrontImageUrl == null ? null : idCardFrontImageUrl.trim();
-  }
-
-  public String getIdCardBackImageUrl() {
-    return idCardBackImageUrl;
-  }
-
-  public void setIdCardBackImageUrl(String idCardBackImageUrl) {
-    this.idCardBackImageUrl = idCardBackImageUrl == null ? null : idCardBackImageUrl.trim();
-  }
-
-  public String getFromPlatform() {
-    return fromPlatform;
-  }
-
-  public void setFromPlatform(String fromPlatform) {
-    this.fromPlatform = fromPlatform == null ? null : fromPlatform.trim();
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public void setStatus(String status) {
-    this.status = status == null ? null : status.trim();
-  }
-
-  public String getExtField1() {
-    return extField1;
-  }
-
-  public void setExtField1(String extField1) {
-    this.extField1 = extField1 == null ? null : extField1.trim();
-  }
-
-  public String getExtField2() {
-    return extField2;
-  }
-
-  public void setExtField2(String extField2) {
-    this.extField2 = extField2 == null ? null : extField2.trim();
-  }
-
-  public String getExtField3() {
-    return extField3;
-  }
-
-  public void setExtField3(String extField3) {
-    this.extField3 = extField3 == null ? null : extField3.trim();
-  }
-
-  public String getExtField4() {
-    return extField4;
-  }
-
-  public void setExtField4(String extField4) {
-    this.extField4 = extField4 == null ? null : extField4.trim();
-  }
-
-  public String getExtConfig() {
-    return extConfig;
-  }
-
-  public void setExtConfig(String extConfig) {
-    this.extConfig = extConfig == null ? null : extConfig.trim();
-  }
-
-  public Integer getVersion() {
-    return version;
-  }
-
-  public void setVersion(Integer version) {
-    this.version = version;
-  }
-
-  public Date getCreateTime() {
-    return createTime;
-  }
-
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
-
-  public Date getUpdateTime() {
-    return updateTime;
-  }
-
-  public void setUpdateTime(Date updateTime) {
-    this.updateTime = updateTime;
-  }
-
-  public String getUpdateSql() {
-    return this.updateSql;
-  }
-
-  public void setUpdateSql(String updateSql) {
-    this.updateSql = updateSql;
-  }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
+    public Integer getRealNameFlag() {
+        return realNameFlag;
+    }
+
+    public void setRealNameFlag(Integer realNameFlag) {
+        this.realNameFlag = realNameFlag;
+    }
+
+    public String getRealNameType() {
+        return realNameType;
+    }
+
+    public void setRealNameType(String realNameType) {
+        this.realNameType = realNameType == null ? null : realNameType.trim();
+    }
+
+    public Boolean getReviewFlag() {
+        return reviewFlag;
+    }
+
+    public void setReviewFlag(Boolean reviewFlag) {
+        this.reviewFlag = reviewFlag;
+    }
+
+    public String getBankCardNum() {
+        return bankCardNum;
+    }
+
+    public void setBankCardNum(String bankCardNum) {
+        this.bankCardNum = bankCardNum == null ? null : bankCardNum.trim();
+    }
+
+    public String getFaceIdImageUrl() {
+        return faceIdImageUrl;
+    }
+
+    public void setFaceIdImageUrl(String faceIdImageUrl) {
+        this.faceIdImageUrl = faceIdImageUrl == null ? null : faceIdImageUrl.trim();
+    }
+
+    public String getIdCardFrontImageUrl() {
+        return idCardFrontImageUrl;
+    }
+
+    public void setIdCardFrontImageUrl(String idCardFrontImageUrl) {
+        this.idCardFrontImageUrl = idCardFrontImageUrl == null ? null : idCardFrontImageUrl.trim();
+    }
+
+    public String getIdCardBackImageUrl() {
+        return idCardBackImageUrl;
+    }
+
+    public void setIdCardBackImageUrl(String idCardBackImageUrl) {
+        this.idCardBackImageUrl = idCardBackImageUrl == null ? null : idCardBackImageUrl.trim();
+    }
+
+    public String getFromPlatform() {
+        return fromPlatform;
+    }
+
+    public void setFromPlatform(String fromPlatform) {
+        this.fromPlatform = fromPlatform == null ? null : fromPlatform.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
+    public String getExtField1() {
+        return extField1;
+    }
+
+    public void setExtField1(String extField1) {
+        this.extField1 = extField1 == null ? null : extField1.trim();
+    }
+
+    public String getExtField2() {
+        return extField2;
+    }
+
+    public void setExtField2(String extField2) {
+        this.extField2 = extField2 == null ? null : extField2.trim();
+    }
+
+    public String getExtField3() {
+        return extField3;
+    }
+
+    public void setExtField3(String extField3) {
+        this.extField3 = extField3 == null ? null : extField3.trim();
+    }
+
+    public String getExtField4() {
+        return extField4;
+    }
+
+    public void setExtField4(String extField4) {
+        this.extField4 = extField4 == null ? null : extField4.trim();
+    }
+
+    public String getExtConfig() {
+        return extConfig;
+    }
+
+    public void setExtConfig(String extConfig) {
+        this.extConfig = extConfig == null ? null : extConfig.trim();
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateSql() {
+        return this.updateSql;
+    }
+
+    public void setUpdateSql(String updateSql) {
+        this.updateSql = updateSql;
+    }
 }
