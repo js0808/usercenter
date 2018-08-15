@@ -75,9 +75,12 @@ authcode:
   validateUrl: @authcode.validateUrl@
   version: @authcode.version@
   expire: @authcode.expire@
+  deviceId: @authcode.deviceId@
   fromName: @authcode.fromName@
-    deviceId: @authcode.deviceId@
-    fromName: @authcode.fromName@
+idservice:
+  user-name: @idservice.userName@
+  password: @idservice.password@
+  check-enterprise: @idservice.check.ent@
 usercenter:
   realname-host: @realname.host@
   username: @realname.username@

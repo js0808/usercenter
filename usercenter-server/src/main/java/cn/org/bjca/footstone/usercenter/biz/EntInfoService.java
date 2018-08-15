@@ -39,6 +39,12 @@ public class EntInfoService {
   @Value("${idservice.checkEnterprise}")
   private String checkEntUrl = null;
 
+  @Value("${idservice.userName}")
+  private String userName = null;
+
+  @Value("${idservice.password}")
+  private String password = null;
+
   @Autowired
   private EntInfoMapper entInfoMapper;
 
@@ -58,16 +64,16 @@ public class EntInfoService {
     String socialCreditCode = entInfoCheakRequest.getSocialCreditCode();
     if (StringUtils.isBlank(orgCode) && StringUtils.isBlank(bizLicense) && StringUtils
         .isBlank(socialCreditCode)) {
-      throw new BaseException("");
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_ENOUGH);
     }
     //目前只支持:ent_base,企业基本信息认证
     String realNameType = entInfoCheakRequest.getRealNameType();
     if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.getDesc())) {
-      throw new BaseException("");
+      throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
     IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
-    idServiceCheckEntReqVo.setUserName("");
-    idServiceCheckEntReqVo.setPassword("");
+    idServiceCheckEntReqVo.setUserName(userName);
+    idServiceCheckEntReqVo.setPassword(password);
     idServiceCheckEntReqVo.setLeagalPerson(entInfoCheakRequest.getLegalName());
     idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoCheakRequest.getBizLicense());
     idServiceCheckEntReqVo.setUnCreditCode(entInfoCheakRequest.getSocialCreditCode());
@@ -82,6 +88,9 @@ public class EntInfoService {
     entInfoMapper.insertSelective(entInfo);
   }
 
+  /**
+   * 调用身份核实
+   */
   private void checkRealRemote(IdServiceCheckEntReqVo idServiceCheckEntReqVo) {
     String reqJson = JSONObject.toJSONString(idServiceCheckEntReqVo);
     HttpHeaders headers = new HttpHeaders();
@@ -94,7 +103,7 @@ public class EntInfoService {
       response = restTemplate
           .exchange(checkEntUrl, HttpMethod.POST, requestEntity, IdServiceCheckEntRespVo.class);
     } catch (RestClientException e) {
-      log.error("身份核实服务通信异常", e);
+      log.error("身份核实服务通信异常,请求报文[{}]", reqJson, e);
       throw new BaseException(ReturnCodeEnum.ID_SERVICE_CONN_ERROR);
     } finally {
       metricsClient.qps().rt().sr_incrTotal();
@@ -116,6 +125,7 @@ public class EntInfoService {
         }
       } else {
         //请求参数类异常
+        log.error("身份核实服务企业认证时错误，请求报文[{}],响应报文[{}]", reqJson, JSONObject.toJSON(response));
         throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, resultMessage);
       }
     } else {
