@@ -4,8 +4,10 @@ import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.EntInfoFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.biz.EntInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +26,7 @@ public class EntInfoController implements EntInfoFacade {
 
   @Override
   public ReturnResult updateEntInfo(@PathVariable Long uid,
-      @RequestBody EntInfoRequest entInfoRequest) {
+      @RequestBody @Validated EntInfoRequest entInfoRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "修改企业信息(实名认证)");
     try {
@@ -40,11 +42,28 @@ public class EntInfoController implements EntInfoFacade {
   }
 
   @Override
-  public ReturnResult addEntInfo(@RequestBody EntInfoRequest entInfoRequest) {
+  public ReturnResult addEntInfo(@RequestBody @Validated EntInfoRequest entInfoRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "添加企业信息(实名认证)");
     try {
       entInfoService.addEntInfo(entInfoRequest);
+      metricsClient.sr_incrSuccess();
+
+      return ReturnResult.success("成功");
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
+  }
+
+  @Override
+  public ReturnResult updateEntStatus(@PathVariable Long uid,
+      @RequestBody @Validated EntInfoStatusRequest entInfoStatusRequest) {
+    //埋点
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "修改企业状态");
+    try {
+      entInfoService.updateEntStatus(uid, entInfoStatusRequest);
       metricsClient.sr_incrSuccess();
 
       return ReturnResult.success("成功");

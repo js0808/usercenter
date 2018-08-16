@@ -45,7 +45,8 @@ public enum ReturnCodeEnum {
   USER_OR_PWD_ERROR(60604030, "用户名或密码不正确"),
   USER_IS_LOCKED(60604031, "用户被锁定"),
 
-  ENT_INFO_NOT_ENOUGH(60604012, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空");
+  ENT_INFO_NOT_ENOUGH(60604012, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空"),
+  ENT_INFO_NOT_EXIST(60604013, "企业信息不存在");
 
   /**
    * The value.

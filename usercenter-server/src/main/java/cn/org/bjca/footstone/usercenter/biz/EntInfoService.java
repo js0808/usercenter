@@ -4,6 +4,7 @@ import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
@@ -25,7 +26,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @description:企业信息管理
@@ -51,18 +51,15 @@ public class EntInfoService {
   @Autowired
   private NotifyInfoMapper notifyInfoMapper;
 
-  @Autowired
-  private RestTemplate restTemplate;
-
   /**
    * 修改企业信息并实名认证
    */
   public void updateEntInfo(Long uid, EntInfoRequest entInfoRequest) {
     checkParam(entInfoRequest);
     //get entinfo by uid
-    EntInfo entInfoOld = getEntInfo(uid);
+    EntInfo entInfoOld = getEntInfoByUid(uid);
     if (entInfoOld == null) {
-      throw new BaseException("");
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
     }
     //TODO 判断状态
 
@@ -72,14 +69,31 @@ public class EntInfoService {
     entInfoOld.setVersion(entInfoOld.getVersion() + 1);
     int result = entInfoMapper.updateByPrimaryKeySelective(entInfoOld);
     if (result != 1) {
-      throw new BaseException("");
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
     }
 
     //TODO 保存消息
 
   }
 
-  private EntInfo getEntInfo(Long uid) {
+  public void updateEntStatus(Long uid, EntInfoStatusRequest entInfoStatusRequest) {
+    //get entinfo by uid
+    EntInfo entInfo = getEntInfoByUid(uid);
+    if (entInfo == null) {
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
+    }
+    entInfo.setStatus(entInfoStatusRequest.getStatus().toString());
+    entInfo.setVersion(entInfo.getVersion() + 1);
+    int result = entInfoMapper.updateByPrimaryKeySelective(entInfo);
+    if (result != 1) {
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
+    }
+  }
+
+  /**
+   * 通过企业UID查询企业信息
+   */
+  public EntInfo getEntInfoByUid(Long uid) {
     EntInfoExample entInfoExample = new EntInfoExample();
     entInfoExample.createCriteria().andUidEqualTo(uid);
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
@@ -107,7 +121,7 @@ public class EntInfoService {
   public void addEntInfo(EntInfoRequest entInfoRequest) {
     checkParam(entInfoRequest);
     //调用身份核实
-    checkRealName(entInfoRequest);
+//    checkRealName(entInfoRequest);
     //保存ent info
     EntInfo entInfo = new EntInfo();
     BeanCopy.beans(entInfoRequest, entInfo).copy();
