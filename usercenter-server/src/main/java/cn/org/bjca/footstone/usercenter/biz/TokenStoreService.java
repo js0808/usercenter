@@ -9,4 +9,8 @@ import cn.org.bjca.footstone.usercenter.vo.LoginTokenVo;
 public interface TokenStoreService {
 
   void store(LoginTokenVo loginTokenVo);
+
+  boolean removeToken(Long uid, String token);
+
+  LoginTokenVo readToken(Long uid, String token);
 }

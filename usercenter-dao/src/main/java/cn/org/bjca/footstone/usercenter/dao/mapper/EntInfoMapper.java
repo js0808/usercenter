@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 public interface EntInfoMapper {
-
     long countByExample(EntInfoExample example);
 
     int deleteByExample(EntInfoExample example);
@@ -18,8 +17,7 @@ public interface EntInfoMapper {
 
     int insertSelective(EntInfo record);
 
-    List<EntInfo> selectByExampleWithBLOBsWithRowbounds(EntInfoExample example,
-        RowBounds rowBounds);
+    List<EntInfo> selectByExampleWithBLOBsWithRowbounds(EntInfoExample example, RowBounds rowBounds);
 
     List<EntInfo> selectByExampleWithBLOBs(EntInfoExample example);
 
@@ -29,11 +27,9 @@ public interface EntInfoMapper {
 
     EntInfo selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") EntInfo record,
-        @Param("example") EntInfoExample example);
+    int updateByExampleSelective(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") EntInfo record,
-        @Param("example") EntInfoExample example);
+    int updateByExampleWithBLOBs(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 
     int updateByExample(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 

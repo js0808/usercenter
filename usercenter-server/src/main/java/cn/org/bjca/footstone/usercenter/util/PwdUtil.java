@@ -125,6 +125,7 @@ public class PwdUtil {
 
 
   public static void main(String args[]) throws Exception {
+    // {SSHA256}FHg7b/UaQlcx4JM/GNoDFuH3sdK3dDzLSr5XsfpKgmZoaGtna2M3RXU0N3M5aXJT
     System.out.println(cipher("123456"));
     System.out.println(verify(cipher("123"), "123"));
   }

@@ -44,6 +44,11 @@ spring:
       max-idle: 16
       max-wait: -1
       min-idle: 0
+  threadpool:
+    core-pool-size: @spring.core-pool-size@
+    max-pool-size: @spring.max-pool-size@
+    queue-capacity: @spring.queue-capacity@
+    keep-alive-seconds: @spring.keep-alive-seconds@
 server:
   port: @server.port@
   connection-timeout: 40000
@@ -87,3 +92,9 @@ usercenter:
   realname-host: @realname.host@
   username: ${idservice.userName}
   password: ${idservice.password}
+account:
+  login:
+    max-attempts: @max-attempts@
+    attempts-duration-minutes: @attempts-duration-minutes@
+    locked-expire-minutes: @locked-expire-minutes@
+    token-expire-minutes: @token-expire-minutes@

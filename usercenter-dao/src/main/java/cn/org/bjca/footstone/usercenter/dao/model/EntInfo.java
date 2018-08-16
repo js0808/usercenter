@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class EntInfo implements Serializable {
-
     private Integer id;
 
     private Long uid;

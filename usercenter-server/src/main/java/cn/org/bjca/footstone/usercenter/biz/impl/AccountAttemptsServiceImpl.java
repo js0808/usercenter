@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz.impl;
 
+import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.biz.AccountAttemptsService;
 import cn.org.bjca.footstone.usercenter.config.AccountLoginConfig;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountAttemptsMapper;
@@ -9,6 +10,7 @@ import cn.org.bjca.footstone.usercenter.dao.model.AccountAttemptsExample;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample.Criteria;
+import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.RDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -45,6 +47,7 @@ public class AccountAttemptsServiceImpl implements AccountAttemptsService {
       AccountAttempts record = new AccountAttempts();
       record.setAccount(username);
       record.setAttempts(1);
+      record.setLastmodified(new Date());
       accountAttemptsMapper.insertSelective(record);
     } else {
       AccountAttempts record = new AccountAttempts();
@@ -55,6 +58,7 @@ public class AccountAttemptsServiceImpl implements AccountAttemptsService {
       } else {
         record.setAttempts(accountAttempts.getAttempts() + 1);
       }
+      record.setLastmodified(new Date());
       accountAttemptsMapper.updateByPrimaryKeySelective(record);
       if (accountAttempts.getAttempts() + 1 >= accountLoginConfig.getMaxAttempts()) {
         AccountInfoExample example = new AccountInfoExample();
@@ -63,11 +67,11 @@ public class AccountAttemptsServiceImpl implements AccountAttemptsService {
 
         AccountInfo accountInfo = new AccountInfo();
         accountInfo.setIsLocked(true);
-        accountInfo.setLockedExpireTime(
-            RDate.add(new Date(), Calendar.MINUTE, accountLoginConfig.getLockedExpireMinutes()));
+        accountInfo
+            .setLockedExpireTime(RDate.addMinutes(accountLoginConfig.getLockedExpireMinutes()));
         log.info("[LOCKED]:{},{}", username, accountInfo);
         accountInfoMapper.updateByExampleSelective(accountInfo, example);
-        throw new LockedException("User Account is locked!");
+        throw new LockedException("user is locked");
       }
     }
   }
@@ -77,6 +81,7 @@ public class AccountAttemptsServiceImpl implements AccountAttemptsService {
     AccountAttempts record = new AccountAttempts();
     record.setAccount(username);
     record.setAttempts(0);
+    record.setLastmodified(new Date());
     AccountAttemptsExample example = new AccountAttemptsExample();
     AccountAttemptsExample.Criteria criteria = example.createCriteria();
     criteria.andAccountEqualTo(username);

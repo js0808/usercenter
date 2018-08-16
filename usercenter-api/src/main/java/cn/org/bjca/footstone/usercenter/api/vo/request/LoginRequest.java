@@ -21,6 +21,8 @@ public class LoginRequest {
 
   private int expireMinutes;
 
+  private String clientInfo;
+
   @NotBlank(message = "登录渠道不能为空")
   private String channel;
 }

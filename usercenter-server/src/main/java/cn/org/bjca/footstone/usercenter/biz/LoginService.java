@@ -1,13 +1,18 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_IS_LOCKED;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_OR_PWD_ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_TOKEN_WRONG;
 
+import cn.org.bjca.footstone.usercenter.Conts;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
+import cn.org.bjca.footstone.usercenter.biz.listener.LoginEvent;
 import cn.org.bjca.footstone.usercenter.config.AccountLoginConfig;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
@@ -20,10 +25,12 @@ import com.google.common.base.Joiner;
 import java.util.Calendar;
 import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -49,6 +56,9 @@ public class LoginService {
   @Autowired
   private AccountLoginConfig accountLoginConfig;
 
+  @Autowired
+  private ApplicationEventPublisher publisher;
+
   public Pair<BizResultVo, LoginResponse> loginWithPassword(LoginRequest loginRequest) {
     if (StringUtils.isBlank(loginRequest.getPassword()) && StringUtils
         .isBlank(loginRequest.getAuthcode())) {
@@ -60,6 +70,11 @@ public class LoginService {
     // 账号不存在
     if (accountInfo == null) {
       return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), null);
+    }
+    // 账号被锁定
+    if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
+        .after(new Date())) {
+      return Pair.of(BizResultVo.of(false, USER_IS_LOCKED), null);
     }
     // 密码
     if (StringUtils.isNotBlank(loginRequest.getPassword())) {
@@ -83,26 +98,33 @@ public class LoginService {
     String token = MessageDigestUtils.md5Hex(tokenSrc);
     int expire = loginRequest.getExpireMinutes() != 0 ? loginRequest.getExpireMinutes()
         : accountLoginConfig.getTokenExpireMinutes();
-    Date expireDate = RDate.add(new Date(), Calendar.MINUTE, expire);
-    tokenStoreService.store(LoginTokenVo.of(account, token, expireDate.getTime(), expire));
-    LoginResponse response = new LoginResponse(token, expireDate.getTime());
-    return response;
+    Date expireDate = RDate.add(new Date(), expire, Calendar.MINUTE);
+    Long uid = accountInfo.getUid();
+    tokenStoreService
+        .store(LoginTokenVo.of(account, token, expireDate.getTime(), expire, uid));
+    val accountInfoResponse = new AccountInfoResponse();
+    Conts.ACCOUNT_INFO_TO_RESPONSE.copy(accountInfo, accountInfoResponse, null);
+    val loginResponse = LoginResponse.of(uid, token, expireDate.getTime(), accountInfoResponse);
+    publisher
+        .publishEvent(LoginEvent.of(true, accountInfo.getAccount(), loginRequest, accountInfo));
+    return loginResponse;
   }
 
   private BizResultVo passwordValid(LoginRequest loginRequest, AccountInfo accountInfo) {
-    // 账号被锁定
-    if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
-        .after(new Date())) {
+    // 密码不正确
+    boolean matches = PwdUtil.verify(accountInfo.getPassword(), loginRequest.getPassword());
+    if (matches) {
+      return BizResultVo.of(true);
+    }
+    publisher
+        .publishEvent(LoginEvent.of(false, accountInfo.getAccount(), loginRequest, accountInfo));
+    try {
+      accountAttemptsService.updateFailAttempts(loginRequest.getUsername());
+    } catch (LockedException e) {
       return BizResultVo.of(false, USER_IS_LOCKED);
     }
-    // 密码不正确
-    String encode = PwdUtil.cipher(loginRequest.getPassword());
-    boolean matches = PwdUtil.verify(accountInfo.getPassword(), encode);
-    if (!matches) {
-      accountAttemptsService.updateFailAttempts(loginRequest.getUsername());
-      return BizResultVo.of(false, USER_OR_PWD_ERROR);
-    }
-    return BizResultVo.of(true);
+    return BizResultVo.of(false, USER_OR_PWD_ERROR);
+
   }
 
   private void authCodeValid(LoginRequest loginRequest, AccountInfo accountInfo) {
@@ -113,7 +135,30 @@ public class LoginService {
       authCodeValidateRequest.setType(AuthCodeTypeEnum.LOGIN.value());
       authCodeService.validate(authCodeValidateRequest);
     } catch (Exception e) {
+      publisher
+          .publishEvent(LoginEvent.of(false, accountInfo.getAccount(), loginRequest, accountInfo));
       throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
     }
+  }
+
+  public BizResultVo logout(Long uid, String token) {
+    boolean isSuccess = tokenStoreService.removeToken(uid, token);
+    return BizResultVo.of(isSuccess);
+  }
+
+  public Pair<BizResultVo, AccountInfoResponse> tokenInfo(Long uid, String token) {
+    LoginTokenVo tokenVo = tokenStoreService.readToken(uid, token);
+    if (tokenVo == null) {
+      return Pair.of(BizResultVo.of(false, USER_TOKEN_WRONG), null);
+    }
+
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByUid(uid);
+    if (accountInfo == null) {
+      return Pair.of(BizResultVo.of(false, ACCOUNT_NOT_EXIT_ERROR), null);
+    }
+
+    val response = new AccountInfoResponse();
+    Conts.ACCOUNT_INFO_TO_RESPONSE.copy(accountInfo, response, null);
+    return Pair.of(BizResultVo.of(true), response);
   }
 }
