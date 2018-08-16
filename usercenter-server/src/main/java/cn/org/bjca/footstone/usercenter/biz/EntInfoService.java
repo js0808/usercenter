@@ -3,9 +3,9 @@ package cn.org.bjca.footstone.usercenter.biz;
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoCheakRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
@@ -49,43 +49,51 @@ public class EntInfoService {
   private EntInfoMapper entInfoMapper;
 
   @Autowired
+  private NotifyInfoMapper notifyInfoMapper;
+
+  @Autowired
   private RestTemplate restTemplate;
 
-  private void addEntInfo(EntInfoRequest entInfoRequest) {
+  /**
+   * 修改企业信息并实名认证
+   */
+  public void updateEntInfo(Integer uid, EntInfoRequest entInfoRequest) {
 
   }
 
   /**
-   * 企业实名认证
+   * 添加企业并实名认证
    */
-  private void checkRealEntnfo(EntInfoCheakRequest entInfoCheakRequest) {
-    String orgCode = entInfoCheakRequest.getOrgCode();
-    String bizLicense = entInfoCheakRequest.getBizLicense();
-    String socialCreditCode = entInfoCheakRequest.getSocialCreditCode();
+  public void addEntInfo(EntInfoRequest entInfoRequest) {
+    String orgCode = entInfoRequest.getOrgCode();
+    String bizLicense = entInfoRequest.getBizLicense();
+    String socialCreditCode = entInfoRequest.getSocialCreditCode();
     if (StringUtils.isBlank(orgCode) && StringUtils.isBlank(bizLicense) && StringUtils
         .isBlank(socialCreditCode)) {
       throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_ENOUGH);
     }
     //目前只支持:ent_base,企业基本信息认证
-    String realNameType = entInfoCheakRequest.getRealNameType();
+    String realNameType = entInfoRequest.getRealNameType();
     if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.getDesc())) {
       throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
     IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
     idServiceCheckEntReqVo.setUserName(userName);
     idServiceCheckEntReqVo.setPassword(password);
-    idServiceCheckEntReqVo.setLeagalPerson(entInfoCheakRequest.getLegalName());
-    idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoCheakRequest.getBizLicense());
-    idServiceCheckEntReqVo.setUnCreditCode(entInfoCheakRequest.getSocialCreditCode());
-    idServiceCheckEntReqVo.setUnitCode(entInfoCheakRequest.getOrgCode());
+    idServiceCheckEntReqVo.setLeagalPerson(entInfoRequest.getLegalName());
+    idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoRequest.getBizLicense());
+    idServiceCheckEntReqVo.setUnCreditCode(entInfoRequest.getSocialCreditCode());
+    idServiceCheckEntReqVo.setUnitCode(entInfoRequest.getOrgCode());
     idServiceCheckEntReqVo.setKeywordType("1");
     idServiceCheckEntReqVo.setTransactionId("");
     //调用身份核实
     checkRealRemote(idServiceCheckEntReqVo);
 
     EntInfo entInfo = new EntInfo();
-    BeanCopy.beans(entInfoCheakRequest, entInfo).copy();
+    BeanCopy.beans(entInfoRequest, entInfo).copy();
     entInfoMapper.insertSelective(entInfo);
+    //保存消息
+
   }
 
   /**

@@ -38,6 +38,10 @@ public enum ReturnCodeEnum {
 
   AUTH_CODE_VALIDATE_ERROR(60604013, "验证码验证失败"),
 
+  ACCOUNT_EXIT_ERROR(60604014, "帐号已经存在"),
+
+  ACCOUNT_NOT_EXIT_ERROR(60604015, "帐号不存在"),
+
   ENT_INFO_NOT_ENOUGH(60604012, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空");
 
   /**
