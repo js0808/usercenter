@@ -3,20 +3,22 @@ package cn.org.bjca.footstone.usercenter.dao.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class AccountInfo implements Serializable {
+public class UpdateStatusLog implements Serializable {
     private Integer id;
-
-    private String accountType;
-
-    private String account;
-
-    private String password;
-
-    private String status;
 
     private Integer uid;
 
     private String userType;
+
+    private Integer operatorUid;
+
+    private String operatorAccount;
+
+    private String oldStatus;
+
+    private String newStatus;
+
+    private String description;
 
     private String extField1;
 
@@ -26,15 +28,9 @@ public class AccountInfo implements Serializable {
 
     private String extField4;
 
-    private Boolean isLocked;
-
-    private Date lockedExpireTime;
-
     private Integer version;
 
     private Date createTime;
-
-    private Date updateTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,38 +42,6 @@ public class AccountInfo implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType == null ? null : accountType.trim();
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
     }
 
     public Integer getUid() {
@@ -94,6 +58,46 @@ public class AccountInfo implements Serializable {
 
     public void setUserType(String userType) {
         this.userType = userType == null ? null : userType.trim();
+    }
+
+    public Integer getOperatorUid() {
+        return operatorUid;
+    }
+
+    public void setOperatorUid(Integer operatorUid) {
+        this.operatorUid = operatorUid;
+    }
+
+    public String getOperatorAccount() {
+        return operatorAccount;
+    }
+
+    public void setOperatorAccount(String operatorAccount) {
+        this.operatorAccount = operatorAccount == null ? null : operatorAccount.trim();
+    }
+
+    public String getOldStatus() {
+        return oldStatus;
+    }
+
+    public void setOldStatus(String oldStatus) {
+        this.oldStatus = oldStatus == null ? null : oldStatus.trim();
+    }
+
+    public String getNewStatus() {
+        return newStatus;
+    }
+
+    public void setNewStatus(String newStatus) {
+        this.newStatus = newStatus == null ? null : newStatus.trim();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description == null ? null : description.trim();
     }
 
     public String getExtField1() {
@@ -128,22 +132,6 @@ public class AccountInfo implements Serializable {
         this.extField4 = extField4 == null ? null : extField4.trim();
     }
 
-    public Boolean getIsLocked() {
-        return isLocked;
-    }
-
-    public void setIsLocked(Boolean isLocked) {
-        this.isLocked = isLocked;
-    }
-
-    public Date getLockedExpireTime() {
-        return lockedExpireTime;
-    }
-
-    public void setLockedExpireTime(Date lockedExpireTime) {
-        this.lockedExpireTime = lockedExpireTime;
-    }
-
     public Integer getVersion() {
         return version;
     }
@@ -158,14 +146,6 @@ public class AccountInfo implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 
     public String getUpdateSql() {

@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper">
-  <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
+<mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.UpdateStatusLogMapper">
+  <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLog">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
-    <result column="account" jdbcType="VARCHAR" property="account" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="uid" jdbcType="INTEGER" property="uid" />
     <result column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="operator_uid" jdbcType="INTEGER" property="operatorUid" />
+    <result column="operator_account" jdbcType="VARCHAR" property="operatorAccount" />
+    <result column="old_status" jdbcType="VARCHAR" property="oldStatus" />
+    <result column="new_status" jdbcType="VARCHAR" property="newStatus" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="ext_field1" jdbcType="VARCHAR" property="extField1" />
     <result column="ext_field2" jdbcType="VARCHAR" property="extField2" />
     <result column="ext_field3" jdbcType="VARCHAR" property="extField3" />
     <result column="ext_field4" jdbcType="VARCHAR" property="extField4" />
-    <result column="is_locked" jdbcType="BIT" property="isLocked" />
-    <result column="locked_expire_time" jdbcType="TIMESTAMP" property="lockedExpireTime" />
     <result column="version" jdbcType="INTEGER" property="version" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,16 +76,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, account_type, account, password, status, uid, user_type, ext_field1, ext_field2, 
-    ext_field3, ext_field4, is_locked, locked_expire_time, version, create_time, update_time
+    id, uid, user_type, operator_uid, operator_account, old_status, new_status, description, 
+    ext_field1, ext_field2, ext_field3, ext_field4, version, create_time
   </sql>
-  <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from account_info
+    from update_status_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -101,56 +99,57 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from account_info
+    from update_status_log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from account_info
+    delete from update_status_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample">
-    delete from account_info
+  <delete id="deleteByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLogExample">
+    delete from update_status_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
-    insert into account_info (id, account_type, account, 
-      password, status, uid, 
-      user_type, ext_field1, ext_field2, 
-      ext_field3, ext_field4, is_locked, 
-      locked_expire_time, version, create_time, 
-      update_time)
-    values (#{id,jdbcType=INTEGER}, #{accountType,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{uid,jdbcType=INTEGER}, 
-      #{userType,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, 
-      #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, #{isLocked,jdbcType=BIT}, 
-      #{lockedExpireTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLog">
+    insert into update_status_log (id, uid, user_type, 
+      operator_uid, operator_account, old_status, 
+      new_status, description, ext_field1, 
+      ext_field2, ext_field3, ext_field4, 
+      version, create_time)
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}, 
+      #{operatorUid,jdbcType=INTEGER}, #{operatorAccount,jdbcType=VARCHAR}, #{oldStatus,jdbcType=VARCHAR}, 
+      #{newStatus,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, 
+      #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
-    insert into account_info
+  <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLog">
+    insert into update_status_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
-      </if>
-      <if test="accountType != null">
-        account_type,
-      </if>
-      <if test="account != null">
-        account,
-      </if>
-      <if test="password != null">
-        password,
-      </if>
-      <if test="status != null">
-        status,
       </if>
       <if test="uid != null">
         uid,
       </if>
       <if test="userType != null">
         user_type,
+      </if>
+      <if test="operatorUid != null">
+        operator_uid,
+      </if>
+      <if test="operatorAccount != null">
+        operator_account,
+      </if>
+      <if test="oldStatus != null">
+        old_status,
+      </if>
+      <if test="newStatus != null">
+        new_status,
+      </if>
+      <if test="description != null">
+        description,
       </if>
       <if test="extField1 != null">
         ext_field1,
@@ -164,43 +163,37 @@
       <if test="extField4 != null">
         ext_field4,
       </if>
-      <if test="isLocked != null">
-        is_locked,
-      </if>
-      <if test="lockedExpireTime != null">
-        locked_expire_time,
-      </if>
       <if test="version != null">
         version,
       </if>
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
-      </if>
-      <if test="accountType != null">
-        #{accountType,jdbcType=VARCHAR},
-      </if>
-      <if test="account != null">
-        #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
       </if>
       <if test="uid != null">
         #{uid,jdbcType=INTEGER},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorUid != null">
+        #{operatorUid,jdbcType=INTEGER},
+      </if>
+      <if test="operatorAccount != null">
+        #{operatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="oldStatus != null">
+        #{oldStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="newStatus != null">
+        #{newStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
       </if>
       <if test="extField1 != null">
         #{extField1,jdbcType=VARCHAR},
@@ -214,52 +207,46 @@
       <if test="extField4 != null">
         #{extField4,jdbcType=VARCHAR},
       </if>
-      <if test="isLocked != null">
-        #{isLocked,jdbcType=BIT},
-      </if>
-      <if test="lockedExpireTime != null">
-        #{lockedExpireTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="version != null">
         #{version,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample" resultType="java.lang.Long">
-    select count(*) from account_info
+  <select id="countByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLogExample" resultType="java.lang.Long">
+    select count(*) from update_status_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update account_info
+    update update_status_log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
-      </if>
-      <if test="record.accountType != null">
-        account_type = #{record.accountType,jdbcType=VARCHAR},
-      </if>
-      <if test="record.account != null">
-        account = #{record.account,jdbcType=VARCHAR},
-      </if>
-      <if test="record.password != null">
-        password = #{record.password,jdbcType=VARCHAR},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.uid != null">
         uid = #{record.uid,jdbcType=INTEGER},
       </if>
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatorUid != null">
+        operator_uid = #{record.operatorUid,jdbcType=INTEGER},
+      </if>
+      <if test="record.operatorAccount != null">
+        operator_account = #{record.operatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.oldStatus != null">
+        old_status = #{record.oldStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.newStatus != null">
+        new_status = #{record.newStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
       </if>
       <if test="record.extField1 != null">
         ext_field1 = #{record.extField1,jdbcType=VARCHAR},
@@ -273,20 +260,11 @@
       <if test="record.extField4 != null">
         ext_field4 = #{record.extField4,jdbcType=VARCHAR},
       </if>
-      <if test="record.isLocked != null">
-        is_locked = #{record.isLocked,jdbcType=BIT},
-      </if>
-      <if test="record.lockedExpireTime != null">
-        locked_expire_time = #{record.lockedExpireTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.version != null">
         version = #{record.version,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateSql != null" >
         ${record.updateSql},
@@ -297,47 +275,48 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update account_info
+    update update_status_log
     set id = #{record.id,jdbcType=INTEGER},
-      account_type = #{record.accountType,jdbcType=VARCHAR},
-      account = #{record.account,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
       uid = #{record.uid,jdbcType=INTEGER},
       user_type = #{record.userType,jdbcType=VARCHAR},
+      operator_uid = #{record.operatorUid,jdbcType=INTEGER},
+      operator_account = #{record.operatorAccount,jdbcType=VARCHAR},
+      old_status = #{record.oldStatus,jdbcType=VARCHAR},
+      new_status = #{record.newStatus,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
       ext_field1 = #{record.extField1,jdbcType=VARCHAR},
       ext_field2 = #{record.extField2,jdbcType=VARCHAR},
       ext_field3 = #{record.extField3,jdbcType=VARCHAR},
       ext_field4 = #{record.extField4,jdbcType=VARCHAR},
-      is_locked = #{record.isLocked,jdbcType=BIT},
-      locked_expire_time = #{record.lockedExpireTime,jdbcType=TIMESTAMP},
       version = #{record.version,jdbcType=INTEGER},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
-    update account_info
+  <update id="updateByPrimaryKeySelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLog">
+    update update_status_log
     <set>
-      <if test="accountType != null">
-        account_type = #{accountType,jdbcType=VARCHAR},
-      </if>
-      <if test="account != null">
-        account = #{account,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null">
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
-      </if>
       <if test="uid != null">
         uid = #{uid,jdbcType=INTEGER},
       </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatorUid != null">
+        operator_uid = #{operatorUid,jdbcType=INTEGER},
+      </if>
+      <if test="operatorAccount != null">
+        operator_account = #{operatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="oldStatus != null">
+        old_status = #{oldStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="newStatus != null">
+        new_status = #{newStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
       </if>
       <if test="extField1 != null">
         ext_field1 = #{extField1,jdbcType=VARCHAR},
@@ -351,50 +330,39 @@
       <if test="extField4 != null">
         ext_field4 = #{extField4,jdbcType=VARCHAR},
       </if>
-      <if test="isLocked != null">
-        is_locked = #{isLocked,jdbcType=BIT},
-      </if>
-      <if test="lockedExpireTime != null">
-        locked_expire_time = #{lockedExpireTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="version != null">
         version = #{version,jdbcType=INTEGER},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
-    update account_info
-    set account_type = #{accountType,jdbcType=VARCHAR},
-      account = #{account,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      uid = #{uid,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLog">
+    update update_status_log
+    set uid = #{uid,jdbcType=INTEGER},
       user_type = #{userType,jdbcType=VARCHAR},
+      operator_uid = #{operatorUid,jdbcType=INTEGER},
+      operator_account = #{operatorAccount,jdbcType=VARCHAR},
+      old_status = #{oldStatus,jdbcType=VARCHAR},
+      new_status = #{newStatus,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
       ext_field1 = #{extField1,jdbcType=VARCHAR},
       ext_field2 = #{extField2,jdbcType=VARCHAR},
       ext_field3 = #{extField3,jdbcType=VARCHAR},
       ext_field4 = #{extField4,jdbcType=VARCHAR},
-      is_locked = #{isLocked,jdbcType=BIT},
-      locked_expire_time = #{lockedExpireTime,jdbcType=TIMESTAMP},
       version = #{version,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from account_info
+    from update_status_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -402,28 +370,26 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="sumByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample" resultType="long" >
-    select sum(${sumCol}) from account_info
+  <select id="sumByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateStatusLogExample" resultType="long" >
+    select sum(${sumCol}) from update_status_log
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-            insert into account_info  (id, account_type, account, 
-        password, status, uid, 
-        user_type, ext_field1, ext_field2, 
-        ext_field3, ext_field4, is_locked, 
-        locked_expire_time, version, create_time, 
-        update_time)
+            insert into update_status_log  (id, uid, user_type, 
+        operator_uid, operator_account, old_status, 
+        new_status, description, ext_field1, 
+        ext_field2, ext_field3, ext_field4, 
+        version, create_time)
       values
       <foreach collection="items" item="item" index="index" separator=",">
-      (#{item.id,jdbcType=INTEGER}, #{item.accountType,jdbcType=VARCHAR}, #{item.account,jdbcType=VARCHAR}, 
-        #{item.password,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR}, #{item.uid,jdbcType=INTEGER}, 
-        #{item.userType,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR}, #{item.extField2,jdbcType=VARCHAR}, 
-        #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR}, #{item.isLocked,jdbcType=BIT}, 
-        #{item.lockedExpireTime,jdbcType=TIMESTAMP}, #{item.version,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
-        #{item.updateTime,jdbcType=TIMESTAMP})
+      (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=INTEGER}, #{item.userType,jdbcType=VARCHAR}, 
+        #{item.operatorUid,jdbcType=INTEGER}, #{item.operatorAccount,jdbcType=VARCHAR}, #{item.oldStatus,jdbcType=VARCHAR}, 
+        #{item.newStatus,jdbcType=VARCHAR}, #{item.description,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR}, 
+        #{item.extField2,jdbcType=VARCHAR}, #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR}, 
+        #{item.version,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP})
       </foreach>
     </if>
   </insert>
