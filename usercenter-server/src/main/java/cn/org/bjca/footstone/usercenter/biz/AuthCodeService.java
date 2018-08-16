@@ -35,7 +35,7 @@ public class AuthCodeService {
 
     private final String redis_key = "usercenter_";
     private String message = "亲爱的%s用户您好, \n验证码：%s，5分钟内输入有效，请输入验证码完成%s，勿将验证码告诉其他人。";
-    private final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
+    public final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
     @Autowired
     private AuthCodeConfig authCodeConfig;
 
