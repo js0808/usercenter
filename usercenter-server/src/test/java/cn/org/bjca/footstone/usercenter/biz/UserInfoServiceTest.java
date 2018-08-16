@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import static java.util.Objects.nonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -12,7 +13,9 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.QueryUserInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
 import com.alibaba.fastjson.JSON;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +59,24 @@ public class UserInfoServiceTest extends BaseTest {
     vo.setIdNum("110101199003079251");
 
     UserInfoResponse modUser = userInfoService.modUser(response.getUid(), vo);
-    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(modUser.getUid());
+    UserInfo userInfo = getUserInfoWithUid(modUser.getUid());
     log.info("{}", JSON.toJSONString(userInfo));
     assertNotNull(modUser);
-    userInfoMapper.deleteByPrimaryKey(modUser.getUid());
+    userInfoMapper.deleteByPrimaryKey(userInfo.getId());
 
   }
 
+  private UserInfo getUserInfoWithUid(Long uid) {
+    UserInfoExample example = new UserInfoExample();
+    example.createCriteria().andUidEqualTo(uid);
+    List<UserInfo> userInfos = userInfoMapper.selectByExample(example);
+    return userInfos.isEmpty() ? null : userInfos.get(0);
+  }
+
+
   @Test
   public void getUser() {
-    QueryUserInfoResponse user = userInfoService.getUser(1);
+    QueryUserInfoResponse user = userInfoService.getUser(82404904060583936L);
     log.info(JSON.toJSONString(user));
   }
 
@@ -77,11 +88,11 @@ public class UserInfoServiceTest extends BaseTest {
     vo.setHeadImgUrl("http://www.baidu.com");
 
     UserInfoResponse modUser = userInfoService.modUserSimple(response.getUid(), vo);
-    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(modUser.getUid());
+    UserInfo userInfo = getUserInfoWithUid(modUser.getUid());
     log.info("{}", JSON.toJSONString(userInfo));
     assertNotNull(modUser);
     assertEquals(vo.getEmail(), userInfo.getEmail());
-    userInfoMapper.deleteByPrimaryKey(modUser.getUid());
+    userInfoMapper.deleteByPrimaryKey(userInfo.getId());
   }
 
   @Test
@@ -92,10 +103,10 @@ public class UserInfoServiceTest extends BaseTest {
 
     UserInfoResponse modUser = userInfoService.modUserStatus(response.getUid(), statusVo);
 
-    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(modUser.getUid());
+    UserInfo userInfo = getUserInfoWithUid(modUser.getUid());
     log.info("{}", JSON.toJSONString(userInfo));
     assertNotNull(modUser);
     assertEquals(statusVo.getStatus().toString(), userInfo.getStatus());
-    userInfoMapper.deleteByPrimaryKey(modUser.getUid());
+    userInfoMapper.deleteByPrimaryKey(userInfo.getId());
   }
 }

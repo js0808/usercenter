@@ -40,6 +40,9 @@
         </javaClientGenerator>
 
       <!--<table tableName="test.t_user_info" domainObjectName="User"></table>-->
-      <table tableName="%"></table>
+        <!--<table tableName="%"/>-->
+        <table tableName="user_info" >
+        <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
     </context>
 </generatorConfiguration>

@@ -9,5 +9,5 @@ import lombok.Data;
 @Data
 public class UserInfoResponse {
 
-  private Integer uid;
+  private Long uid;
 }

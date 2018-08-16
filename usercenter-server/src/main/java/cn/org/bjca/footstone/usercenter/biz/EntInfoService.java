@@ -36,10 +36,10 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class EntInfoService {
 
-  @Value("${idservice.checkEnterprise}")
+  @Value("${idservice.check-enterprise}")
   private String checkEntUrl = null;
 
-  @Value("${idservice.userName}")
+  @Value("${idservice.user-name}")
   private String userName = null;
 
   @Value("${idservice.password}")

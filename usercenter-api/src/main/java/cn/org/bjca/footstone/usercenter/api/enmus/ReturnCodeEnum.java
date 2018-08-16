@@ -24,9 +24,9 @@ public enum ReturnCodeEnum {
 
 
   REALNAME_TYPE_ERROR(60604026, "错误的实名认证方式"),
-  REALNAME_NOT_EXIST(60604027, "未找到实名认证信息uid {0}"),
-  REALNAME_PERSON_ERROR(10904028, "个人实名认证信息异常 {0}"),
-  REALNAME_PARAM_ERROR(60604029, "实名认证参数错误 {0}"),
+  REALNAME_NOT_EXIST(60604027, "未找到实名认证信息uid %s"),
+  REALNAME_PERSON_ERROR(10904028, "个人实名认证信息异常 %s"),
+  REALNAME_PARAM_ERROR(60604029, "实名认证参数错误 %s"),
 
   ID_SERVICE_ERROR(60604009, "身份核实错误[%s]"),
 

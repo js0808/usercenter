@@ -33,24 +33,24 @@ public class UserController implements UserInfoFacade {
   }
 
   @Override
-  public ReturnResult<UserInfoResponse> modUser(@PathVariable Integer uid,
+  public ReturnResult<UserInfoResponse> modUser(@PathVariable Long uid,
       @RequestBody UserInfoVo userInfo) {
     return ReturnResult.success(userInfoService.modUser(uid, userInfo));
   }
 
   @Override
-  public ReturnResult<QueryUserInfoResponse> getUser(@PathVariable Integer uid) {
+  public ReturnResult<QueryUserInfoResponse> getUser(@PathVariable Long uid) {
     return ReturnResult.success(userInfoService.getUser(uid));
   }
 
   @Override
-  public ReturnResult<UserInfoResponse> modUserSimple(@PathVariable Integer uid,
+  public ReturnResult<UserInfoResponse> modUserSimple(@PathVariable Long uid,
       @RequestBody UserInfoSimpleVo userInfoSimpleVo) {
     return ReturnResult.success(userInfoService.modUserSimple(uid, userInfoSimpleVo));
   }
 
   @Override
-  public ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Integer uid,
+  public ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Long uid,
       @RequestBody UserInfoStatusVo userInfoStatusVo) {
     return ReturnResult.success(userInfoService.modUserStatus(uid, userInfoStatusVo));
   }
