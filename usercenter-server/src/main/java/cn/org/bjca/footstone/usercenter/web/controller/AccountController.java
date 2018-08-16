@@ -24,42 +24,42 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AccountController {
 
-    @Autowired
-    private AccountRegisterService registerService;
+  @Autowired
+  private AccountRegisterService registerService;
 
-    @RequestMapping(value = "/accountRegister", method = RequestMethod.POST)
-    public ReturnResult codeApply(@Validated @RequestBody AccountRegisterRequest request) {
-        MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "帐号注册", "帐号注册交易");
-        try {
-            registerService.accountRegister(request);
-            metrics.sr_incrSuccess();
-        } catch (BjcaBizException ex) {
-            log.error("accountRegister 异常信息", ex);
-            throw ex;
-        } catch (Exception e) {
-            log.error("accountRegister 异常信息", e);
-            throw new BjcaBizException(ReturnCodeEnum.ERROR);
-        } finally {
-            metrics.qps().rt().sr_incrTotal();
-        }
-        return ReturnResult.success("success");
+  @RequestMapping(value = "/accountRegister", method = RequestMethod.POST)
+  public ReturnResult codeApply(@Validated @RequestBody AccountRegisterRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "帐号注册", "帐号注册交易");
+    try {
+      registerService.accountRegister(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("accountRegister 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("accountRegister 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
     }
+    return ReturnResult.success("success");
+  }
 
-    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
-    public ReturnResult resetPassword(@Validated @RequestBody ResetPasswordRequest request) {
-        MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "密码重置", "密码重置交易");
-        try {
-            registerService.resetPassword(request);
-            metrics.sr_incrSuccess();
-        } catch (BjcaBizException ex) {
-            log.error("resetPassword 异常信息", ex);
-            throw ex;
-        } catch (Exception e) {
-            log.error("resetPassword 异常信息", e);
-            throw new BjcaBizException(ReturnCodeEnum.ERROR);
-        } finally {
-            metrics.qps().rt().sr_incrTotal();
-        }
-        return ReturnResult.success("success");
+  @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+  public ReturnResult resetPassword(@Validated @RequestBody ResetPasswordRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "密码重置", "密码重置交易");
+    try {
+      registerService.resetPassword(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("resetPassword 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("resetPassword 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
     }
+    return ReturnResult.success("success");
+  }
 }
