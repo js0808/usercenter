@@ -39,7 +39,6 @@ public class SnowFlake {
    * left shift bits of timeStamp, workerId and datacenterId
    */
   private final long timestampShift = sequenceBits + workerIdBits;
-  private final long datacenterIdShift = sequenceBits + workerIdBits;
   private final long workerIdShift = sequenceBits;
 
   /*

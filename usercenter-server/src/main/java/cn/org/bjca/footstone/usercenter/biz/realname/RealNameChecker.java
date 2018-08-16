@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 /**
  * NAME_AND_ID_NUM 姓名和身份证号
  *
- * name_and_mobile 姓名和手机号
+ * NAME_AND_MOBILE 姓名和手机号
  *
- * id_card_and_face 身份证和人脸
+ * ID_CARD_AND_FACE 身份证和人脸
  *
- * bank_card3 银行卡号3要素
+ * BANK_CARD3 银行卡号3要素
  *
- * bank_card4 银行卡号4要素
+ * BANK_CARD4 银行卡号4要素
  *
  * @author shuvigoss@gmail.com (ShuWei) 2018/8/14
  * @since 1.0

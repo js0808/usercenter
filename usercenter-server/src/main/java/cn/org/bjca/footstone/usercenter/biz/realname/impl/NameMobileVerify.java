@@ -37,7 +37,7 @@ public class NameMobileVerify extends RealNameVerify {
       return Pair.of(false, "错误的身份证号码");
     }
     String mobile = getUserInfoVo().getMobile();
-    if (Strings.isNullOrEmpty(mobile) || !Pattern.matches(mobile, PATTERN)) {
+    if (Strings.isNullOrEmpty(mobile) || !Pattern.matches(PATTERN, mobile)) {
       return Pair.of(false, "错误的手机号码");
     }
     return Pair.of(true, "");
@@ -68,4 +68,5 @@ public class NameMobileVerify extends RealNameVerify {
     }
     return Pair.of(false, "验证结果:" + result.get("mobileResultMsg"));
   }
+
 }
