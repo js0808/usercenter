@@ -16,8 +16,11 @@ import cn.org.bjca.footstone.usercenter.biz.realname.RealNameChecker;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
+import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import java.util.Date;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +61,11 @@ public class UserInfoService {
 
     doVerify(verify, userInfo);
 
-    userInfoMapper.updateByPrimaryKeySelective(userInfo);
+    int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+    if (count != 1) {
+      log.error("变更实名认证信息异常{}", userInfo);
+      throw new BaseException(SQL_EXCEPTION);
+    }
 
     return buildRsp(userInfo);
   }
@@ -79,7 +86,7 @@ public class UserInfoService {
 
   private UserInfoResponse buildRsp(UserInfo userInfo) {
     UserInfoResponse response = new UserInfoResponse();
-    response.setUid(userInfo.getId());
+    response.setUid(userInfo.getUid());
     return response;
   }
 
@@ -92,34 +99,41 @@ public class UserInfoService {
   }
 
   private UserInfo createUserInfo() {
-    return new UserInfo();
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUid(SnowFlake.next());
+    return userInfo;
   }
 
   /**
    * 变更用户信息，需要重新走实名认证
    */
-  public UserInfoResponse modUser(Integer uid, UserInfoVo userInfo) {
+  public UserInfoResponse modUser(Long uid, UserInfoVo userInfo) {
     log.info("请求实名认证变更{}", userInfo);
     RealNameVerify verify = getVerify(userInfo);
 
-    UserInfo old = userInfoMapper.selectByPrimaryKey(uid);
+    UserInfo old = getUserInfoWithUid(uid);
     if (isNull(old)) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
 
     USERINFO_COPIER.copy(userInfo, old, null);
 
+    verify.verify();
+
     old.setRealNameType(old.getRealNameType() + "," + userInfo.getRealNameType());
     old.setUpdateTime(new Date());
     old.setVersion(old.getVersion() + 1);
-    //TODO 状态变更为？
 
-    userInfoMapper.updateByPrimaryKeySelective(old);
+    int count = userInfoMapper.updateByPrimaryKeySelective(old);
+    if (count != 1) {
+      log.error("变更实名认证信息异常{}", userInfo);
+      throw new BaseException(SQL_EXCEPTION);
+    }
     return buildRsp(old);
   }
 
-  public QueryUserInfoResponse getUser(Integer uid) {
-    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(uid);
+  public QueryUserInfoResponse getUser(Long uid) {
+    UserInfo userInfo = getUserInfoWithUid(uid);
     if (nonNull(userInfo)) {
       QueryUserInfoResponse rsp = new QueryUserInfoResponse();
       USERINFO2RESPONSE.copy(userInfo, rsp, null);
@@ -128,13 +142,20 @@ public class UserInfoService {
     return null;
   }
 
-  public UserInfoResponse modUserSimple(Integer uid, UserInfoSimpleVo userInfoSimpleVo) {
-    UserInfo old = userInfoMapper.selectByPrimaryKey(uid);
+  private UserInfo getUserInfoWithUid(Long uid) {
+    UserInfoExample example = new UserInfoExample();
+    example.createCriteria().andUidEqualTo(uid);
+    List<UserInfo> userInfos = userInfoMapper.selectByExample(example);
+    return userInfos.isEmpty() ? null : userInfos.get(0);
+  }
+
+  public UserInfoResponse modUserSimple(Long uid, UserInfoSimpleVo userInfoSimpleVo) {
+    UserInfo old = getUserInfoWithUid(uid);
     if (isNull(old)) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
     UserInfo userInfo = new UserInfo();
-    userInfo.setId(uid);
+    userInfo.setId(old.getId());
     userInfo.setEmail(userInfoSimpleVo.getEmail());
     userInfo.setHeadImgUrl(userInfoSimpleVo.getHeadImgUrl());
     userInfo.setVersion(old.getVersion() + 1);
@@ -142,16 +163,16 @@ public class UserInfoService {
     if (count != 1) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
-    return buildRsp(userInfo);
+    return buildRsp(old);
   }
 
-  public UserInfoResponse modUserStatus(Integer uid, UserInfoStatusVo userInfoStatusVo) {
-    UserInfo old = userInfoMapper.selectByPrimaryKey(uid);
+  public UserInfoResponse modUserStatus(Long uid, UserInfoStatusVo userInfoStatusVo) {
+    UserInfo old = getUserInfoWithUid(uid);
     if (isNull(old)) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
     UserInfo userInfo = new UserInfo();
-    userInfo.setId(uid);
+    userInfo.setId(old.getId());
     userInfo.setStatus(userInfoStatusVo.getStatus().toString());
     userInfo.setVersion(old.getVersion() + 1);
 
@@ -159,6 +180,6 @@ public class UserInfoService {
     if (count != 1) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
-    return buildRsp(userInfo);
+    return buildRsp(old);
   }
 }

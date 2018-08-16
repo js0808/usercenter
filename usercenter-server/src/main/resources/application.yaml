@@ -46,6 +46,7 @@ spring:
 server:
   port: @server.port@
   connection-timeout: 40000
+  context-path: /usercenter
   tomcat:
     basedir: @bjca.log.dir@/tomcat
     background-processor-delay: 30

@@ -27,61 +27,61 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AuthCodeController {
 
-    @Autowired
-    private AuthCodeService authCodeService;
+  @Autowired
+  private AuthCodeService authCodeService;
 
-    @RequestMapping(value = "/codeApply", method = RequestMethod.POST)
-    public ReturnResult codeApply(@Validated @RequestBody AuthCodeApplyRequest request) {
-        MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "短信验证码申请交易");
-        AuthCodeApplyResponse response = new AuthCodeApplyResponse();
-        try {
-            response = authCodeService.codeApply(request);
-            metrics.sr_incrSuccess();
-        } catch (BjcaBizException ex) {
-            log.error("codeAppley 异常信息", ex);
-            throw ex;
-        } catch (Exception e) {
-            log.error("codeAppley 异常信息", e);
-            throw new BjcaBizException(ReturnCodeEnum.ERROR);
-        } finally {
-            metrics.qps().rt().sr_incrTotal();
-        }
-        return ReturnResult.success(response);
+  @RequestMapping(value = "/codeApply", method = RequestMethod.POST)
+  public ReturnResult codeApply(@Validated @RequestBody AuthCodeApplyRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "短信验证码申请交易");
+    AuthCodeApplyResponse response = new AuthCodeApplyResponse();
+    try {
+      response = authCodeService.codeApply(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("codeAppley 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("codeAppley 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
     }
+    return ReturnResult.success(response);
+  }
 
-    @RequestMapping(value = "/emailCodeApply", method = RequestMethod.POST)
-    public ReturnResult emailCodeApply(@Validated @RequestBody EmailCodeApplyRequest request) {
-        MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "邮件验证码申请交易");
-        try {
-            authCodeService.emailCodeApply(request);
-            metrics.sr_incrSuccess();
-        } catch (BjcaBizException ex) {
-            log.error("emailCodeApply 异常信息", ex);
-            throw ex;
-        } catch (Exception e) {
-            log.error("emailCodeApply 异常信息", e);
-            throw new BjcaBizException(ReturnCodeEnum.ERROR);
-        } finally {
-            metrics.qps().rt().sr_incrTotal();
-        }
-        return ReturnResult.success("success");
+  @RequestMapping(value = "/emailCodeApply", method = RequestMethod.POST)
+  public ReturnResult emailCodeApply(@Validated @RequestBody EmailCodeApplyRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "邮件验证码申请交易");
+    try {
+      authCodeService.emailCodeApply(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("emailCodeApply 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("emailCodeApply 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
     }
+    return ReturnResult.success("success");
+  }
 
-    @RequestMapping(value = "/validate", method = RequestMethod.POST)
-    public ReturnResult validate(@Validated @RequestBody AuthCodeValidateRequest request) {
-        MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码验证", "验证码验证交易");
-        try {
-            authCodeService.validate(request);
-            metrics.sr_incrSuccess();
-        } catch (BjcaBizException ex) {
-            log.error("validate 异常信息", ex);
-            throw ex;
-        } catch (Exception e) {
-            log.error("validate 异常信息", e);
-            throw new BjcaBizException(ReturnCodeEnum.ERROR);
-        } finally {
-            metrics.qps().rt().sr_incrTotal();
-        }
-        return ReturnResult.success("success");
+  @RequestMapping(value = "/validate", method = RequestMethod.POST)
+  public ReturnResult validate(@Validated @RequestBody AuthCodeValidateRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码验证", "验证码验证交易");
+    try {
+      authCodeService.validate(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("validate 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("validate 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
     }
+    return ReturnResult.success("success");
+  }
 }

@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
- * name_and_id_num 姓名和身份证号
+ * NAME_AND_ID_NUM 姓名和身份证号
  *
  * name_and_mobile 姓名和手机号
  *

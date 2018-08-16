@@ -7,9 +7,9 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
-import cn.org.bjca.footstone.usercenter.biz.vo.request.AuthorCodeSend;
-import cn.org.bjca.footstone.usercenter.biz.vo.request.CodeValidateSend;
-import cn.org.bjca.footstone.usercenter.biz.vo.request.MailCodeSend;
+import cn.org.bjca.footstone.usercenter.vo.AuthorCodeReqVo;
+import cn.org.bjca.footstone.usercenter.vo.CodeValidateReqVo;
+import cn.org.bjca.footstone.usercenter.vo.MailCodeReqVo;
 import cn.org.bjca.footstone.usercenter.config.AuthCodeConfig;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.SignatureUtils;
@@ -35,7 +35,7 @@ public class AuthCodeService {
 
     private final String redis_key = "usercenter_";
     private String message = "亲爱的%s用户您好, \n验证码：%s，5分钟内输入有效，请输入验证码完成%s，勿将验证码告诉其他人。";
-    private final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
+    public final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
     @Autowired
     private AuthCodeConfig authCodeConfig;
 
@@ -45,7 +45,7 @@ public class AuthCodeService {
     public AuthCodeApplyResponse codeApply(AuthCodeApplyRequest request) throws Exception {
 
         /**组装请求参数**/
-        AuthorCodeSend send = new AuthorCodeSend();
+        AuthorCodeReqVo send = new AuthorCodeReqVo();
         send.setVersion(authCodeConfig.getVersion());
         send.setAppId(authCodeConfig.getAppId());
         send.setMobile(request.getMobile());
@@ -80,7 +80,7 @@ public class AuthCodeService {
     public void emailCodeApply(EmailCodeApplyRequest request) throws Exception {
 
         /**组装请求参数**/
-        MailCodeSend send = new MailCodeSend();
+        MailCodeReqVo send = new MailCodeReqVo();
         send.setSubject(request.getSubject());
         send.setTo(request.getEmail());
         send.setFromName(authCodeConfig.getFromName());
@@ -109,7 +109,7 @@ public class AuthCodeService {
         Pattern p = Pattern.compile(regexp);
         Matcher m = p.matcher(request.getUserName());
         if (m.matches()) {
-            CodeValidateSend send = new CodeValidateSend();
+            CodeValidateReqVo send = new CodeValidateReqVo();
             send.setAppId(authCodeConfig.getAppId());
             send.setDeviceId(authCodeConfig.getDeviceId());
             send.setSignAlgo(authCodeConfig.getSignAlgo());

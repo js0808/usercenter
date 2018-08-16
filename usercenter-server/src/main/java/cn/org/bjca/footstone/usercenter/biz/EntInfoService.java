@@ -3,15 +3,18 @@ package cn.org.bjca.footstone.usercenter.biz;
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoCheakRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
+import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceCheckEntReqVo;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceCheckEntRespVo;
 import com.alibaba.fastjson.JSONObject;
+import java.util.List;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,10 +39,10 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class EntInfoService {
 
-  @Value("${idservice.checkEnterprise}")
+  @Value("${idservice.check-enterprise}")
   private String checkEntUrl = null;
 
-  @Value("${idservice.userName}")
+  @Value("${idservice.user-name}")
   private String userName = null;
 
   @Value("${idservice.password}")
@@ -49,49 +52,85 @@ public class EntInfoService {
   private EntInfoMapper entInfoMapper;
 
   @Autowired
+  private NotifyInfoMapper notifyInfoMapper;
+
+  @Autowired
   private RestTemplate restTemplate;
 
-  private void addEntInfo(EntInfoRequest entInfoRequest) {
+  /**
+   * 修改企业信息并实名认证
+   */
+  public void updateEntInfo(Long uid, EntInfoRequest entInfoRequest) {
+    checkParam(entInfoRequest);
+    //get entinfo by uid
+    EntInfo entInfoOld = getEntInfo(uid);
+    if (entInfoOld == null) {
+      throw new BaseException("");
+    }
+    //TODO 判断状态
+
+    checkRealName(entInfoRequest);
+    //update ent info
+    BeanCopy.beans(entInfoRequest, entInfoOld).copy();
+    entInfoOld.setVersion(entInfoOld.getVersion() + 1);
+    entInfoMapper.updateByPrimaryKeySelective(entInfoOld);
+
+    //TODO 保存消息
 
   }
 
-  /**
-   * 企业实名认证
-   */
-  private void checkRealEntnfo(EntInfoCheakRequest entInfoCheakRequest) {
-    String orgCode = entInfoCheakRequest.getOrgCode();
-    String bizLicense = entInfoCheakRequest.getBizLicense();
-    String socialCreditCode = entInfoCheakRequest.getSocialCreditCode();
+  private EntInfo getEntInfo(Long uid) {
+    EntInfoExample entInfoExample = new EntInfoExample();
+    entInfoExample.createCriteria().andUidEqualTo(uid);
+    List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
+    return entInfoList.isEmpty() ? null : entInfoList.get(0);
+  }
+
+  private void checkParam(EntInfoRequest entInfoRequest) {
+    String orgCode = entInfoRequest.getOrgCode();
+    String bizLicense = entInfoRequest.getBizLicense();
+    String socialCreditCode = entInfoRequest.getSocialCreditCode();
     if (StringUtils.isBlank(orgCode) && StringUtils.isBlank(bizLicense) && StringUtils
         .isBlank(socialCreditCode)) {
       throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_ENOUGH);
     }
     //目前只支持:ent_base,企业基本信息认证
-    String realNameType = entInfoCheakRequest.getRealNameType();
+    String realNameType = entInfoRequest.getRealNameType();
     if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.getDesc())) {
       throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
-    IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
-    idServiceCheckEntReqVo.setUserName(userName);
-    idServiceCheckEntReqVo.setPassword(password);
-    idServiceCheckEntReqVo.setLeagalPerson(entInfoCheakRequest.getLegalName());
-    idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoCheakRequest.getBizLicense());
-    idServiceCheckEntReqVo.setUnCreditCode(entInfoCheakRequest.getSocialCreditCode());
-    idServiceCheckEntReqVo.setUnitCode(entInfoCheakRequest.getOrgCode());
-    idServiceCheckEntReqVo.setKeywordType("1");
-    idServiceCheckEntReqVo.setTransactionId("");
-    //调用身份核实
-    checkRealRemote(idServiceCheckEntReqVo);
+  }
 
+  /**
+   * 添加企业并实名认证
+   */
+  public void addEntInfo(EntInfoRequest entInfoRequest) {
+    checkParam(entInfoRequest);
+    //调用身份核实
+    checkRealName(entInfoRequest);
+    //保存ent info
     EntInfo entInfo = new EntInfo();
-    BeanCopy.beans(entInfoCheakRequest, entInfo).copy();
+    BeanCopy.beans(entInfoRequest, entInfo).copy();
+    entInfo.setUid(SnowFlake.next());
     entInfoMapper.insertSelective(entInfo);
+    //TODO 保存消息
+
   }
 
   /**
    * 调用身份核实
    */
-  private void checkRealRemote(IdServiceCheckEntReqVo idServiceCheckEntReqVo) {
+  private void checkRealName(EntInfoRequest entInfoRequest) {
+    IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
+    idServiceCheckEntReqVo.setUserName(userName);
+    idServiceCheckEntReqVo.setPassword(password);
+    idServiceCheckEntReqVo.setLeagalPerson(entInfoRequest.getLegalName());
+    idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoRequest.getBizLicense());
+    idServiceCheckEntReqVo.setUnCreditCode(entInfoRequest.getSocialCreditCode());
+    idServiceCheckEntReqVo.setUnitCode(entInfoRequest.getOrgCode());
+    //TYPE=1--企业名称
+    idServiceCheckEntReqVo.setKeywordType("1");
+    idServiceCheckEntReqVo.setTransactionId(String.valueOf(SnowFlake.next()));
     String reqJson = JSONObject.toJSONString(idServiceCheckEntReqVo);
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);

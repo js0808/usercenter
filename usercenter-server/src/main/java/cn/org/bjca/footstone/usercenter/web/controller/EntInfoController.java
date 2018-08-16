@@ -1,15 +1,17 @@
 package cn.org.bjca.footstone.usercenter.web.controller;
 
+import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.EntInfoFacade;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoCheakRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.biz.EntInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @description:
+ * @description:ent info api
  * @author: ZHAOZHIWEI
  * @create: 2018/8/13
  **/
@@ -21,12 +23,35 @@ public class EntInfoController implements EntInfoFacade {
   EntInfoService entInfoService;
 
   @Override
-  public ReturnResult addEntInfo(EntInfoRequest entInfoRequest) {
-    return null;
+  public ReturnResult updateEntInfo(@PathVariable Integer uid,
+      @RequestBody EntInfoRequest entInfoRequest) {
+    //埋点
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "修改企业信息(实名认证)");
+    try {
+      entInfoService.updateEntInfo(uid, entInfoRequest);
+      metricsClient.sr_incrSuccess();
+
+      return ReturnResult.success("成功");
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
   }
 
   @Override
-  public ReturnResult checkRealEntInfo(EntInfoCheakRequest entInfoCheakRequest) {
-    return null;
+  public ReturnResult addEntInfo(@RequestBody EntInfoRequest entInfoRequest) {
+    //埋点
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "添加企业信息(实名认证)");
+    try {
+      entInfoService.addEntInfo(entInfoRequest);
+      metricsClient.sr_incrSuccess();
+
+      return ReturnResult.success("成功");
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
   }
 }

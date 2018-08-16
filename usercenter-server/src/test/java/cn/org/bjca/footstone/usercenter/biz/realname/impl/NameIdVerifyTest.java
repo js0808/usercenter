@@ -11,8 +11,10 @@ import cn.org.bjca.footstone.usercenter.biz.realname.RealNameChecker;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import com.alibaba.fastjson.JSON;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
@@ -58,10 +60,10 @@ public class NameIdVerifyTest extends BaseTest {
     UserInfoResponse response = userInfoService.addUser(vo);
     log.info(JSON.toJSONString(response));
 
-    UserInfo userInfo = userInfoMapper.selectByPrimaryKey(response.getUid());
+    UserInfo userInfo = getUserInfoWithUid(response.getUid());
     log.info(JSON.toJSONString(userInfo));
 
-    userInfoMapper.deleteByPrimaryKey(response.getUid());
+    userInfoMapper.deleteByPrimaryKey(userInfo.getId());
   }
 
   @Test(expected = BaseException.class)
@@ -72,6 +74,13 @@ public class NameIdVerifyTest extends BaseTest {
     vo.setIdNum("110101199003079251123");
     UserInfoResponse response = userInfoService.addUser(vo);
     log.info(JSON.toJSONString(response));
+  }
+
+  private UserInfo getUserInfoWithUid(Long uid) {
+    UserInfoExample example = new UserInfoExample();
+    example.createCriteria().andUidEqualTo(uid);
+    List<UserInfo> userInfos = userInfoMapper.selectByExample(example);
+    return userInfos.isEmpty() ? null : userInfos.get(0);
   }
 
 }

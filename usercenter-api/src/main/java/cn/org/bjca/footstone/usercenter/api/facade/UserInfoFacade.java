@@ -28,23 +28,23 @@ public interface UserInfoFacade {
   @ApiOperation(value = "变更用户信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "变更用户信息(实名认证)")
   @RequestMapping(value = "/{uid}", method = RequestMethod.PUT)
   @ResponseBody
-  ReturnResult<UserInfoResponse> modUser(@PathVariable Integer uid,
+  ReturnResult<UserInfoResponse> modUser(@PathVariable Long uid,
       @RequestBody UserInfoVo userInfo);
 
   @ApiOperation(value = "查询用户信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "查询用户信息")
   @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
   @ResponseBody
-  ReturnResult<QueryUserInfoResponse> getUser(@PathVariable Integer uid);
+  ReturnResult<QueryUserInfoResponse> getUser(@PathVariable Long uid);
 
   @ApiOperation(value = "变更用户信息(基本信息)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "变更用户信息(基本信息)")
   @RequestMapping(value = "/{uid}/simple", method = RequestMethod.PUT)
   @ResponseBody
-  ReturnResult<UserInfoResponse> modUserSimple(@PathVariable Integer uid,
+  ReturnResult<UserInfoResponse> modUserSimple(@PathVariable Long uid,
       @RequestBody UserInfoSimpleVo userInfoSimpleVo);
 
   @ApiOperation(value = "用户状态变更接口", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "用户状态变更接口")
   @RequestMapping(value = "/{uid}/status", method = RequestMethod.PUT)
   @ResponseBody
-  ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Integer uid,
+  ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Long uid,
       @RequestBody UserInfoStatusVo userInfoStatusVo);
 }

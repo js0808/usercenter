@@ -4,7 +4,7 @@
 <mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper">
   <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
     <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="uid" jdbcType="INTEGER" property="uid"/>
+    <result column="uid" jdbcType="BIGINT" property="uid"/>
     <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl"/>
     <result column="name" jdbcType="VARCHAR" property="name"/>
     <result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -161,31 +161,38 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
-    insert into ent_info (id, uid, head_img_url, 
-      name, phone, org_code, 
-      biz_license, social_credit_code, legal_name, 
-      real_name_flag, real_name_type, review_flag, 
-      biz_license_image_url, org_code_image_url, from_platform, 
-      status, ext_field1, ext_field2, 
-      ext_field3, ext_field4, ext_config, 
-      version, create_time, update_time, 
-      legal_id_num)
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{headImgUrl,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, 
-      #{bizLicense,jdbcType=VARCHAR}, #{socialCreditCode,jdbcType=VARCHAR}, #{legalName,jdbcType=VARCHAR}, 
-      #{realNameFlag,jdbcType=BIT}, #{realNameType,jdbcType=VARCHAR}, #{reviewFlag,jdbcType=BIT}, 
-      #{bizLicenseImageUrl,jdbcType=VARCHAR}, #{orgCodeImageUrl,jdbcType=VARCHAR}, #{fromPlatform,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, 
-      #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, #{extConfig,jdbcType=VARCHAR}, 
-      #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{legalIdNum,jdbcType=VARBINARY})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ent_info (uid, head_img_url, name,
+    phone, org_code, biz_license,
+    social_credit_code, legal_name, real_name_flag,
+    real_name_type, review_flag, biz_license_image_url,
+    org_code_image_url, from_platform, status,
+    ext_field1, ext_field2, ext_field3,
+    ext_field4, ext_config, version,
+    create_time, update_time, legal_id_num
+    )
+    values (#{uid,jdbcType=BIGINT}, #{headImgUrl,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
+    #{phone,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, #{bizLicense,jdbcType=VARCHAR},
+    #{socialCreditCode,jdbcType=VARCHAR}, #{legalName,jdbcType=VARCHAR},
+    #{realNameFlag,jdbcType=BIT},
+    #{realNameType,jdbcType=VARCHAR}, #{reviewFlag,jdbcType=BIT},
+    #{bizLicenseImageUrl,jdbcType=VARCHAR},
+    #{orgCodeImageUrl,jdbcType=VARCHAR}, #{fromPlatform,jdbcType=VARCHAR},
+    #{status,jdbcType=VARCHAR},
+    #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR},
+    #{extField4,jdbcType=VARCHAR}, #{extConfig,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER},
+    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+    #{legalIdNum,jdbcType=VARBINARY}
+    )
   </insert>
   <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into ent_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="uid != null">
         uid,
       </if>
@@ -260,11 +267,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="uid != null">
-        #{uid,jdbcType=INTEGER},
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="headImgUrl != null">
         #{headImgUrl,jdbcType=VARCHAR},
@@ -352,7 +356,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=INTEGER},
+        uid = #{record.uid,jdbcType=BIGINT},
       </if>
       <if test="record.headImgUrl != null">
         head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
@@ -434,7 +438,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update ent_info
     set id = #{record.id,jdbcType=INTEGER},
-    uid = #{record.uid,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=BIGINT},
     head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
     name = #{record.name,jdbcType=VARCHAR},
     phone = #{record.phone,jdbcType=VARCHAR},
@@ -465,7 +469,7 @@
   <update id="updateByExample" parameterType="map">
     update ent_info
     set id = #{record.id,jdbcType=INTEGER},
-    uid = #{record.uid,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=BIGINT},
     head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
     name = #{record.name,jdbcType=VARCHAR},
     phone = #{record.phone,jdbcType=VARCHAR},
@@ -497,7 +501,7 @@
     update ent_info
     <set>
       <if test="uid != null">
-        uid = #{uid,jdbcType=INTEGER},
+        uid = #{uid,jdbcType=BIGINT},
       </if>
       <if test="headImgUrl != null">
         head_img_url = #{headImgUrl,jdbcType=VARCHAR},
@@ -574,7 +578,7 @@
   <update id="updateByPrimaryKeyWithBLOBs"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
     update ent_info
-    set uid = #{uid,jdbcType=INTEGER},
+    set uid = #{uid,jdbcType=BIGINT},
       head_img_url = #{headImgUrl,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
@@ -603,7 +607,7 @@
   <update id="updateByPrimaryKey"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
     update ent_info
-    set uid = #{uid,jdbcType=INTEGER},
+    set uid = #{uid,jdbcType=BIGINT},
       head_img_url = #{headImgUrl,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
@@ -671,34 +675,34 @@
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-      insert into ent_info (id, uid, head_img_url,
-      name, phone, org_code,
-      biz_license, social_credit_code, legal_name,
-      real_name_flag, real_name_type, review_flag,
-      biz_license_image_url, org_code_image_url, from_platform,
-      status, ext_field1, ext_field2,
-      ext_field3, ext_field4, ext_config,
-      version, create_time, update_time,
-      legal_id_num)
+      insert into ent_info (uid, head_img_url, name,
+      phone, org_code, biz_license,
+      social_credit_code, legal_name, real_name_flag,
+      real_name_type, review_flag, biz_license_image_url,
+      org_code_image_url, from_platform, status,
+      ext_field1, ext_field2, ext_field3,
+      ext_field4, ext_config, version,
+      create_time, update_time, legal_id_num
+      )
       values
       <foreach collection="items" item="item" index="index" separator=",">
-        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=INTEGER},
-        #{item.headImgUrl,jdbcType=VARCHAR},
-        #{item.name,jdbcType=VARCHAR}, #{item.phone,jdbcType=VARCHAR},
-        #{item.orgCode,jdbcType=VARCHAR},
-        #{item.bizLicense,jdbcType=VARCHAR}, #{item.socialCreditCode,jdbcType=VARCHAR},
-        #{item.legalName,jdbcType=VARCHAR},
-        #{item.realNameFlag,jdbcType=BIT}, #{item.realNameType,jdbcType=VARCHAR},
-        #{item.reviewFlag,jdbcType=BIT},
-        #{item.bizLicenseImageUrl,jdbcType=VARCHAR}, #{item.orgCodeImageUrl,jdbcType=VARCHAR},
-        #{item.fromPlatform,jdbcType=VARCHAR},
-        #{item.status,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR},
-        #{item.extField2,jdbcType=VARCHAR},
-        #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR},
-        #{item.extConfig,jdbcType=VARCHAR},
-        #{item.version,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP},
-        #{item.updateTime,jdbcType=TIMESTAMP},
-        #{item.legalIdNum,jdbcType=VARBINARY})
+        (#{item.uid,jdbcType=BIGINT}, #{item.headImgUrl,jdbcType=VARCHAR},
+        #{item.name,jdbcType=VARCHAR},
+        #{item.phone,jdbcType=VARCHAR}, #{item.orgCode,jdbcType=VARCHAR},
+        #{item.bizLicense,jdbcType=VARCHAR},
+        #{item.socialCreditCode,jdbcType=VARCHAR}, #{item.legalName,jdbcType=VARCHAR},
+        #{item.realNameFlag,jdbcType=BIT},
+        #{item.realNameType,jdbcType=VARCHAR}, #{item.reviewFlag,jdbcType=BIT},
+        #{item.bizLicenseImageUrl,jdbcType=VARCHAR},
+        #{item.orgCodeImageUrl,jdbcType=VARCHAR}, #{item.fromPlatform,jdbcType=VARCHAR},
+        #{item.status,jdbcType=VARCHAR},
+        #{item.extField1,jdbcType=VARCHAR}, #{item.extField2,jdbcType=VARCHAR},
+        #{item.extField3,jdbcType=VARCHAR},
+        #{item.extField4,jdbcType=VARCHAR}, #{item.extConfig,jdbcType=VARCHAR},
+        #{item.version,jdbcType=INTEGER},
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP},
+        #{item.legalIdNum,jdbcType=VARBINARY}
+        )
       </foreach>
     </if>
   </insert>
