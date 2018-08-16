@@ -28,7 +28,7 @@ public interface EntInfoFacade {
       @ApiImplicitParam(name = "entInfoRequest", value = "EntInfoRequest payload", required = true, paramType = "body", dataType = "EntInfoRequest")
   })
   @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
-  public ReturnResult updateEntInfo(@PathVariable Integer uid,
+  public ReturnResult updateEntInfo(@PathVariable Long uid,
       @RequestBody EntInfoRequest entInfoRequest);
 
   @ApiOperation(value = "添加企业信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "添加企业信息(实名认证)")
