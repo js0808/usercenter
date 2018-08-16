@@ -8,41 +8,42 @@ import org.apache.ibatis.session.RowBounds;
 
 public interface EntInfoMapper {
 
-  long countByExample(EntInfoExample example);
+    long countByExample(EntInfoExample example);
 
-  int deleteByExample(EntInfoExample example);
+    int deleteByExample(EntInfoExample example);
 
-  int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Integer id);
 
-  int insert(EntInfo record);
+    int insert(EntInfo record);
 
-  int insertSelective(EntInfo record);
+    int insertSelective(EntInfo record);
 
-  List<EntInfo> selectByExampleWithBLOBsWithRowbounds(EntInfoExample example, RowBounds rowBounds);
+    List<EntInfo> selectByExampleWithBLOBsWithRowbounds(EntInfoExample example,
+        RowBounds rowBounds);
 
-  List<EntInfo> selectByExampleWithBLOBs(EntInfoExample example);
+    List<EntInfo> selectByExampleWithBLOBs(EntInfoExample example);
 
-  List<EntInfo> selectByExampleWithRowbounds(EntInfoExample example, RowBounds rowBounds);
+    List<EntInfo> selectByExampleWithRowbounds(EntInfoExample example, RowBounds rowBounds);
 
-  List<EntInfo> selectByExample(EntInfoExample example);
+    List<EntInfo> selectByExample(EntInfoExample example);
 
-  EntInfo selectByPrimaryKey(Integer id);
+    EntInfo selectByPrimaryKey(Integer id);
 
-  int updateByExampleSelective(@Param("record") EntInfo record,
-      @Param("example") EntInfoExample example);
+    int updateByExampleSelective(@Param("record") EntInfo record,
+        @Param("example") EntInfoExample example);
 
-  int updateByExampleWithBLOBs(@Param("record") EntInfo record,
-      @Param("example") EntInfoExample example);
+    int updateByExampleWithBLOBs(@Param("record") EntInfo record,
+        @Param("example") EntInfoExample example);
 
-  int updateByExample(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
+    int updateByExample(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 
-  int updateByPrimaryKeySelective(EntInfo record);
+    int updateByPrimaryKeySelective(EntInfo record);
 
-  int updateByPrimaryKeyWithBLOBs(EntInfo record);
+    int updateByPrimaryKeyWithBLOBs(EntInfo record);
 
-  int updateByPrimaryKey(EntInfo record);
+    int updateByPrimaryKey(EntInfo record);
 
-  Long sumByExample(EntInfoExample example);
+    Long sumByExample(EntInfoExample example);
 
-  void batchInsert(@Param("items") List<EntInfo> items);
+    void batchInsert(@Param("items") List<EntInfo> items);
 }
