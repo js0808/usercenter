@@ -31,4 +31,15 @@ public class AccountInfoService {
     }
     return accountInfos.get(0);
   }
+
+  public AccountInfo findAccountInfoByUid(Long uid) {
+    AccountInfoExample example = new AccountInfoExample();
+    Criteria criteria = example.createCriteria();
+    criteria.andUidEqualTo(uid);
+    List<AccountInfo> accountInfos = accountInfoMapper.selectByExample(example);
+    if (CollectionUtils.isEmpty(accountInfos)) {
+      return null;
+    }
+    return accountInfos.get(0);
+  }
 }

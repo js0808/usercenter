@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  **/
 @Data
 @Component
-@ConfigurationProperties(prefix = "bjca.account.login")
+@ConfigurationProperties(prefix = "account.login")
 public class AccountLoginConfig {
 
   private int maxAttempts = 5;

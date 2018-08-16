@@ -345,6 +345,10 @@ public class RDate {
     return add(getNow(), days, Calendar.DATE);
   }
 
+  public static Date addMinutes(int minutes) {
+    return add(getNow(), minutes, Calendar.MINUTE);
+  }
+
   /**
    * 取得指定日期以后若干天的日期。如果要得到以前的日期，参数用负数。
    *

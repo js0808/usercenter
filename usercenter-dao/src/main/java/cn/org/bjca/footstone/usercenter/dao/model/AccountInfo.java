@@ -14,7 +14,7 @@ public class AccountInfo implements Serializable {
 
     private String status;
 
-    private Integer uid;
+    private Long uid;
 
     private String userType;
 
@@ -29,6 +29,8 @@ public class AccountInfo implements Serializable {
     private Boolean isLocked;
 
     private Date lockedExpireTime;
+
+    private Date lastLoginTime;
 
     private Integer version;
 
@@ -80,11 +82,11 @@ public class AccountInfo implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public Integer getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public void setUid(Integer uid) {
+    public void setUid(Long uid) {
         this.uid = uid;
     }
 
@@ -142,6 +144,14 @@ public class AccountInfo implements Serializable {
 
     public void setLockedExpireTime(Date lockedExpireTime) {
         this.lockedExpireTime = lockedExpireTime;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     public Integer getVersion() {

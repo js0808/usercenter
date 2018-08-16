@@ -7,33 +7,31 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 public interface LoginLogMapper {
+    long countByExample(LoginLogExample example);
 
-  long countByExample(LoginLogExample example);
+    int deleteByExample(LoginLogExample example);
 
-  int deleteByExample(LoginLogExample example);
+    int deleteByPrimaryKey(Integer id);
 
-  int deleteByPrimaryKey(Integer id);
+    int insert(LoginLog record);
 
-  int insert(LoginLog record);
+    int insertSelective(LoginLog record);
 
-  int insertSelective(LoginLog record);
+    List<LoginLog> selectByExampleWithRowbounds(LoginLogExample example, RowBounds rowBounds);
 
-  List<LoginLog> selectByExampleWithRowbounds(LoginLogExample example, RowBounds rowBounds);
+    List<LoginLog> selectByExample(LoginLogExample example);
 
-  List<LoginLog> selectByExample(LoginLogExample example);
+    LoginLog selectByPrimaryKey(Integer id);
 
-  LoginLog selectByPrimaryKey(Integer id);
+    int updateByExampleSelective(@Param("record") LoginLog record, @Param("example") LoginLogExample example);
 
-  int updateByExampleSelective(@Param("record") LoginLog record,
-      @Param("example") LoginLogExample example);
+    int updateByExample(@Param("record") LoginLog record, @Param("example") LoginLogExample example);
 
-  int updateByExample(@Param("record") LoginLog record, @Param("example") LoginLogExample example);
+    int updateByPrimaryKeySelective(LoginLog record);
 
-  int updateByPrimaryKeySelective(LoginLog record);
+    int updateByPrimaryKey(LoginLog record);
 
-  int updateByPrimaryKey(LoginLog record);
+    Long sumByExample(LoginLogExample example);
 
-  Long sumByExample(LoginLogExample example);
-
-  void batchInsert(@Param("items") List<LoginLog> items);
+    void batchInsert(@Param("items") List<LoginLog> items);
 }

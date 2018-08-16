@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.LoginLogMapper">
   <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
-    <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="account_type" jdbcType="VARCHAR" property="accountType"/>
-    <result column="account" jdbcType="VARCHAR" property="account"/>
-    <result column="uid" jdbcType="INTEGER" property="uid"/>
-    <result column="user_type" jdbcType="VARCHAR" property="userType"/>
-    <result column="client_info" jdbcType="VARCHAR" property="clientInfo"/>
-    <result column="login_result" jdbcType="BIT" property="loginResult"/>
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="client_info" jdbcType="VARCHAR" property="clientInfo" />
+    <result column="login_result" jdbcType="BIT" property="loginResult" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -30,8 +29,7 @@
                 </when>
                 <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="("
-                    separator=",">
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -60,8 +58,7 @@
                 </when>
                 <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="("
-                    separator=",">
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -75,17 +72,15 @@
   <sql id="Base_Column_List">
     id, account_type, account, uid, user_type, client_info, login_result, create_time
   </sql>
-  <select id="selectByExample"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample"
-    resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from login_log
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause"/>
+      <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
@@ -95,8 +90,8 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
+    select 
+    <include refid="Base_Column_List" />
     from login_log
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -104,11 +99,10 @@
     delete from login_log
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample">
+  <delete id="deleteByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample">
     delete from login_log
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause"/>
+      <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
@@ -116,7 +110,7 @@
       uid, user_type, client_info, 
       login_result, create_time)
     values (#{id,jdbcType=INTEGER}, #{accountType,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{uid,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, 
+      #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, 
       #{loginResult,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
@@ -158,7 +152,7 @@
         #{account,jdbcType=VARCHAR},
       </if>
       <if test="uid != null">
-        #{uid,jdbcType=INTEGER},
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
@@ -174,12 +168,10 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample"
-    resultType="java.lang.Long">
+  <select id="countByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample" resultType="java.lang.Long">
     select count(*) from login_log
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause"/>
+      <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
@@ -195,7 +187,7 @@
         account = #{record.account,jdbcType=VARCHAR},
       </if>
       <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=INTEGER},
+        uid = #{record.uid,jdbcType=BIGINT},
       </if>
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
@@ -209,30 +201,29 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateSql != null">
+      <if test="record.updateSql != null" >
         ${record.updateSql},
       </if>
     </set>
     <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause"/>
+      <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
     update login_log
     set id = #{record.id,jdbcType=INTEGER},
-    account_type = #{record.accountType,jdbcType=VARCHAR},
-    account = #{record.account,jdbcType=VARCHAR},
-    uid = #{record.uid,jdbcType=INTEGER},
-    user_type = #{record.userType,jdbcType=VARCHAR},
-    client_info = #{record.clientInfo,jdbcType=VARCHAR},
-    login_result = #{record.loginResult,jdbcType=BIT},
-    create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      account_type = #{record.accountType,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
+      uid = #{record.uid,jdbcType=BIGINT},
+      user_type = #{record.userType,jdbcType=VARCHAR},
+      client_info = #{record.clientInfo,jdbcType=VARCHAR},
+      login_result = #{record.loginResult,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause"/>
+      <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
     update login_log
     <set>
       <if test="accountType != null">
@@ -242,7 +233,7 @@
         account = #{account,jdbcType=VARCHAR},
       </if>
       <if test="uid != null">
-        uid = #{uid,jdbcType=INTEGER},
+        uid = #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
@@ -259,52 +250,46 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
+  <update id="updateByPrimaryKey" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
     update login_log
     set account_type = #{accountType,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
-      uid = #{uid,jdbcType=INTEGER},
+      uid = #{uid,jdbcType=BIGINT},
       user_type = #{userType,jdbcType=VARCHAR},
       client_info = #{clientInfo,jdbcType=VARCHAR},
       login_result = #{loginResult,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample"
-    resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List"/>
+    <include refid="Base_Column_List" />
     from login_log
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause"/>
+      <include refid="Example_Where_Clause" />
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="sumByExample"
-    parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample" resultType="long">
+  <select id="sumByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample" resultType="long" >
     select sum(${sumCol}) from login_log
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause"/>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
     </if>
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-      insert into login_log (id, account_type, account,
-      uid, user_type, client_info,
-      login_result, create_time)
+            insert into login_log  (id, account_type, account, 
+        uid, user_type, client_info, 
+        login_result, create_time)
       values
       <foreach collection="items" item="item" index="index" separator=",">
-        (#{item.id,jdbcType=INTEGER}, #{item.accountType,jdbcType=VARCHAR},
-        #{item.account,jdbcType=VARCHAR},
-        #{item.uid,jdbcType=INTEGER}, #{item.userType,jdbcType=VARCHAR},
-        #{item.clientInfo,jdbcType=VARCHAR},
+      (#{item.id,jdbcType=INTEGER}, #{item.accountType,jdbcType=VARCHAR}, #{item.account,jdbcType=VARCHAR}, 
+        #{item.uid,jdbcType=BIGINT}, #{item.userType,jdbcType=VARCHAR}, #{item.clientInfo,jdbcType=VARCHAR}, 
         #{item.loginResult,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP})
       </foreach>
     </if>
