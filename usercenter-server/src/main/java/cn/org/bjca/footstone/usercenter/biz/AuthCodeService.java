@@ -33,125 +33,132 @@ import static cn.org.bjca.footstone.usercenter.util.RestUtils.post;
 @Slf4j
 public class AuthCodeService {
 
-    private final String redis_key = "usercenter_";
-    private String message = "亲爱的%s用户您好, \n验证码：%s，5分钟内输入有效，请输入验证码完成%s，勿将验证码告诉其他人。";
-    public final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
-    @Autowired
-    private AuthCodeConfig authCodeConfig;
+  private final String redis_key = "usercenter_";
+  private String message = "亲爱的%s用户您好, \n验证码：%s，5分钟内输入有效，请输入验证码完成%s，勿将验证码告诉其他人。";
+  public final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
+  @Autowired
+  private AuthCodeConfig authCodeConfig;
 
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
 
-    public AuthCodeApplyResponse codeApply(AuthCodeApplyRequest request) throws Exception {
+  public AuthCodeApplyResponse codeApply(AuthCodeApplyRequest request) throws Exception {
 
-        /**组装请求参数**/
-        AuthorCodeReqVo send = new AuthorCodeReqVo();
-        send.setVersion(authCodeConfig.getVersion());
-        send.setAppId(authCodeConfig.getAppId());
-        send.setMobile(request.getMobile());
-        send.setParam("{}");
-        send.setExtension("{}");
-        send.setDeviceId(authCodeConfig.getDeviceId());
-        send.setTemplateId(authCodeConfig.getTemplateId());
-        send.setTransId(String.valueOf(System.currentTimeMillis()));
-        send.setSignAlgo(authCodeConfig.getSignAlgo());
-        String signStr = SignatureUtils.signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
-        send.setSignature(signStr);
-        ResponseEntity<ReturnResult> responseEntity = null;
-        responseEntity = post(authCodeConfig.getCodeUrl(), false, ReturnResult.class, send);
-        log.info("codeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
-        if (isOk(responseEntity)) {
-            ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
-            if (returnResult.getStatus() != 200) {
-                throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
-            }
-            log.info("data:[{}]", JSONObject.toJSONString(returnResult.getData()));
+    /**组装请求参数**/
+    AuthorCodeReqVo send = new AuthorCodeReqVo();
+    send.setVersion(authCodeConfig.getVersion());
+    send.setAppId(authCodeConfig.getAppId());
+    send.setMobile(request.getMobile());
+    send.setParam("{}");
+    send.setExtension("{}");
+    send.setDeviceId(authCodeConfig.getDeviceId());
+    send.setTemplateId(authCodeConfig.getTemplateId());
+    send.setTransId(String.valueOf(System.currentTimeMillis()));
+    send.setSignAlgo(authCodeConfig.getSignAlgo());
+    String signStr = SignatureUtils
+        .signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
+    send.setSignature(signStr);
+    ResponseEntity<ReturnResult> responseEntity = null;
+    responseEntity = post(authCodeConfig.getCodeUrl(), false, ReturnResult.class, send);
+    log.info("codeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
+    if (isOk(responseEntity)) {
+      ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
+      if (returnResult.getStatus() != 200) {
+        throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
+      }
+      log.info("data:[{}]", JSONObject.toJSONString(returnResult.getData()));
 
-            AuthCodeApplyResponse response = JSONObject.parseObject(JSONObject.toJSONString(returnResult.getData()),
-                    AuthCodeApplyResponse.class);
-            return response;
-        } else {
-            log.error("status:[{}]", responseEntity.getStatusCode().value());
-            log.error("message:[{}]", responseEntity.getBody().getMessage());
-            throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, responseEntity.getBody().getMessage());
+      AuthCodeApplyResponse response = JSONObject
+          .parseObject(JSONObject.toJSONString(returnResult.getData()),
+              AuthCodeApplyResponse.class);
+      return response;
+    } else {
+      log.error("status:[{}]", responseEntity.getStatusCode().value());
+      log.error("message:[{}]", responseEntity.getBody().getMessage());
+      throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR,
+          responseEntity.getBody().getMessage());
+    }
+  }
+
+  public void emailCodeApply(EmailCodeApplyRequest request) throws Exception {
+
+    /**组装请求参数**/
+    MailCodeReqVo send = new MailCodeReqVo();
+    send.setSubject(request.getSubject());
+    send.setTo(request.getEmail());
+    send.setFromName(authCodeConfig.getFromName());
+    AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
+    String emailCode = getFixLenthString(6);
+    String sendMsg = String.format(message, request.getEmail(), emailCode, typeEnum.getDesc());
+    send.setPlainText(sendMsg);
+    ResponseEntity<ReturnResult> responseEntity = null;
+    responseEntity = post(authCodeConfig.getEmailUrl(), false, ReturnResult.class, send);
+    log.info("emailCodeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
+    if (isOk(responseEntity)) {
+      ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
+      if (returnResult.getStatus() != 200) {
+        throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
+      }
+    } else {
+      log.error("status:[{}]", responseEntity.getStatusCode().value());
+      log.error("message:[{}]", responseEntity.getBody().getMessage());
+      throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR,
+          responseEntity.getBody().getMessage());
+    }
+    String key = redis_key + typeEnum.value() + "_" + request.getEmail();
+    stringRedisTemplate.opsForValue()
+        .set(key, emailCode, authCodeConfig.getExpire(), TimeUnit.SECONDS);
+  }
+
+  public void validate(AuthCodeValidateRequest request) throws Exception {
+    Pattern p = Pattern.compile(regexp);
+    Matcher m = p.matcher(request.getUserName());
+    if (m.matches()) {
+      CodeValidateReqVo send = new CodeValidateReqVo();
+      send.setAppId(authCodeConfig.getAppId());
+      send.setDeviceId(authCodeConfig.getDeviceId());
+      send.setSignAlgo(authCodeConfig.getSignAlgo());
+      send.setMobile(request.getUserName());
+      send.setTransId(String.valueOf(System.currentTimeMillis()));
+      send.setTemplateId(authCodeConfig.getTemplateId());
+      send.setVersion(authCodeConfig.getVersion());
+      send.setAuthCode(request.getAuthCode());
+      String signStr = SignatureUtils
+          .signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
+      send.setSignature(signStr);
+      ResponseEntity<ReturnResult> responseEntity = null;
+      responseEntity = post(authCodeConfig.getValidateUrl(), false, ReturnResult.class, send);
+      log.info("validate post return:[{}]", JSONObject.toJSONString(responseEntity));
+      if (isOk(responseEntity)) {
+        ReturnResult returnResult = responseEntity.getBody();
+        if (returnResult.getStatus() != 200) {
+          throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
         }
+      } else {
+        log.error("status:[{}]", responseEntity.getStatusCode().value());
+        log.error("message:[{}]", responseEntity.getBody().getMessage());
+        throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR,
+            responseEntity.getBody().getMessage());
+      }
+    } else {
+      AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
+      String key = redis_key + typeEnum.value() + "_" + request.getUserName();
+      String redisValue = stringRedisTemplate.opsForValue().get(key);
+      if (StringUtils.isEmpty(redisValue)) {
+        throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_NOT_EXIT_ERROR);
+      }
+      if (!StringUtils.equals(redisValue, request.getAuthCode())) {
+        throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
+      }
     }
+  }
 
-    public void emailCodeApply(EmailCodeApplyRequest request) throws Exception {
+  public String getFixLenthString(int strLength) {
+    Random rm = new Random();
+    // 获得随机数
+    double pross = (1 + rm.nextDouble()) * Math.pow(10, strLength);
 
-        /**组装请求参数**/
-        MailCodeReqVo send = new MailCodeReqVo();
-        send.setSubject(request.getSubject());
-        send.setTo(request.getEmail());
-        send.setFromName(authCodeConfig.getFromName());
-        AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
-        String emailCode = getFixLenthString(6);
-        String sendMsg = String.format(message, request.getEmail(), emailCode, typeEnum.getDesc());
-        send.setPlainText(sendMsg);
-        ResponseEntity<ReturnResult> responseEntity = null;
-        responseEntity = post(authCodeConfig.getEmailUrl(), false, ReturnResult.class, send);
-        log.info("emailCodeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
-        if (isOk(responseEntity)) {
-            ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
-            if (returnResult.getStatus() != 200) {
-                throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
-            }
-        } else {
-            log.error("status:[{}]", responseEntity.getStatusCode().value());
-            log.error("message:[{}]", responseEntity.getBody().getMessage());
-            throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, responseEntity.getBody().getMessage());
-        }
-        String key = redis_key + typeEnum.value() + "_" + request.getEmail();
-        stringRedisTemplate.opsForValue().set(key, emailCode, authCodeConfig.getExpire(), TimeUnit.SECONDS);
-    }
-
-    public void validate(AuthCodeValidateRequest request) throws Exception {
-        Pattern p = Pattern.compile(regexp);
-        Matcher m = p.matcher(request.getUserName());
-        if (m.matches()) {
-            CodeValidateReqVo send = new CodeValidateReqVo();
-            send.setAppId(authCodeConfig.getAppId());
-            send.setDeviceId(authCodeConfig.getDeviceId());
-            send.setSignAlgo(authCodeConfig.getSignAlgo());
-            send.setMobile(request.getUserName());
-            send.setTransId(String.valueOf(System.currentTimeMillis()));
-            send.setTemplateId(authCodeConfig.getTemplateId());
-            send.setVersion(authCodeConfig.getVersion());
-            send.setAuthCode(request.getAuthCode());
-            String signStr = SignatureUtils.signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
-            send.setSignature(signStr);
-            ResponseEntity<ReturnResult> responseEntity = null;
-            responseEntity = post(authCodeConfig.getValidateUrl(), false, ReturnResult.class, send);
-            log.info("validate post return:[{}]", JSONObject.toJSONString(responseEntity));
-            if (isOk(responseEntity)) {
-                ReturnResult returnResult = responseEntity.getBody();
-                if (returnResult.getStatus() != 200) {
-                    throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, returnResult.getMessage());
-                }
-            } else {
-                log.error("status:[{}]", responseEntity.getStatusCode().value());
-                log.error("message:[{}]", responseEntity.getBody().getMessage());
-                throw new BjcaBizException(ReturnCodeEnum.MSG_SERVER_ERROR, responseEntity.getBody().getMessage());
-            }
-        } else {
-            AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
-            String key = redis_key + typeEnum.value() + "_" + request.getUserName();
-            String redisValue = stringRedisTemplate.opsForValue().get(key);
-            if (StringUtils.isEmpty(redisValue)) {
-                throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_NOT_EXIT_ERROR);
-            }
-            if (!StringUtils.equals(redisValue, request.getAuthCode())) {
-                throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
-            }
-        }
-    }
-
-    public String getFixLenthString(int strLength) {
-        Random rm = new Random();
-        // 获得随机数
-        double pross = (1 + rm.nextDouble()) * Math.pow(10, strLength);
-
-        // 返回固定的长度的随机数
-        return String.valueOf(pross).substring(1, strLength + 1);
-    }
+    // 返回固定的长度的随机数
+    return String.valueOf(pross).substring(1, strLength + 1);
+  }
 }
