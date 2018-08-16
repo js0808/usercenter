@@ -9,25 +9,22 @@ import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
+import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceCheckEntReqVo;
-import cn.org.bjca.footstone.usercenter.vo.IdServiceCheckEntRespVo;
 import com.alibaba.fastjson.JSONObject;
 import java.util.List;
+import java.util.Map;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -73,7 +70,10 @@ public class EntInfoService {
     //update ent info
     BeanCopy.beans(entInfoRequest, entInfoOld).copy();
     entInfoOld.setVersion(entInfoOld.getVersion() + 1);
-    entInfoMapper.updateByPrimaryKeySelective(entInfoOld);
+    int result = entInfoMapper.updateByPrimaryKeySelective(entInfoOld);
+    if (result != 1) {
+      throw new BaseException("");
+    }
 
     //TODO 保存消息
 
@@ -96,7 +96,7 @@ public class EntInfoService {
     }
     //目前只支持:ent_base,企业基本信息认证
     String realNameType = entInfoRequest.getRealNameType();
-    if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.getDesc())) {
+    if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.value())) {
       throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
   }
@@ -124,6 +124,7 @@ public class EntInfoService {
     IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
     idServiceCheckEntReqVo.setUserName(userName);
     idServiceCheckEntReqVo.setPassword(password);
+    idServiceCheckEntReqVo.setEnterpriseName(entInfoRequest.getName());
     idServiceCheckEntReqVo.setLeagalPerson(entInfoRequest.getLegalName());
     idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoRequest.getBizLicense());
     idServiceCheckEntReqVo.setUnCreditCode(entInfoRequest.getSocialCreditCode());
@@ -132,16 +133,15 @@ public class EntInfoService {
     idServiceCheckEntReqVo.setKeywordType("1");
     idServiceCheckEntReqVo.setTransactionId(String.valueOf(SnowFlake.next()));
     String reqJson = JSONObject.toJSONString(idServiceCheckEntReqVo);
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
+
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("依赖第三方服务", "身份核实服务", "企业认证");
-    HttpEntity<String> requestEntity = new HttpEntity(reqJson, headers);
-    ResponseEntity<IdServiceCheckEntRespVo> response = null;
+    ResponseEntity<Map<String, String>> response = null;
     try {
-      response = restTemplate
-          .exchange(checkEntUrl, HttpMethod.POST, requestEntity, IdServiceCheckEntRespVo.class);
-    } catch (RestClientException e) {
+      response = RestUtils
+          .post(checkEntUrl, new ParameterizedTypeReference<Map<String, String>>() {
+          }, idServiceCheckEntReqVo);
+    } catch (Exception e) {
       log.error("身份核实服务通信异常,请求报文[{}]", reqJson, e);
       throw new BaseException(ReturnCodeEnum.ID_SERVICE_CONN_ERROR);
     } finally {
@@ -149,11 +149,11 @@ public class EntInfoService {
     }
 
     if (response.getStatusCode() == HttpStatus.OK) {
-      String resultCode = response.getBody().getResultCode();
-      String resultMessage = response.getBody().getResultMessage();
+      String resultCode = response.getBody().get("resultCode");
+      String resultMessage = response.getBody().get("resultMessage");
       if (StringUtils.equals(resultCode, IdServiceBaseRespVo.OK)) {
-        String entResult = response.getBody().getEnterpriseResult();
-        String entResultMsg = response.getBody().getEnterpriseResultMsg();
+        String entResult = response.getBody().get("enterpriseResult");
+        String entResultMsg = response.getBody().get("enterpriseResultMsg");
         if (StringUtils.equals(entResult, IdServiceBaseRespVo.OK)) {
           log.info("身份核实服务企业认证成功,请求报文[{}]", reqJson);
           metricsClient.sr_incrSuccess();
