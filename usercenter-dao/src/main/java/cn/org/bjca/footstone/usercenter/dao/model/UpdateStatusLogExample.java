@@ -286,52 +286,52 @@ public class UpdateStatusLogExample {
       return (Criteria) this;
     }
 
-    public Criteria andUidEqualTo(Integer value) {
+    public Criteria andUidEqualTo(Long value) {
       addCriterion("uid =", value, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidNotEqualTo(Integer value) {
+    public Criteria andUidNotEqualTo(Long value) {
       addCriterion("uid <>", value, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidGreaterThan(Integer value) {
+    public Criteria andUidGreaterThan(Long value) {
       addCriterion("uid >", value, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidGreaterThanOrEqualTo(Integer value) {
+    public Criteria andUidGreaterThanOrEqualTo(Long value) {
       addCriterion("uid >=", value, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidLessThan(Integer value) {
+    public Criteria andUidLessThan(Long value) {
       addCriterion("uid <", value, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidLessThanOrEqualTo(Integer value) {
+    public Criteria andUidLessThanOrEqualTo(Long value) {
       addCriterion("uid <=", value, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidIn(List<Integer> values) {
+    public Criteria andUidIn(List<Long> values) {
       addCriterion("uid in", values, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidNotIn(List<Integer> values) {
+    public Criteria andUidNotIn(List<Long> values) {
       addCriterion("uid not in", values, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidBetween(Integer value1, Integer value2) {
+    public Criteria andUidBetween(Long value1, Long value2) {
       addCriterion("uid between", value1, value2, "uid");
       return (Criteria) this;
     }
 
-    public Criteria andUidNotBetween(Integer value1, Integer value2) {
+    public Criteria andUidNotBetween(Long value1, Long value2) {
       addCriterion("uid not between", value1, value2, "uid");
       return (Criteria) this;
     }

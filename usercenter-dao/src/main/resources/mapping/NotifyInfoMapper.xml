@@ -4,7 +4,7 @@
 <mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper">
   <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo">
     <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="uid" jdbcType="INTEGER" property="uid"/>
+    <result column="uid" jdbcType="BIGINT" property="uid"/>
     <result column="user_type" jdbcType="VARCHAR" property="userType"/>
     <result column="notify_type" jdbcType="VARCHAR" property="notifyType"/>
     <result column="notify_status" jdbcType="VARCHAR" property="notifyStatus"/>
@@ -118,7 +118,7 @@
       notify_type, notify_status, notify_num, 
       notify_msg, create_time, update_time
       )
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, 
       #{notifyType,jdbcType=VARCHAR}, #{notifyStatus,jdbcType=VARCHAR}, #{notifyNum,jdbcType=INTEGER}, 
       #{notifyMsg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
       )
@@ -160,7 +160,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="uid != null">
-        #{uid,jdbcType=INTEGER},
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
@@ -200,7 +200,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=INTEGER},
+        uid = #{record.uid,jdbcType=BIGINT},
       </if>
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
@@ -234,7 +234,7 @@
   <update id="updateByExample" parameterType="map">
     update notify_info
     set id = #{record.id,jdbcType=INTEGER},
-    uid = #{record.uid,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=BIGINT},
     user_type = #{record.userType,jdbcType=VARCHAR},
     notify_type = #{record.notifyType,jdbcType=VARCHAR},
     notify_status = #{record.notifyStatus,jdbcType=VARCHAR},
@@ -251,7 +251,7 @@
     update notify_info
     <set>
       <if test="uid != null">
-        uid = #{uid,jdbcType=INTEGER},
+        uid = #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
@@ -280,7 +280,7 @@
   <update id="updateByPrimaryKey"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo">
     update notify_info
-    set uid = #{uid,jdbcType=INTEGER},
+    set uid = #{uid,jdbcType=BIGINT},
       user_type = #{userType,jdbcType=VARCHAR},
       notify_type = #{notifyType,jdbcType=VARCHAR},
       notify_status = #{notifyStatus,jdbcType=VARCHAR},
@@ -321,7 +321,7 @@
       )
       values
       <foreach collection="items" item="item" index="index" separator=",">
-        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=INTEGER},
+        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=BIGINT},
         #{item.userType,jdbcType=VARCHAR},
         #{item.notifyType,jdbcType=VARCHAR}, #{item.notifyStatus,jdbcType=VARCHAR},
         #{item.notifyNum,jdbcType=INTEGER},

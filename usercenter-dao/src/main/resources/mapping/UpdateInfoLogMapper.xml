@@ -4,7 +4,7 @@
 <mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.UpdateInfoLogMapper">
   <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.UpdateInfoLog">
     <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="uid" jdbcType="INTEGER" property="uid"/>
+    <result column="uid" jdbcType="BIGINT" property="uid"/>
     <result column="user_type" jdbcType="VARCHAR" property="userType"/>
     <result column="operator_uid" jdbcType="INTEGER" property="operatorUid"/>
     <result column="operator_account" jdbcType="VARCHAR" property="operatorAccount"/>
@@ -126,7 +126,7 @@
       ext_field1, ext_field2, ext_field3, 
       ext_field4, version, create_time
       )
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, 
       #{operatorUid,jdbcType=INTEGER}, #{operatorAccount,jdbcType=VARCHAR}, #{attributeName,jdbcType=VARCHAR}, 
       #{oldValue,jdbcType=VARCHAR}, #{updateValue,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, 
       #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, 
@@ -188,7 +188,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="uid != null">
-        #{uid,jdbcType=INTEGER},
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
@@ -246,7 +246,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=INTEGER},
+        uid = #{record.uid,jdbcType=BIGINT},
       </if>
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
@@ -298,7 +298,7 @@
   <update id="updateByExample" parameterType="map">
     update update_info_log
     set id = #{record.id,jdbcType=INTEGER},
-    uid = #{record.uid,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=BIGINT},
     user_type = #{record.userType,jdbcType=VARCHAR},
     operator_uid = #{record.operatorUid,jdbcType=INTEGER},
     operator_account = #{record.operatorAccount,jdbcType=VARCHAR},
@@ -321,7 +321,7 @@
     update update_info_log
     <set>
       <if test="uid != null">
-        uid = #{uid,jdbcType=INTEGER},
+        uid = #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
@@ -368,7 +368,7 @@
   <update id="updateByPrimaryKey"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateInfoLog">
     update update_info_log
-    set uid = #{uid,jdbcType=INTEGER},
+    set uid = #{uid,jdbcType=BIGINT},
       user_type = #{userType,jdbcType=VARCHAR},
       operator_uid = #{operatorUid,jdbcType=INTEGER},
       operator_account = #{operatorAccount,jdbcType=VARCHAR},
@@ -418,7 +418,7 @@
       )
       values
       <foreach collection="items" item="item" index="index" separator=",">
-        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=INTEGER},
+        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=BIGINT},
         #{item.userType,jdbcType=VARCHAR},
         #{item.operatorUid,jdbcType=INTEGER}, #{item.operatorAccount,jdbcType=VARCHAR},
         #{item.attributeName,jdbcType=VARCHAR},

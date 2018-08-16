@@ -4,7 +4,7 @@
 <mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoExtMapper">
   <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExt">
     <id column="id" jdbcType="INTEGER" property="id"/>
-    <result column="uid" jdbcType="INTEGER" property="uid"/>
+    <result column="uid" jdbcType="BIGINT" property="uid"/>
     <result column="item0" jdbcType="VARCHAR" property="item0"/>
     <result column="item1" jdbcType="VARCHAR" property="item1"/>
     <result column="item2" jdbcType="VARCHAR" property="item2"/>
@@ -121,7 +121,7 @@
       item4, item5, item6, 
       item7, item8, item9
       )
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{item0,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT}, #{item0,jdbcType=VARCHAR}, 
       #{item1,jdbcType=VARCHAR}, #{item2,jdbcType=VARCHAR}, #{item3,jdbcType=VARCHAR}, 
       #{item4,jdbcType=VARCHAR}, #{item5,jdbcType=VARCHAR}, #{item6,jdbcType=VARCHAR}, 
       #{item7,jdbcType=VARCHAR}, #{item8,jdbcType=VARCHAR}, #{item9,jdbcType=VARCHAR}
@@ -173,7 +173,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="uid != null">
-        #{uid,jdbcType=INTEGER},
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="item0 != null">
         #{item0,jdbcType=VARCHAR},
@@ -222,7 +222,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=INTEGER},
+        uid = #{record.uid,jdbcType=BIGINT},
       </if>
       <if test="record.item0 != null">
         item0 = #{record.item0,jdbcType=VARCHAR},
@@ -265,7 +265,7 @@
   <update id="updateByExample" parameterType="map">
     update ent_info_ext
     set id = #{record.id,jdbcType=INTEGER},
-    uid = #{record.uid,jdbcType=INTEGER},
+    uid = #{record.uid,jdbcType=BIGINT},
     item0 = #{record.item0,jdbcType=VARCHAR},
     item1 = #{record.item1,jdbcType=VARCHAR},
     item2 = #{record.item2,jdbcType=VARCHAR},
@@ -285,7 +285,7 @@
     update ent_info_ext
     <set>
       <if test="uid != null">
-        uid = #{uid,jdbcType=INTEGER},
+        uid = #{uid,jdbcType=BIGINT},
       </if>
       <if test="item0 != null">
         item0 = #{item0,jdbcType=VARCHAR},
@@ -323,7 +323,7 @@
   <update id="updateByPrimaryKey"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExt">
     update ent_info_ext
-    set uid = #{uid,jdbcType=INTEGER},
+    set uid = #{uid,jdbcType=BIGINT},
       item0 = #{item0,jdbcType=VARCHAR},
       item1 = #{item1,jdbcType=VARCHAR},
       item2 = #{item2,jdbcType=VARCHAR},
@@ -368,7 +368,7 @@
       )
       values
       <foreach collection="items" item="item" index="index" separator=",">
-        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=INTEGER}, #{item.item0,jdbcType=VARCHAR},
+        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=BIGINT}, #{item.item0,jdbcType=VARCHAR},
         #{item.item1,jdbcType=VARCHAR}, #{item.item2,jdbcType=VARCHAR},
         #{item.item3,jdbcType=VARCHAR},
         #{item.item4,jdbcType=VARCHAR}, #{item.item5,jdbcType=VARCHAR},

@@ -5,105 +5,105 @@ import java.util.Date;
 
 public class NotifyInfo implements Serializable {
 
-  private Integer id;
+    private Integer id;
 
-  private Integer uid;
+    private Long uid;
 
-  private String userType;
+    private String userType;
 
-  private String notifyType;
+    private String notifyType;
 
-  private String notifyStatus;
+    private String notifyStatus;
 
-  private Integer notifyNum;
+    private Integer notifyNum;
 
-  private String notifyMsg;
+    private String notifyMsg;
 
-  private Date createTime;
+    private Date createTime;
 
-  private Date updateTime;
+    private Date updateTime;
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  private String updateSql;
+    private String updateSql;
 
-  public Integer getId() {
-    return id;
-  }
+    public Integer getId() {
+        return id;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-  public Integer getUid() {
-    return uid;
-  }
+    public Long getUid() {
+        return uid;
+    }
 
-  public void setUid(Integer uid) {
-    this.uid = uid;
-  }
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
 
-  public String getUserType() {
-    return userType;
-  }
+    public String getUserType() {
+        return userType;
+    }
 
-  public void setUserType(String userType) {
-    this.userType = userType == null ? null : userType.trim();
-  }
+    public void setUserType(String userType) {
+        this.userType = userType == null ? null : userType.trim();
+    }
 
-  public String getNotifyType() {
-    return notifyType;
-  }
+    public String getNotifyType() {
+        return notifyType;
+    }
 
-  public void setNotifyType(String notifyType) {
-    this.notifyType = notifyType == null ? null : notifyType.trim();
-  }
+    public void setNotifyType(String notifyType) {
+        this.notifyType = notifyType == null ? null : notifyType.trim();
+    }
 
-  public String getNotifyStatus() {
-    return notifyStatus;
-  }
+    public String getNotifyStatus() {
+        return notifyStatus;
+    }
 
-  public void setNotifyStatus(String notifyStatus) {
-    this.notifyStatus = notifyStatus == null ? null : notifyStatus.trim();
-  }
+    public void setNotifyStatus(String notifyStatus) {
+        this.notifyStatus = notifyStatus == null ? null : notifyStatus.trim();
+    }
 
-  public Integer getNotifyNum() {
-    return notifyNum;
-  }
+    public Integer getNotifyNum() {
+        return notifyNum;
+    }
 
-  public void setNotifyNum(Integer notifyNum) {
-    this.notifyNum = notifyNum;
-  }
+    public void setNotifyNum(Integer notifyNum) {
+        this.notifyNum = notifyNum;
+    }
 
-  public String getNotifyMsg() {
-    return notifyMsg;
-  }
+    public String getNotifyMsg() {
+        return notifyMsg;
+    }
 
-  public void setNotifyMsg(String notifyMsg) {
-    this.notifyMsg = notifyMsg == null ? null : notifyMsg.trim();
-  }
+    public void setNotifyMsg(String notifyMsg) {
+        this.notifyMsg = notifyMsg == null ? null : notifyMsg.trim();
+    }
 
-  public Date getCreateTime() {
-    return createTime;
-  }
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-  public Date getUpdateTime() {
-    return updateTime;
-  }
+    public Date getUpdateTime() {
+        return updateTime;
+    }
 
-  public void setUpdateTime(Date updateTime) {
-    this.updateTime = updateTime;
-  }
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 
-  public String getUpdateSql() {
-    return this.updateSql;
-  }
+    public String getUpdateSql() {
+        return this.updateSql;
+    }
 
-  public void setUpdateSql(String updateSql) {
-    this.updateSql = updateSql;
-  }
+    public void setUpdateSql(String updateSql) {
+        this.updateSql = updateSql;
+    }
 }

@@ -6,7 +6,7 @@ public class EntInfoExt implements Serializable {
 
   private Integer id;
 
-  private Integer uid;
+  private Long uid;
 
   private String item0;
 
@@ -40,11 +40,11 @@ public class EntInfoExt implements Serializable {
     this.id = id;
   }
 
-  public Integer getUid() {
+  public Long getUid() {
     return uid;
   }
 
-  public void setUid(Integer uid) {
+  public void setUid(Long uid) {
     this.uid = uid;
   }
 
