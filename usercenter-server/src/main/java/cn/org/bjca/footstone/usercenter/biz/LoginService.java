@@ -12,6 +12,7 @@ import cn.org.bjca.footstone.usercenter.config.AccountLoginConfig;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.MessageDigestUtils;
+import cn.org.bjca.footstone.usercenter.util.PwdUtil;
 import cn.org.bjca.footstone.usercenter.util.RDate;
 import cn.org.bjca.footstone.usercenter.vo.BizResultVo;
 import cn.org.bjca.footstone.usercenter.vo.LoginTokenVo;
@@ -41,9 +42,6 @@ public class LoginService {
 
   @Autowired
   private AccountAttemptsService accountAttemptsService;
-
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
 
   @Autowired
   private TokenStoreService tokenStoreService;
@@ -98,8 +96,8 @@ public class LoginService {
       return BizResultVo.of(false, USER_IS_LOCKED);
     }
     // 密码不正确
-    String encode = passwordEncoder.encode(loginRequest.getPassword());
-    boolean matches = passwordEncoder.matches(accountInfo.getPassword(), encode);
+    String encode = PwdUtil.cipher(loginRequest.getPassword());
+    boolean matches = PwdUtil.verify(accountInfo.getPassword(), encode);
     if (!matches) {
       accountAttemptsService.updateFailAttempts(loginRequest.getUsername());
       return BizResultVo.of(false, USER_OR_PWD_ERROR);

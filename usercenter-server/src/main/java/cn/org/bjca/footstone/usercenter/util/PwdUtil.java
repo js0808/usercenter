@@ -35,13 +35,18 @@ public class PwdUtil {
    * @param inData String
    * @return String
    */
-  public static String cipher(String inData) throws Exception {
+  public static String cipher(String inData) {
     if (inData == null) {
       return null;
     }
 
     String random = RandomStringUtils.randomAlphanumeric(LEN);
-    MessageDigest md = MessageDigest.getInstance(SHA256_ALG);
+    MessageDigest md = null;
+    try {
+      md = MessageDigest.getInstance(SHA256_ALG);
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
+    }
 
     md.update(inData.getBytes());
     md.update(random.getBytes());
@@ -64,8 +69,7 @@ public class PwdUtil {
    * @param inputPWD String 输入的密码
    * @return boolean
    */
-  public static boolean verify(String cipherPWD, String inputPWD)
-      throws NoSuchAlgorithmException {
+  public static boolean verify(String cipherPWD, String inputPWD) {
     MessageDigest md = null;
     // hash值
     byte[] shaCode = null;
@@ -80,7 +84,11 @@ public class PwdUtil {
       salt = new byte[cipherPwdByte.length - SHA256_LENGTH];
       System.arraycopy(cipherPwdByte, SRC_POS, shaCode, SRC_POS, SHA256_LENGTH);
       System.arraycopy(cipherPwdByte, SHA256_LENGTH, salt, SRC_POS, salt.length);
-      md = MessageDigest.getInstance(SHA256_ALG);
+      try {
+        md = MessageDigest.getInstance(SHA256_ALG);
+      } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+      }
     } else if (cipherPWD.startsWith(SSHA)) {
       cipherPWD = cipherPWD.substring(BEGIN_INDEX_SSHA);
       byte[] cipherPwdByte = Base64.decodeBase64(cipherPWD);
@@ -89,13 +97,21 @@ public class PwdUtil {
       salt = new byte[cipherPwdByte.length - SHA1_LENGTH];
       System.arraycopy(cipherPwdByte, SRC_POS, shaCode, SRC_POS, SHA1_LENGTH);
       System.arraycopy(cipherPwdByte, SHA1_LENGTH, salt, SRC_POS, salt.length);
-      md = MessageDigest.getInstance(SHA1_ALG);
+      try {
+        md = MessageDigest.getInstance(SHA1_ALG);
+      } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+      }
     } else if (cipherPWD.startsWith(SHA)) {
       cipherPWD = cipherPWD.substring(BEGIN_INDEX_SHA);
       byte[] ldapPwdByte = Base64.decodeBase64(cipherPWD);
       shaCode = ldapPwdByte;
       salt = new byte[SRC_POS];
-      md = MessageDigest.getInstance(SHA1_ALG);
+      try {
+        md = MessageDigest.getInstance(SHA1_ALG);
+      } catch (NoSuchAlgorithmException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     // 把用户输入的密码添加到摘要计算信息
@@ -109,6 +125,7 @@ public class PwdUtil {
 
 
   public static void main(String args[]) throws Exception {
+    System.out.println(cipher("123456"));
     System.out.println(verify(cipher("123"), "123"));
   }
 }

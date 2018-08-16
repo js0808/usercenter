@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.web.controller;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
+import cn.org.bjca.footstone.usercenter.api.facade.LoginFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
 import cn.org.bjca.footstone.usercenter.biz.LoginService;
@@ -21,14 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequestMapping
-public class LoginController {
+public class LoginController implements LoginFacade {
 
   @Autowired
   private LoginService loginService;
 
   @RequestMapping
-  public ReturnResult loginWithPassword(@Validated @RequestBody LoginRequest request)
-      throws Exception {
+  public ReturnResult<LoginResponse> login(@Validated @RequestBody LoginRequest request) {
     Pair<BizResultVo, LoginResponse> result = loginService.loginWithPassword(request);
     if (result.getLeft().isSuccess()) {
       return ReturnResult.success(result.getRight());
