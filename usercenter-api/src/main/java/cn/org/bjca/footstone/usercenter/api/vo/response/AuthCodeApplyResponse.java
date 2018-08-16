@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class AuthCodeApplyResponse {
-    public String id;
-    public Integer serialNo;
+
+  public String id;
+  public Integer serialNo;
 }

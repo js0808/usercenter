@@ -23,7 +23,7 @@ public class EntInfoController implements EntInfoFacade {
   EntInfoService entInfoService;
 
   @Override
-  public ReturnResult updateEntInfo(@PathVariable Integer uid,
+  public ReturnResult updateEntInfo(@PathVariable Long uid,
       @RequestBody EntInfoRequest entInfoRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "修改企业信息(实名认证)");

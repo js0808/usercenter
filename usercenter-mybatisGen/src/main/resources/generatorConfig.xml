@@ -41,7 +41,7 @@
 
       <!--<table tableName="test.t_user_info" domainObjectName="User"></table>-->
         <!--<table tableName="%"/>-->
-        <table tableName="user_info" >
+      <table tableName="ent_info">
         <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
     </context>
