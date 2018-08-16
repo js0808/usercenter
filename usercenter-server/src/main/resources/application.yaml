@@ -34,6 +34,7 @@ spring:
     socket-time-out: @socket.time.out@
     connection-time-out: @connection.time.out@
     connection-request-time-out: @connection.request.time.out@
+    ignorssl: @ignorssl@
   redis:
     host: @redis.host@
     port: @redis.port@
@@ -83,5 +84,5 @@ idservice:
   check-enterprise: @idservice.check.ent@
 usercenter:
   realname-host: @realname.host@
-  username: @realname.username@
-  password: @realname.password@
+  username: ${idservice.userName}
+  password: ${idservice.password}

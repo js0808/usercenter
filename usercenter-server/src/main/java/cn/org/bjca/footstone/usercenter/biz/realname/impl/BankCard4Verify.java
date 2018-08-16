@@ -42,7 +42,7 @@ public class BankCard4Verify extends RealNameVerify {
       return Pair.of(false, "错误的银行卡号");
     }
     String mobile = getUserInfoVo().getMobile();
-    if (Strings.isNullOrEmpty(mobile) || !Pattern.matches(mobile, PATTERN)) {
+    if (Strings.isNullOrEmpty(mobile) || !Pattern.matches(PATTERN, mobile)) {
       return Pair.of(false, "错误的手机号码");
     }
 

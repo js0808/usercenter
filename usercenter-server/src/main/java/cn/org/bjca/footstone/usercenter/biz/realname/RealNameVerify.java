@@ -6,6 +6,7 @@ import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.RestUtils;
+import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import com.google.common.collect.Maps;
 import java.text.MessageFormat;
 import java.util.Map;
@@ -60,6 +61,7 @@ public abstract class RealNameVerify {
     Map<String, String> param = Maps.newHashMap();
     param.put("userName", username);
     param.put("password", password);
+    param.put("transactionId", String.valueOf(SnowFlake.next()));
     return param;
   }
 

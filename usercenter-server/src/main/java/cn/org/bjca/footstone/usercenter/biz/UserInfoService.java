@@ -7,6 +7,7 @@ import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.SQL_EXCE
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
+import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
@@ -94,7 +95,7 @@ public class UserInfoService {
    * 实名认证
    */
   private void doVerify(RealNameVerify verify, UserInfo userInfo) {
-    verify.verify();
+    verirfy(verify, userInfo.getRealNameType());
     userInfo.setRealNameFlag(1);
   }
 
@@ -118,7 +119,7 @@ public class UserInfoService {
 
     USERINFO_COPIER.copy(userInfo, old, null);
 
-    verify.verify();
+    verirfy(verify, userInfo.getRealNameType());
 
     old.setRealNameType(old.getRealNameType() + "," + userInfo.getRealNameType());
     old.setUpdateTime(new Date());
@@ -130,6 +131,19 @@ public class UserInfoService {
       throw new BaseException(SQL_EXCEPTION);
     }
     return buildRsp(old);
+  }
+
+  private void verirfy(RealNameVerify verify, String realNameType) {
+    MetricsClient metricsClient = MetricsClient
+        .newInstance("依赖第三方服务", "身份核实服务", realNameType);
+    try {
+      verify.verify();
+      metricsClient.sr_incrSuccess();
+    } catch (Exception e) {
+      log.error("实名验证失败", e);
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
   }
 
   public QueryUserInfoResponse getUser(Long uid) {
