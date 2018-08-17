@@ -17,134 +17,133 @@ import java.security.spec.X509EncodedKeySpec;
 
 public class RSASignature {
 
-    private static final Logger logger = LoggerFactory.getLogger(RSASignature.class);
+  private static final Logger logger = LoggerFactory.getLogger(RSASignature.class);
 
-    static {
-        Security.addProvider(new BouncyCastleProvider());
-    }
+  static {
+    Security.addProvider(new BouncyCastleProvider());
+  }
 
-    /**
-     * 解密
-     *
-     * @param content 密文
-     * @param key     商户私钥
-     * @return 解密后的字符串
-     */
-    public static String decrypt(String content, String key) throws Exception {
-        PrivateKey prikey = getPrivateKey(key);
+  /**
+   * 解密
+   *
+   * @param content 密文
+   * @param key 商户私钥
+   * @return 解密后的字符串
+   */
+  public static String decrypt(String content, String key) throws Exception {
+    PrivateKey prikey = getPrivateKey(key);
 
-        Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, prikey);
+    Cipher cipher = Cipher.getInstance("RSA");
+    cipher.init(Cipher.DECRYPT_MODE, prikey);
 
-        InputStream ins = new ByteArrayInputStream(Base64.decode(content));
-        ByteArrayOutputStream writer = new ByteArrayOutputStream();
-        // rsa解密的字节大小最多是128，将需要解密的内容，按128位拆开解密
-        byte[] buf = new byte[128];
-        int bufl;
+    InputStream ins = new ByteArrayInputStream(Base64.decode(content));
+    ByteArrayOutputStream writer = new ByteArrayOutputStream();
+    // rsa解密的字节大小最多是128，将需要解密的内容，按128位拆开解密
+    byte[] buf = new byte[128];
+    int bufl;
 
-        while ((bufl = ins.read(buf)) != -1) {
-            byte[] block = null;
+    while ((bufl = ins.read(buf)) != -1) {
+      byte[] block = null;
 
-            if (buf.length == bufl) {
-                block = buf;
-            } else {
-                block = new byte[bufl];
-                for (int i = 0; i < bufl; i++) {
-                    block[i] = buf[i];
-                }
-            }
-
-            writer.write(cipher.doFinal(block));
+      if (buf.length == bufl) {
+        block = buf;
+      } else {
+        block = new byte[bufl];
+        for (int i = 0; i < bufl; i++) {
+          block[i] = buf[i];
         }
+      }
 
-        return new String(writer.toByteArray(), "utf-8");
+      writer.write(cipher.doFinal(block));
     }
 
-    /**
-     * 得到私钥
-     *
-     * @param key 密钥字符串（经过base64编码）
-     * @throws Exception
-     */
+    return new String(writer.toByteArray(), "utf-8");
+  }
 
-    public static PrivateKey getPrivateKey(String key) throws Exception {
+  /**
+   * 得到私钥
+   *
+   * @param key 密钥字符串（经过base64编码）
+   */
 
-        byte[] keyBytes;
+  public static PrivateKey getPrivateKey(String key) throws Exception {
 
-        keyBytes = Base64.decode(key);
+    byte[] keyBytes;
 
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+    keyBytes = Base64.decode(key);
 
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
 
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-        return privateKey;
+    PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
 
+    return privateKey;
+
+  }
+
+  public static final String SIGN_ALGORITHMS = "SHA1WithRSA";
+
+  /**
+   * RSA签名
+   *
+   * @param content 待签名数据
+   * @param privateKey 商户私钥
+   * @return 签名值
+   */
+  public static String sign(String content, String privateKey) {
+    String charset = "utf-8";
+    try {
+      PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(
+          Base64.decode(privateKey));
+      KeyFactory keyf = KeyFactory.getInstance("RSA");
+      PrivateKey priKey = keyf.generatePrivate(priPKCS8);
+
+      java.security.Signature signature = java.security.Signature
+          .getInstance(SIGN_ALGORITHMS);
+
+      signature.initSign(priKey);
+      signature.update(content.getBytes(charset));
+
+      byte[] signed = signature.sign();
+
+      return Base64.encode(signed);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    public static final String SIGN_ALGORITHMS = "SHA1WithRSA";
+    return null;
+  }
 
-    /**
-     * RSA签名
-     *
-     * @param content    待签名数据
-     * @param privateKey 商户私钥
-     * @return 签名值
-     */
-    public static String sign(String content, String privateKey) {
-        String charset = "utf-8";
-        try {
-            PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(
-                    Base64.decode(privateKey));
-            KeyFactory keyf = KeyFactory.getInstance("RSA");
-            PrivateKey priKey = keyf.generatePrivate(priPKCS8);
+  /**
+   * RSA验签名检查
+   *
+   * @param content 待签名数据
+   * @param sign 签名值
+   * @param publicKey 支付宝公钥
+   * @return 布尔值
+   */
+  public static boolean doCheck(String content, String sign, String publicKey) {
+    try {
+      KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+      byte[] encodedKey = Base64.decode(publicKey);
+      PublicKey pubKey = keyFactory
+          .generatePublic(new X509EncodedKeySpec(encodedKey));
 
-            java.security.Signature signature = java.security.Signature
-                    .getInstance(SIGN_ALGORITHMS);
+      java.security.Signature signature = java.security.Signature
+          .getInstance(SIGN_ALGORITHMS);
 
-            signature.initSign(priKey);
-            signature.update(content.getBytes(charset));
+      signature.initVerify(pubKey);
+      signature.update(content.getBytes("utf-8"));
 
-            byte[] signed = signature.sign();
+      boolean bverify = signature.verify(Base64.decode(sign));
+      return bverify;
 
-            return Base64.encode(signed);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    } catch (Exception e) {
+      logger.error("签名验证失败！content:[{}],sign:[{}],publicKey[{}]", content, sign, publicKey);
     }
 
-    /**
-     * RSA验签名检查
-     *
-     * @param content   待签名数据
-     * @param sign      签名值
-     * @param publicKey 支付宝公钥
-     * @return 布尔值
-     */
-    public static boolean doCheck(String content, String sign, String publicKey) {
-        try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            byte[] encodedKey = Base64.decode(publicKey);
-            PublicKey pubKey = keyFactory
-                    .generatePublic(new X509EncodedKeySpec(encodedKey));
-
-            java.security.Signature signature = java.security.Signature
-                    .getInstance(SIGN_ALGORITHMS);
-
-            signature.initVerify(pubKey);
-            signature.update(content.getBytes("utf-8"));
-
-            boolean bverify = signature.verify(Base64.decode(sign));
-            return bverify;
-
-        } catch (Exception e) {
-            logger.error("签名验证失败！content:[{}],sign:[{}],publicKey[{}]", content, sign, publicKey);
-        }
-
-        return false;
-    }
+    return false;
+  }
 
 }
