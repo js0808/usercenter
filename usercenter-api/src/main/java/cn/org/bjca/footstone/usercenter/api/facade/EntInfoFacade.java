@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import io.swagger.annotations.Api;
@@ -24,11 +25,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/entinfos")
 public interface EntInfoFacade {
 
+  @ApiOperation(value = "用UID查询企业信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "用UID查询企业信息")
+  @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
+  public ReturnResult getEntInfoByUid(@PathVariable Long uid);
+
 
   @ApiOperation(value = "修改企业信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "修改企业信息(实名认证)")
   @ApiImplicitParams(value = {
       @ApiImplicitParam(name = "entInfoRequest", value = "EntInfoRequest payload", required = true, paramType = "body", dataType = "EntInfoRequest")
   })
+
   @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
   public ReturnResult updateEntInfo(@PathVariable Long uid,
       @RequestBody @Validated EntInfoRequest entInfoRequest);
@@ -37,6 +43,7 @@ public interface EntInfoFacade {
   @ApiImplicitParams(value = {
       @ApiImplicitParam(name = "entInfoRequest", value = "EntInfoRequest payload", required = true, paramType = "body", dataType = "EntInfoRequest")
   })
+
   @RequestMapping(value = "", method = RequestMethod.POST)
   public ReturnResult addEntInfo(@RequestBody @Validated EntInfoRequest entInfoRequest);
 
@@ -44,8 +51,17 @@ public interface EntInfoFacade {
   @ApiImplicitParams(value = {
       @ApiImplicitParam(name = "entInfoStatusRequest", value = "EntInfoStatusRequest payload", required = true, paramType = "body", dataType = "EntInfoStatusRequest")
   })
+
   @RequestMapping(value = "/{uid}/status", method = RequestMethod.PUT)
   public ReturnResult updateEntStatus(@PathVariable Long uid,
       @RequestBody @Validated EntInfoStatusRequest entInfoStatusRequest);
+
+  @ApiOperation(value = "修改无需实名认证的企业信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "修改无需实名认证的企业信息")
+  @ApiImplicitParams(value = {
+      @ApiImplicitParam(name = "entInfoBaseRequest", value = "EntInfoBaseRequest payload", required = true, paramType = "body", dataType = "EntInfoBaseRequest")
+  })
+  @RequestMapping(value = "/{uid}/simple", method = RequestMethod.PUT)
+  public ReturnResult updateEntInfoSimple(@PathVariable Long uid,
+      @RequestBody @Validated EntInfoBaseRequest entInfoBaseRequest);
 
 }
