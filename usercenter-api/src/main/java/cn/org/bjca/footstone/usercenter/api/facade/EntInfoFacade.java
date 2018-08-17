@@ -32,12 +32,11 @@ public interface EntInfoFacade {
   public ReturnResult getEntInfoByUid(@PathVariable Long uid);
 
 
-  @ApiOperation(value = "修改企业信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "修改企业信息(实名认证)")
+  @ApiOperation(value = "修改企业信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "修改企业信息(实名认证)")
   @ApiImplicitParams(value = {
       @ApiImplicitParam(name = "entInfoRequest", value = "EntInfoRequest payload", required = true, paramType = "body", dataType = "EntInfoRequest")
   })
-
-  @RequestMapping(value = "/{uid}", method = RequestMethod.POST)
+  @RequestMapping(value = "/{uid}", method = RequestMethod.PUT)
   public ReturnResult updateEntInfo(@PathVariable Long uid,
       @RequestBody @Validated EntInfoRequest entInfoRequest);
 

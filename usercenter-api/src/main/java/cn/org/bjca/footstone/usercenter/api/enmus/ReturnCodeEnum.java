@@ -22,12 +22,13 @@ public enum ReturnCodeEnum {
 
   ERROR(60609999, "服务端异常"),
   RESOURCE_NOT_EXIST(60609998, "查询信息不存在"),
+  RESOURCE_ALREADY_EXIST(60604013, "信息已经存在"),
 
   REALNAME_TYPE_ERROR(60604026, "错误的实名认证方式"),
   REALNAME_NOT_EXIST(60604027, "未找到实名认证信息uid %s"),
   REALNAME_PERSON_ERROR(10904028, "个人实名认证信息异常 %s"),
   REALNAME_PARAM_ERROR(60604029, "实名认证参数错误 %s"),
-  USER_STATUS_ERROR(60604030, "个人用户信息异常"),
+  USER_STATUS_ERROR(60604030, "个人用户信息状态异常"),
 
   ID_SERVICE_ERROR(60604009, "身份核实错误[%s]"),
 
@@ -48,7 +49,7 @@ public enum ReturnCodeEnum {
   USER_TOKEN_WRONG(60604032, "用户TOKEN不正确"),
 
   ENT_INFO_NOT_ENOUGH(60604012, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空"),
-  ENT_INFO_NOT_EXIST(60604013, "企业信息不存在");
+  ENT_INFO_STATUS_ERROR(60604012, "企业信息状态异常");
 
   /**
    * The value.
