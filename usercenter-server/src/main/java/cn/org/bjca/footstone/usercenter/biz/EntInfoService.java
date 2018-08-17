@@ -6,6 +6,7 @@ import static java.util.Objects.isNull;
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
@@ -67,7 +68,7 @@ public class EntInfoService {
    * 修改企业信息并实名认证
    */
   public void updateEntInfo(Long uid, EntInfoRequest entInfoRequest) {
-    checkParam(entInfoRequest);
+    checkRealNameParam(entInfoRequest);
     //get entinfo by uid
     EntInfo entInfoOld = getEntInfoByUid(uid);
     if (entInfoOld == null) {
@@ -84,6 +85,30 @@ public class EntInfoService {
       throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
     }
 
+    //TODO 保存消息
+
+  }
+
+  /**
+   * 修改无需实名认证的企业信息
+   */
+  public void updateEntInfoSimple(Long uid, EntInfoBaseRequest entInfoBaseRequest) {
+    //get entinfo by uid
+    EntInfo entInfoOld = getEntInfoByUid(uid);
+    if (entInfoOld == null) {
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
+    }
+    //TODO 判断状态
+    //update ent info
+    EntInfo updateEntInfo = new EntInfo();
+    updateEntInfo.setHeadImgUrl(entInfoBaseRequest.getHeadImgUrl());
+    updateEntInfo.setPhone(entInfoBaseRequest.getPhone());
+    updateEntInfo.setUid(entInfoOld.getUid());
+    updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
+    int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
+    if (result != 1) {
+      throw new BaseException(ReturnCodeEnum.ENT_INFO_NOT_EXIST);
+    }
     //TODO 保存消息
 
   }
@@ -112,7 +137,7 @@ public class EntInfoService {
     return entInfoList.isEmpty() ? null : entInfoList.get(0);
   }
 
-  private void checkParam(EntInfoRequest entInfoRequest) {
+  private void checkRealNameParam(EntInfoRequest entInfoRequest) {
     String orgCode = entInfoRequest.getOrgCode();
     String bizLicense = entInfoRequest.getBizLicense();
     String socialCreditCode = entInfoRequest.getSocialCreditCode();
@@ -131,7 +156,7 @@ public class EntInfoService {
    * 添加企业并实名认证
    */
   public void addEntInfo(EntInfoRequest entInfoRequest) {
-    checkParam(entInfoRequest);
+    checkRealNameParam(entInfoRequest);
     //调用身份核实
 //    checkRealName(entInfoRequest);
     //保存ent info
