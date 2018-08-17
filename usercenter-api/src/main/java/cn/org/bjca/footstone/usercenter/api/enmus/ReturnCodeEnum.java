@@ -21,12 +21,13 @@ public enum ReturnCodeEnum {
   SIGN_VERIFY_ERROR(60604005, "验证请求签名错误"),
 
   ERROR(60609999, "服务端异常"),
-
+  RESOURCE_NOT_EXIST(60609998, "查询信息不存在"),
 
   REALNAME_TYPE_ERROR(60604026, "错误的实名认证方式"),
   REALNAME_NOT_EXIST(60604027, "未找到实名认证信息uid %s"),
   REALNAME_PERSON_ERROR(10904028, "个人实名认证信息异常 %s"),
   REALNAME_PARAM_ERROR(60604029, "实名认证参数错误 %s"),
+  USER_STATUS_ERROR(60604030, "个人用户信息异常"),
 
   ID_SERVICE_ERROR(60604009, "身份核实错误[%s]"),
 

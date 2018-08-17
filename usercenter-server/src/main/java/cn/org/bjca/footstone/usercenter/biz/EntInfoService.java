@@ -1,5 +1,7 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.RESOURCE_NOT_EXIST;
 import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.ENT;
 import static java.util.Objects.isNull;
 
@@ -231,9 +233,13 @@ public class EntInfoService {
     }
     Long uid = getUidFromAccount(account);
     if (isNull(uid)) {
-      return null;
+      throw new BaseException(ACCOUNT_NOT_EXIT_ERROR);
     }
-    return getEntInfoByUid(uid);
+    EntInfo info = getEntInfoByUid(uid);
+    if (isNull(info)) {
+      throw new BaseException(RESOURCE_NOT_EXIST);
+    }
+    return info;
   }
 
   private Long getUidFromAccount(String account) {

@@ -3,8 +3,11 @@ package cn.org.bjca.footstone.usercenter.biz;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_NOT_EXIST;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_PARAM_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_TYPE_ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.RESOURCE_NOT_EXIST;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.SQL_EXCEPTION;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_STATUS_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.USER;
+import static cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum.INVALID;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -127,6 +130,8 @@ public class UserInfoService {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
 
+    validateStatus(old);
+
     USERINFO_COPIER.copy(userInfo, old, null);
 
     verirfy(verify, userInfo.getRealNameType());
@@ -141,6 +146,12 @@ public class UserInfoService {
       throw new BaseException(SQL_EXCEPTION);
     }
     return buildRsp(old);
+  }
+
+  private void validateStatus(UserInfo old) {
+    if (Objects.equals(INVALID.toString(), old.getStatus())) {
+      throw new BaseException(USER_STATUS_ERROR);
+    }
   }
 
   private void verirfy(RealNameVerify verify, String realNameType) {
@@ -163,7 +174,7 @@ public class UserInfoService {
       USERINFO2RESPONSE.copy(userInfo, rsp, null);
       return rsp;
     }
-    return null;
+    throw new BaseException(RESOURCE_NOT_EXIST);
   }
 
   private UserInfo getUserInfoWithUid(Long uid) {
@@ -178,6 +189,8 @@ public class UserInfoService {
     if (isNull(old)) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
+    validateStatus(old);
+
     UserInfo userInfo = new UserInfo();
     userInfo.setId(old.getId());
     userInfo.setEmail(userInfoSimpleVo.getEmail());
@@ -195,6 +208,8 @@ public class UserInfoService {
     if (isNull(old)) {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
+    validateStatus(old);
+
     UserInfo userInfo = new UserInfo();
     userInfo.setId(old.getId());
     userInfo.setStatus(userInfoStatusVo.getStatus().toString());
