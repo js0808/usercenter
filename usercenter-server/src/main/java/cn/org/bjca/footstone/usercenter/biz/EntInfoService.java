@@ -242,7 +242,7 @@ public class EntInfoService {
     }
   }
 
-  public QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
+  public EntInfo queryByAccount(EntInfoQueryRequest request) {
     String account = request.getAccount();
     if (Strings.isNullOrEmpty(account)) {
       return null;
