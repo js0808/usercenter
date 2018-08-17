@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import io.swagger.annotations.Api;
@@ -47,5 +48,9 @@ public interface EntInfoFacade {
   @RequestMapping(value = "/{uid}/status", method = RequestMethod.PUT)
   public ReturnResult updateEntStatus(@PathVariable Long uid,
       @RequestBody @Validated EntInfoStatusRequest entInfoStatusRequest);
+
+  @ApiOperation(value = "通过企业账号查询企业信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "通过企业账号查询企业信息")
+  @RequestMapping(value = "", method = RequestMethod.GET)
+  ReturnResult query(EntInfoQueryRequest request);
 
 }

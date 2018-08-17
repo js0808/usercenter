@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.web.controller;
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.UserInfoFacade;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoQueryVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
@@ -106,6 +107,24 @@ public class UserController implements UserInfoFacade {
       metricsClient.sr_incrSuccess();
     } catch (Exception e) {
       log.error("个人状态变更异常", e);
+      throw e;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
+    return result;
+  }
+
+  @Override
+  public ReturnResult<QueryUserInfoResponse> getUserByAccount(UserInfoQueryVo queryVo) {
+
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "通过账号查询用户信息");
+    ReturnResult result;
+    try {
+      result = ReturnResult
+          .success(userInfoService.getUserByAccount(queryVo));
+      metricsClient.sr_incrSuccess();
+    } catch (Exception e) {
+      log.error("通过账号查询用户信息", e);
       throw e;
     } finally {
       metricsClient.qps().rt().sr_incrTotal();

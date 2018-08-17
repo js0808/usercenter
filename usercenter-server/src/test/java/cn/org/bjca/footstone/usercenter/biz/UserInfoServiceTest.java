@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import cn.org.bjca.footstone.usercenter.BaseTest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoQueryVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
@@ -108,5 +109,14 @@ public class UserInfoServiceTest extends BaseTest {
     assertNotNull(modUser);
     assertEquals(statusVo.getStatus().toString(), userInfo.getStatus());
     userInfoMapper.deleteByPrimaryKey(userInfo.getId());
+  }
+
+  @Test
+  public void getUserFromAccount(){
+    UserInfoQueryVo queryVo = new UserInfoQueryVo();
+    queryVo.setAccount("18611525990");
+    QueryUserInfoResponse userByAccount = userInfoService.getUserByAccount(queryVo);
+    log.info(JSON.toJSONString(userByAccount));
+    assertNotNull(userByAccount);
   }
 }

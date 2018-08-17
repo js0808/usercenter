@@ -4,10 +4,12 @@ import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_PARAM_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_TYPE_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.SQL_EXCEPTION;
+import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.USER;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoQueryVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
@@ -15,13 +17,18 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.QueryUserInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameChecker;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
+import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
+import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +50,9 @@ public class UserInfoService {
       .create(UserInfo.class, QueryUserInfoResponse.class, false);
   @Autowired
   private UserInfoMapper userInfoMapper;
+
+  @Autowired
+  private AccountInfoMapper accountInfoMapper;
 
   @Autowired
   private RealNameChecker checker;
@@ -195,5 +205,32 @@ public class UserInfoService {
       throw new BaseException(REALNAME_NOT_EXIST, uid);
     }
     return buildRsp(old);
+  }
+
+  public QueryUserInfoResponse getUserByAccount(UserInfoQueryVo queryVo) {
+    String account = queryVo.getAccount();
+    if (Strings.isNullOrEmpty(account)) {
+      return null;
+    }
+    Long uid = getUidFromAccount(account);
+    if (isNull(uid)) {
+      return null;
+    }
+    return getUser(uid);
+  }
+
+  private Long getUidFromAccount(String account) {
+    AccountInfoExample example = new AccountInfoExample();
+    example.createCriteria().andAccountEqualTo(account);
+    List<AccountInfo> accountInfos = accountInfoMapper.selectByExample(example);
+    if (accountInfos.isEmpty()) {
+
+      return null;
+    }
+    AccountInfo accountInfo = accountInfos.get(0);
+    if (!Objects.equals(USER.toString(), accountInfo.getUserType())) {
+      return null;
+    }
+    return accountInfo.getUid();
   }
 }

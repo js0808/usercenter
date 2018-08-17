@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.web.controller;
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.EntInfoFacade;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.biz.EntInfoService;
@@ -69,6 +70,19 @@ public class EntInfoController implements EntInfoFacade {
       return ReturnResult.success("成功");
     } catch (Exception e) {
       throw e;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
+  }
+
+  @Override
+  public ReturnResult query(EntInfoQueryRequest request) {
+    //埋点
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "通过Account查询企业信息");
+    try {
+      ReturnResult result = ReturnResult.success(entInfoService.queryByAccount(request));
+      metricsClient.sr_incrSuccess();
+      return result;
     } finally {
       metricsClient.qps().rt().sr_incrTotal();
     }

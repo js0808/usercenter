@@ -1,12 +1,19 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.ENT;
+import static java.util.Objects.isNull;
+
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
+import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
@@ -15,8 +22,10 @@ import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceCheckEntReqVo;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +59,9 @@ public class EntInfoService {
 
   @Autowired
   private NotifyInfoMapper notifyInfoMapper;
+
+  @Autowired
+  private AccountInfoMapper accountInfoMapper;
 
   /**
    * 修改企业信息并实名认证
@@ -185,5 +197,31 @@ public class EntInfoService {
       log.error("身份核实服务企业认证时发生通信异常,http状态码[{}],请求数据[{}]", response.getStatusCodeValue(), reqJson);
       throw new BaseException(ReturnCodeEnum.ID_SERVICE_CONN_ERROR);
     }
+  }
+
+  public EntInfo queryByAccount(EntInfoQueryRequest request) {
+    String account = request.getAccount();
+    if (Strings.isNullOrEmpty(account)) {
+      return null;
+    }
+    Long uid = getUidFromAccount(account);
+    if (isNull(uid)) {
+      return null;
+    }
+    return getEntInfoByUid(uid);
+  }
+
+  private Long getUidFromAccount(String account) {
+    AccountInfoExample example = new AccountInfoExample();
+    example.createCriteria().andAccountEqualTo(account);
+    List<AccountInfo> accountInfos = accountInfoMapper.selectByExample(example);
+    if (accountInfos.isEmpty()) {
+      return null;
+    }
+    AccountInfo accountInfo = accountInfos.get(0);
+    if (!Objects.equals(ENT.toString(), accountInfo.getUserType())) {
+      return null;
+    }
+    return accountInfo.getUid();
   }
 }

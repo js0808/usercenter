@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
+import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoQueryVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
@@ -47,4 +48,9 @@ public interface UserInfoFacade {
   @ResponseBody
   ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Long uid,
       @RequestBody UserInfoStatusVo userInfoStatusVo);
+
+  @ApiOperation(value = "根据Account查询用户信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "根据Account查询用户信息")
+  @RequestMapping(value = "/", method = RequestMethod.GET)
+  @ResponseBody
+  ReturnResult<QueryUserInfoResponse> getUserByAccount(UserInfoQueryVo queryVo);
 }
