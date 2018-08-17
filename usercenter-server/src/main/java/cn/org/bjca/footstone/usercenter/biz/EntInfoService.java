@@ -132,7 +132,7 @@ public class EntInfoService {
   /**
    * 通过企业UID查询企业信息
    */
-  public EntInfo getEntInfoByUid(Long uid) {
+  private EntInfo getEntInfoByUid(Long uid) {
     EntInfoExample entInfoExample = new EntInfoExample();
     entInfoExample.createCriteria().andUidEqualTo(uid);
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
@@ -240,7 +240,7 @@ public class EntInfoService {
     }
   }
 
-  public EntInfo queryByAccount(EntInfoQueryRequest request) {
+  public QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
     String account = request.getAccount();
     if (Strings.isNullOrEmpty(account)) {
       return null;
@@ -249,7 +249,7 @@ public class EntInfoService {
     if (isNull(uid)) {
       return null;
     }
-    return getEntInfoByUid(uid);
+    return getEntInfo(uid);
   }
 
   private Long getUidFromAccount(String account) {
