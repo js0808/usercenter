@@ -242,7 +242,7 @@ public class EntInfoService {
     }
   }
 
-  public EntInfo queryByAccount(EntInfoQueryRequest request) {
+  public QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
     String account = request.getAccount();
     if (Strings.isNullOrEmpty(account)) {
       return null;
@@ -251,7 +251,7 @@ public class EntInfoService {
     if (isNull(uid)) {
       throw new BaseException(ACCOUNT_NOT_EXIT_ERROR);
     }
-    EntInfo info = getEntInfoByUid(uid);
+    QueryEntInfoResponse info = getEntInfo(uid);
     if (isNull(info)) {
       throw new BaseException(RESOURCE_NOT_EXIST);
     }
