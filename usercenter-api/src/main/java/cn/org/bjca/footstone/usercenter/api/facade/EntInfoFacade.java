@@ -1,10 +1,11 @@
 package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -46,7 +47,8 @@ public interface EntInfoFacade {
   })
 
   @RequestMapping(value = "", method = RequestMethod.POST)
-  public ReturnResult addEntInfo(@RequestBody @Validated EntInfoRequest entInfoRequest);
+  public ReturnResult<EntInfoResponse> addEntInfo(
+      @RequestBody @Validated EntInfoRequest entInfoRequest);
 
   @ApiOperation(value = "修改企业状态", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "修改企业状态")
   @ApiImplicitParams(value = {

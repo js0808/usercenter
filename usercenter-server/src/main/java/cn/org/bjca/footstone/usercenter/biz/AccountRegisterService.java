@@ -82,6 +82,8 @@ public class AccountRegisterService {
 
     String password = PwdUtil.cipher(request.getPassword());
     info.setPassword(password);
+    /**强制解锁当前帐号**/
+    info.setIsLocked(false);
     accountInfoMapper.updateByPrimaryKeySelective(info);
   }
 }

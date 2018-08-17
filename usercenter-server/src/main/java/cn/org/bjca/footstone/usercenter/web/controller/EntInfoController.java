@@ -3,12 +3,13 @@ package cn.org.bjca.footstone.usercenter.web.controller;
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.EntInfoFacade;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.EntInfoService;
-import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,14 +46,15 @@ public class EntInfoController implements EntInfoFacade {
   }
 
   @Override
-  public ReturnResult addEntInfo(@RequestBody @Validated EntInfoRequest entInfoRequest) {
+  public ReturnResult<EntInfoResponse> addEntInfo(
+      @RequestBody @Validated EntInfoRequest entInfoRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "添加企业信息(实名认证)");
     try {
-      entInfoService.addEntInfo(entInfoRequest);
+      EntInfoResponse response = entInfoService.addEntInfo(entInfoRequest);
       metricsClient.sr_incrSuccess();
 
-      return ReturnResult.success("成功");
+      return ReturnResult.success(response);
     } catch (Exception e) {
       throw e;
     } finally {
@@ -80,9 +82,9 @@ public class EntInfoController implements EntInfoFacade {
   @Override
   public ReturnResult getEntInfoByUid(@PathVariable Long uid) {
     //埋点
-    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "修改企业状态");
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "用UID查询企业信息");
     try {
-      EntInfo entInfo = entInfoService.getEntInfoByUid(uid);
+      QueryEntInfoResponse entInfo = entInfoService.getEntInfo(uid);
       metricsClient.sr_incrSuccess();
 
       return ReturnResult.success(entInfo);

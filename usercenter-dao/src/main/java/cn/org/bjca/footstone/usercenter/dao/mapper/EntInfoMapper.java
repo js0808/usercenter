@@ -17,10 +17,6 @@ public interface EntInfoMapper {
 
     int insertSelective(EntInfo record);
 
-    List<EntInfo> selectByExampleWithBLOBsWithRowbounds(EntInfoExample example, RowBounds rowBounds);
-
-    List<EntInfo> selectByExampleWithBLOBs(EntInfoExample example);
-
     List<EntInfo> selectByExampleWithRowbounds(EntInfoExample example, RowBounds rowBounds);
 
     List<EntInfo> selectByExample(EntInfoExample example);
@@ -29,13 +25,9 @@ public interface EntInfoMapper {
 
     int updateByExampleSelective(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
-
     int updateByExample(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 
     int updateByPrimaryKeySelective(EntInfo record);
-
-    int updateByPrimaryKeyWithBLOBs(EntInfo record);
 
     int updateByPrimaryKey(EntInfo record);
 
