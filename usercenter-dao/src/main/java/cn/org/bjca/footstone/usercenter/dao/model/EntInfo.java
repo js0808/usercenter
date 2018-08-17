@@ -22,6 +22,8 @@ public class EntInfo implements Serializable {
 
     private String legalName;
 
+  private String legalIdNum;
+
     private Boolean realNameFlag;
 
     private String realNameType;
@@ -51,8 +53,6 @@ public class EntInfo implements Serializable {
     private Date createTime;
 
     private Date updateTime;
-
-    private byte[] legalIdNum;
 
     private static final long serialVersionUID = 1L;
 
@@ -129,6 +129,14 @@ public class EntInfo implements Serializable {
     public void setLegalName(String legalName) {
         this.legalName = legalName == null ? null : legalName.trim();
     }
+
+  public String getLegalIdNum() {
+    return legalIdNum;
+  }
+
+  public void setLegalIdNum(String legalIdNum) {
+    this.legalIdNum = legalIdNum == null ? null : legalIdNum.trim();
+  }
 
     public Boolean getRealNameFlag() {
         return realNameFlag;
@@ -248,14 +256,6 @@ public class EntInfo implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    public byte[] getLegalIdNum() {
-        return legalIdNum;
-    }
-
-    public void setLegalIdNum(byte[] legalIdNum) {
-        this.legalIdNum = legalIdNum;
     }
 
     public String getUpdateSql() {

@@ -10,6 +10,8 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
@@ -137,6 +139,17 @@ public class EntInfoService {
     return entInfoList.isEmpty() ? null : entInfoList.get(0);
   }
 
+  public QueryEntInfoResponse getEntInfo(Long uid) {
+    EntInfo entInfo = getEntInfoByUid(uid);
+    if (entInfo != null) {
+      QueryEntInfoResponse resp = new QueryEntInfoResponse();
+      BeanCopy.beans(entInfo, resp).copy();
+      return resp;
+    } else {
+      return null;
+    }
+  }
+
   private void checkRealNameParam(EntInfoRequest entInfoRequest) {
     String orgCode = entInfoRequest.getOrgCode();
     String bizLicense = entInfoRequest.getBizLicense();
@@ -155,7 +168,7 @@ public class EntInfoService {
   /**
    * 添加企业并实名认证
    */
-  public void addEntInfo(EntInfoRequest entInfoRequest) {
+  public EntInfoResponse addEntInfo(EntInfoRequest entInfoRequest) {
     checkRealNameParam(entInfoRequest);
     //调用身份核实
 //    checkRealName(entInfoRequest);
@@ -164,6 +177,9 @@ public class EntInfoService {
     BeanCopy.beans(entInfoRequest, entInfo).copy();
     entInfo.setUid(SnowFlake.next());
     entInfoMapper.insertSelective(entInfo);
+    EntInfoResponse response = new EntInfoResponse();
+    response.setUid(entInfo.getUid());
+    return response;
     //TODO 保存消息
 
   }

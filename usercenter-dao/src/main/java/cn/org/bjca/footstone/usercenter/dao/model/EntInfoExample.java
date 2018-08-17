@@ -126,6 +126,11 @@ public class EntInfoExample {
         return this;
     }
 
+  public EntInfoExample sumLegalIdNum() {
+    this.sumCol = "legal_id_num";
+    return this;
+  }
+
     public EntInfoExample sumRealNameFlag() {
         this.sumCol="real_name_flag";
         return this;
@@ -198,11 +203,6 @@ public class EntInfoExample {
 
     public EntInfoExample sumUpdateTime() {
         this.sumCol="update_time";
-        return this;
-    }
-
-    public EntInfoExample sumLegalIdNum() {
-        this.sumCol="legal_id_num";
         return this;
     }
 
@@ -878,6 +878,76 @@ public class EntInfoExample {
             addCriterion("legal_name not between", value1, value2, "legalName");
             return (Criteria) this;
         }
+
+      public Criteria andLegalIdNumIsNull() {
+        addCriterion("legal_id_num is null");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumIsNotNull() {
+        addCriterion("legal_id_num is not null");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumEqualTo(String value) {
+        addCriterion("legal_id_num =", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumNotEqualTo(String value) {
+        addCriterion("legal_id_num <>", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumGreaterThan(String value) {
+        addCriterion("legal_id_num >", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumGreaterThanOrEqualTo(String value) {
+        addCriterion("legal_id_num >=", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumLessThan(String value) {
+        addCriterion("legal_id_num <", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumLessThanOrEqualTo(String value) {
+        addCriterion("legal_id_num <=", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumLike(String value) {
+        addCriterion("legal_id_num like", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumNotLike(String value) {
+        addCriterion("legal_id_num not like", value, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumIn(List<String> values) {
+        addCriterion("legal_id_num in", values, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumNotIn(List<String> values) {
+        addCriterion("legal_id_num not in", values, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumBetween(String value1, String value2) {
+        addCriterion("legal_id_num between", value1, value2, "legalIdNum");
+        return (Criteria) this;
+      }
+
+      public Criteria andLegalIdNumNotBetween(String value1, String value2) {
+        addCriterion("legal_id_num not between", value1, value2, "legalIdNum");
+        return (Criteria) this;
+      }
 
         public Criteria andRealNameFlagIsNull() {
             addCriterion("real_name_flag is null");
