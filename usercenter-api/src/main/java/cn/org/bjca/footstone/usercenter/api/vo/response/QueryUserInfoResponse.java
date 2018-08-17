@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class QueryUserInfoResponse {
 
-  private Integer id;
+  private Long uid;
 
   private String headImgUrl;
 
@@ -37,16 +37,6 @@ public class QueryUserInfoResponse {
   private String fromPlatform;
 
   private String status;
-
-  private String extField1;
-
-  private String extField2;
-
-  private String extField3;
-
-  private String extField4;
-
-  private String extConfig;
 
   private Integer version;
 
