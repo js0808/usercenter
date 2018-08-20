@@ -196,6 +196,11 @@ public class EntInfoExample {
         return this;
     }
 
+  public EntInfoExample sumOper() {
+    this.sumCol = "oper";
+    return this;
+  }
+
     public EntInfoExample sumCreateTime() {
         this.sumCol="create_time";
         return this;
@@ -1828,6 +1833,76 @@ public class EntInfoExample {
             addCriterion("version not between", value1, value2, "version");
             return (Criteria) this;
         }
+
+      public Criteria andOperIsNull() {
+        addCriterion("oper is null");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperIsNotNull() {
+        addCriterion("oper is not null");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperEqualTo(String value) {
+        addCriterion("oper =", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperNotEqualTo(String value) {
+        addCriterion("oper <>", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperGreaterThan(String value) {
+        addCriterion("oper >", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperGreaterThanOrEqualTo(String value) {
+        addCriterion("oper >=", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperLessThan(String value) {
+        addCriterion("oper <", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperLessThanOrEqualTo(String value) {
+        addCriterion("oper <=", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperLike(String value) {
+        addCriterion("oper like", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperNotLike(String value) {
+        addCriterion("oper not like", value, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperIn(List<String> values) {
+        addCriterion("oper in", values, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperNotIn(List<String> values) {
+        addCriterion("oper not in", values, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperBetween(String value1, String value2) {
+        addCriterion("oper between", value1, value2, "oper");
+        return (Criteria) this;
+      }
+
+      public Criteria andOperNotBetween(String value1, String value2) {
+        addCriterion("oper not between", value1, value2, "oper");
+        return (Criteria) this;
+      }
 
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
