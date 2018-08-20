@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class UpdateStatusLog implements Serializable {
-
     private Integer id;
 
     private Long uid;
@@ -20,6 +19,10 @@ public class UpdateStatusLog implements Serializable {
     private String newStatus;
 
     private String description;
+
+  private String appId;
+
+  private String clientInfo;
 
     private String extField1;
 
@@ -100,6 +103,22 @@ public class UpdateStatusLog implements Serializable {
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
     }
+
+  public String getAppId() {
+    return appId;
+  }
+
+  public void setAppId(String appId) {
+    this.appId = appId == null ? null : appId.trim();
+  }
+
+  public String getClientInfo() {
+    return clientInfo;
+  }
+
+  public void setClientInfo(String clientInfo) {
+    this.clientInfo = clientInfo == null ? null : clientInfo.trim();
+  }
 
     public String getExtField1() {
         return extField1;

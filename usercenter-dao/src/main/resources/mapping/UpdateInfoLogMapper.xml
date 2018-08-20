@@ -11,6 +11,7 @@
     <result column="attribute_name" jdbcType="VARCHAR" property="attributeName"/>
     <result column="old_value" jdbcType="VARCHAR" property="oldValue"/>
     <result column="update_value" jdbcType="VARCHAR" property="updateValue"/>
+    <result column="app_id" jdbcType="VARCHAR" property="appId"/>
     <result column="client_info" jdbcType="VARCHAR" property="clientInfo"/>
     <result column="ext_field1" jdbcType="VARCHAR" property="extField1"/>
     <result column="ext_field2" jdbcType="VARCHAR" property="extField2"/>
@@ -81,7 +82,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, uid, user_type, operator_uid, operator_account, attribute_name, old_value, update_value, 
-    client_info, ext_field1, ext_field2, ext_field3, ext_field4, version, create_time
+    app_id, client_info, ext_field1, ext_field2, ext_field3, ext_field4, version, create_time
   </sql>
   <select id="selectByExample"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateInfoLogExample"
@@ -122,16 +123,16 @@
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateInfoLog">
     insert into update_info_log (id, uid, user_type, 
       operator_uid, operator_account, attribute_name, 
-      old_value, update_value, client_info, 
-      ext_field1, ext_field2, ext_field3, 
-      ext_field4, version, create_time
-      )
+      old_value, update_value, app_id, 
+      client_info, ext_field1, ext_field2, 
+      ext_field3, ext_field4, version, 
+      create_time)
     values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, 
       #{operatorUid,jdbcType=INTEGER}, #{operatorAccount,jdbcType=VARCHAR}, #{attributeName,jdbcType=VARCHAR}, 
-      #{oldValue,jdbcType=VARCHAR}, #{updateValue,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, 
-      #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, 
-      #{extField4,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+      #{oldValue,jdbcType=VARCHAR}, #{updateValue,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, 
+      #{clientInfo,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, 
+      #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.UpdateInfoLog">
@@ -160,6 +161,9 @@
       </if>
       <if test="updateValue != null">
         update_value,
+      </if>
+      <if test="appId != null">
+        app_id,
       </if>
       <if test="clientInfo != null">
         client_info,
@@ -207,6 +211,9 @@
       </if>
       <if test="updateValue != null">
         #{updateValue,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
       </if>
       <if test="clientInfo != null">
         #{clientInfo,jdbcType=VARCHAR},
@@ -266,6 +273,9 @@
       <if test="record.updateValue != null">
         update_value = #{record.updateValue,jdbcType=VARCHAR},
       </if>
+      <if test="record.appId != null">
+        app_id = #{record.appId,jdbcType=VARCHAR},
+      </if>
       <if test="record.clientInfo != null">
         client_info = #{record.clientInfo,jdbcType=VARCHAR},
       </if>
@@ -305,6 +315,7 @@
     attribute_name = #{record.attributeName,jdbcType=VARCHAR},
     old_value = #{record.oldValue,jdbcType=VARCHAR},
     update_value = #{record.updateValue,jdbcType=VARCHAR},
+    app_id = #{record.appId,jdbcType=VARCHAR},
     client_info = #{record.clientInfo,jdbcType=VARCHAR},
     ext_field1 = #{record.extField1,jdbcType=VARCHAR},
     ext_field2 = #{record.extField2,jdbcType=VARCHAR},
@@ -341,6 +352,9 @@
       <if test="updateValue != null">
         update_value = #{updateValue,jdbcType=VARCHAR},
       </if>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
       <if test="clientInfo != null">
         client_info = #{clientInfo,jdbcType=VARCHAR},
       </if>
@@ -375,6 +389,7 @@
       attribute_name = #{attributeName,jdbcType=VARCHAR},
       old_value = #{oldValue,jdbcType=VARCHAR},
       update_value = #{updateValue,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=VARCHAR},
       client_info = #{clientInfo,jdbcType=VARCHAR},
       ext_field1 = #{extField1,jdbcType=VARCHAR},
       ext_field2 = #{extField2,jdbcType=VARCHAR},
@@ -412,10 +427,10 @@
     <if test="items.get(0) != null">
       insert into update_info_log (id, uid, user_type,
       operator_uid, operator_account, attribute_name,
-      old_value, update_value, client_info,
-      ext_field1, ext_field2, ext_field3,
-      ext_field4, version, create_time
-      )
+      old_value, update_value, app_id,
+      client_info, ext_field1, ext_field2,
+      ext_field3, ext_field4, version,
+      create_time)
       values
       <foreach collection="items" item="item" index="index" separator=",">
         (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=BIGINT},
@@ -423,12 +438,12 @@
         #{item.operatorUid,jdbcType=INTEGER}, #{item.operatorAccount,jdbcType=VARCHAR},
         #{item.attributeName,jdbcType=VARCHAR},
         #{item.oldValue,jdbcType=VARCHAR}, #{item.updateValue,jdbcType=VARCHAR},
-        #{item.clientInfo,jdbcType=VARCHAR},
-        #{item.extField1,jdbcType=VARCHAR}, #{item.extField2,jdbcType=VARCHAR},
-        #{item.extField3,jdbcType=VARCHAR},
-        #{item.extField4,jdbcType=VARCHAR}, #{item.version,jdbcType=INTEGER},
-        #{item.createTime,jdbcType=TIMESTAMP}
-        )
+        #{item.appId,jdbcType=VARCHAR},
+        #{item.clientInfo,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR},
+        #{item.extField2,jdbcType=VARCHAR},
+        #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR},
+        #{item.version,jdbcType=INTEGER},
+        #{item.createTime,jdbcType=TIMESTAMP})
       </foreach>
     </if>
   </insert>
