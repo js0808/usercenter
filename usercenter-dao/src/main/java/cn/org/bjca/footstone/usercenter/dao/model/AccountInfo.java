@@ -34,6 +34,10 @@ public class AccountInfo implements Serializable {
 
     private Integer version;
 
+    private String appId;
+
+    private String clientInfo;
+
     private Date createTime;
 
     private Date updateTime;
@@ -160,6 +164,22 @@ public class AccountInfo implements Serializable {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId == null ? null : appId.trim();
+    }
+
+    public String getClientInfo() {
+        return clientInfo;
+    }
+
+    public void setClientInfo(String clientInfo) {
+        this.clientInfo = clientInfo == null ? null : clientInfo.trim();
     }
 
     public Date getCreateTime() {

@@ -14,6 +14,8 @@ public class LoginLog implements Serializable {
 
     private String userType;
 
+  private String appId;
+
     private String clientInfo;
 
     private Boolean loginResult;
@@ -63,6 +65,14 @@ public class LoginLog implements Serializable {
     public void setUserType(String userType) {
         this.userType = userType == null ? null : userType.trim();
     }
+
+  public String getAppId() {
+    return appId;
+  }
+
+  public void setAppId(String appId) {
+    this.appId = appId == null ? null : appId.trim();
+  }
 
     public String getClientInfo() {
         return clientInfo;

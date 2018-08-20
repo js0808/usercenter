@@ -7,6 +7,7 @@
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="uid" jdbcType="BIGINT" property="uid" />
     <result column="user_type" jdbcType="VARCHAR" property="userType" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId"/>
     <result column="client_info" jdbcType="VARCHAR" property="clientInfo" />
     <result column="login_result" jdbcType="BIT" property="loginResult" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -70,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, account_type, account, uid, user_type, client_info, login_result, create_time
+    id, account_type, account, uid, user_type, app_id, client_info, login_result, create_time
   </sql>
   <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLogExample" resultMap="BaseResultMap">
     select
@@ -107,11 +108,13 @@
   </delete>
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
     insert into login_log (id, account_type, account, 
-      uid, user_type, client_info, 
-      login_result, create_time)
+      uid, user_type, app_id, 
+      client_info, login_result, create_time
+      )
     values (#{id,jdbcType=INTEGER}, #{accountType,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, 
-      #{loginResult,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP})
+      #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, 
+      #{clientInfo,jdbcType=VARCHAR}, #{loginResult,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.LoginLog">
     insert into login_log
@@ -130,6 +133,9 @@
       </if>
       <if test="userType != null">
         user_type,
+      </if>
+      <if test="appId != null">
+        app_id,
       </if>
       <if test="clientInfo != null">
         client_info,
@@ -156,6 +162,9 @@
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
       </if>
       <if test="clientInfo != null">
         #{clientInfo,jdbcType=VARCHAR},
@@ -192,6 +201,9 @@
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
       </if>
+      <if test="record.appId != null">
+        app_id = #{record.appId,jdbcType=VARCHAR},
+      </if>
       <if test="record.clientInfo != null">
         client_info = #{record.clientInfo,jdbcType=VARCHAR},
       </if>
@@ -216,6 +228,7 @@
       account = #{record.account,jdbcType=VARCHAR},
       uid = #{record.uid,jdbcType=BIGINT},
       user_type = #{record.userType,jdbcType=VARCHAR},
+    app_id = #{record.appId,jdbcType=VARCHAR},
       client_info = #{record.clientInfo,jdbcType=VARCHAR},
       login_result = #{record.loginResult,jdbcType=BIT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
@@ -238,6 +251,9 @@
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
       </if>
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
       <if test="clientInfo != null">
         client_info = #{clientInfo,jdbcType=VARCHAR},
       </if>
@@ -256,6 +272,7 @@
       account = #{account,jdbcType=VARCHAR},
       uid = #{uid,jdbcType=BIGINT},
       user_type = #{userType,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=VARCHAR},
       client_info = #{clientInfo,jdbcType=VARCHAR},
       login_result = #{loginResult,jdbcType=BIT},
       create_time = #{createTime,jdbcType=TIMESTAMP}
@@ -283,14 +300,18 @@
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-            insert into login_log  (id, account_type, account, 
-        uid, user_type, client_info, 
-        login_result, create_time)
+            insert into login_log  (id, account_type, account,
+      uid, user_type, app_id,
+      client_info, login_result, create_time
+      )
       values
       <foreach collection="items" item="item" index="index" separator=",">
-      (#{item.id,jdbcType=INTEGER}, #{item.accountType,jdbcType=VARCHAR}, #{item.account,jdbcType=VARCHAR}, 
-        #{item.uid,jdbcType=BIGINT}, #{item.userType,jdbcType=VARCHAR}, #{item.clientInfo,jdbcType=VARCHAR}, 
-        #{item.loginResult,jdbcType=BIT}, #{item.createTime,jdbcType=TIMESTAMP})
+      (#{item.id,jdbcType=INTEGER}, #{item.accountType,jdbcType=VARCHAR}, #{item.account,jdbcType=VARCHAR},
+        #{item.uid,jdbcType=BIGINT}, #{item.userType,jdbcType=VARCHAR},
+        #{item.appId,jdbcType=VARCHAR},
+        #{item.clientInfo,jdbcType=VARCHAR}, #{item.loginResult,jdbcType=BIT},
+        #{item.createTime,jdbcType=TIMESTAMP}
+        )
       </foreach>
     </if>
   </insert>

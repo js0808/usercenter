@@ -156,6 +156,16 @@ public class AccountInfoExample {
         return this;
     }
 
+  public AccountInfoExample sumAppId() {
+    this.sumCol = "app_id";
+    return this;
+  }
+
+  public AccountInfoExample sumClientInfo() {
+    this.sumCol = "client_info";
+    return this;
+  }
+
     public AccountInfoExample sumCreateTime() {
         this.sumCol="create_time";
         return this;
@@ -1218,6 +1228,146 @@ public class AccountInfoExample {
             addCriterion("version not between", value1, value2, "version");
             return (Criteria) this;
         }
+
+      public Criteria andAppIdIsNull() {
+        addCriterion("app_id is null");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdIsNotNull() {
+        addCriterion("app_id is not null");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdEqualTo(String value) {
+        addCriterion("app_id =", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdNotEqualTo(String value) {
+        addCriterion("app_id <>", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdGreaterThan(String value) {
+        addCriterion("app_id >", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdGreaterThanOrEqualTo(String value) {
+        addCriterion("app_id >=", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdLessThan(String value) {
+        addCriterion("app_id <", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdLessThanOrEqualTo(String value) {
+        addCriterion("app_id <=", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdLike(String value) {
+        addCriterion("app_id like", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdNotLike(String value) {
+        addCriterion("app_id not like", value, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdIn(List<String> values) {
+        addCriterion("app_id in", values, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdNotIn(List<String> values) {
+        addCriterion("app_id not in", values, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdBetween(String value1, String value2) {
+        addCriterion("app_id between", value1, value2, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andAppIdNotBetween(String value1, String value2) {
+        addCriterion("app_id not between", value1, value2, "appId");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoIsNull() {
+        addCriterion("client_info is null");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoIsNotNull() {
+        addCriterion("client_info is not null");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoEqualTo(String value) {
+        addCriterion("client_info =", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoNotEqualTo(String value) {
+        addCriterion("client_info <>", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoGreaterThan(String value) {
+        addCriterion("client_info >", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoGreaterThanOrEqualTo(String value) {
+        addCriterion("client_info >=", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoLessThan(String value) {
+        addCriterion("client_info <", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoLessThanOrEqualTo(String value) {
+        addCriterion("client_info <=", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoLike(String value) {
+        addCriterion("client_info like", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoNotLike(String value) {
+        addCriterion("client_info not like", value, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoIn(List<String> values) {
+        addCriterion("client_info in", values, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoNotIn(List<String> values) {
+        addCriterion("client_info not in", values, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoBetween(String value1, String value2) {
+        addCriterion("client_info between", value1, value2, "clientInfo");
+        return (Criteria) this;
+      }
+
+      public Criteria andClientInfoNotBetween(String value1, String value2) {
+        addCriterion("client_info not between", value1, value2, "clientInfo");
+        return (Criteria) this;
+      }
 
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
