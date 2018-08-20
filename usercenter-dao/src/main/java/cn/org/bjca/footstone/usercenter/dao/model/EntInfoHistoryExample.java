@@ -966,52 +966,52 @@ public class EntInfoHistoryExample {
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagEqualTo(Boolean value) {
+    public Criteria andRealNameFlagEqualTo(Integer value) {
       addCriterion("real_name_flag =", value, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagNotEqualTo(Boolean value) {
+    public Criteria andRealNameFlagNotEqualTo(Integer value) {
       addCriterion("real_name_flag <>", value, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagGreaterThan(Boolean value) {
+    public Criteria andRealNameFlagGreaterThan(Integer value) {
       addCriterion("real_name_flag >", value, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagGreaterThanOrEqualTo(Boolean value) {
+    public Criteria andRealNameFlagGreaterThanOrEqualTo(Integer value) {
       addCriterion("real_name_flag >=", value, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagLessThan(Boolean value) {
+    public Criteria andRealNameFlagLessThan(Integer value) {
       addCriterion("real_name_flag <", value, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagLessThanOrEqualTo(Boolean value) {
+    public Criteria andRealNameFlagLessThanOrEqualTo(Integer value) {
       addCriterion("real_name_flag <=", value, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagIn(List<Boolean> values) {
+    public Criteria andRealNameFlagIn(List<Integer> values) {
       addCriterion("real_name_flag in", values, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagNotIn(List<Boolean> values) {
+    public Criteria andRealNameFlagNotIn(List<Integer> values) {
       addCriterion("real_name_flag not in", values, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagBetween(Boolean value1, Boolean value2) {
+    public Criteria andRealNameFlagBetween(Integer value1, Integer value2) {
       addCriterion("real_name_flag between", value1, value2, "realNameFlag");
       return (Criteria) this;
     }
 
-    public Criteria andRealNameFlagNotBetween(Boolean value1, Boolean value2) {
+    public Criteria andRealNameFlagNotBetween(Integer value1, Integer value2) {
       addCriterion("real_name_flag not between", value1, value2, "realNameFlag");
       return (Criteria) this;
     }
@@ -1096,52 +1096,52 @@ public class EntInfoHistoryExample {
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagEqualTo(Boolean value) {
+    public Criteria andReviewFlagEqualTo(Integer value) {
       addCriterion("review_flag =", value, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagNotEqualTo(Boolean value) {
+    public Criteria andReviewFlagNotEqualTo(Integer value) {
       addCriterion("review_flag <>", value, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagGreaterThan(Boolean value) {
+    public Criteria andReviewFlagGreaterThan(Integer value) {
       addCriterion("review_flag >", value, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagGreaterThanOrEqualTo(Boolean value) {
+    public Criteria andReviewFlagGreaterThanOrEqualTo(Integer value) {
       addCriterion("review_flag >=", value, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagLessThan(Boolean value) {
+    public Criteria andReviewFlagLessThan(Integer value) {
       addCriterion("review_flag <", value, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagLessThanOrEqualTo(Boolean value) {
+    public Criteria andReviewFlagLessThanOrEqualTo(Integer value) {
       addCriterion("review_flag <=", value, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagIn(List<Boolean> values) {
+    public Criteria andReviewFlagIn(List<Integer> values) {
       addCriterion("review_flag in", values, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagNotIn(List<Boolean> values) {
+    public Criteria andReviewFlagNotIn(List<Integer> values) {
       addCriterion("review_flag not in", values, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagBetween(Boolean value1, Boolean value2) {
+    public Criteria andReviewFlagBetween(Integer value1, Integer value2) {
       addCriterion("review_flag between", value1, value2, "reviewFlag");
       return (Criteria) this;
     }
 
-    public Criteria andReviewFlagNotBetween(Boolean value1, Boolean value2) {
+    public Criteria andReviewFlagNotBetween(Integer value1, Integer value2) {
       addCriterion("review_flag not between", value1, value2, "reviewFlag");
       return (Criteria) this;
     }

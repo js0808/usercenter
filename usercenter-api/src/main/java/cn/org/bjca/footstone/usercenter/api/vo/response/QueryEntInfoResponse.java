@@ -1,6 +1,5 @@
 package cn.org.bjca.footstone.usercenter.api.vo.response;
 
-import java.util.Date;
 import lombok.Data;
 
 /**
@@ -31,17 +30,17 @@ public class QueryEntInfoResponse {
 
   private String legalIdNum;
 
-  private Boolean realNameFlag;
+  private Integer realNameFlag;
 
   private String realNameType;
 
-  private Boolean reviewFlag;
+  private Integer reviewFlag;
 
   private String bizLicenseImageUrl;
 
   private String orgCodeImageUrl;
 
-  private String fromPlatform;
+  private String appId;
 
   private String status;
 
@@ -57,7 +56,5 @@ public class QueryEntInfoResponse {
 
   private Integer version;
 
-  private Date createTime;
-
-  private Date updateTime;
+  private String oper;
 }

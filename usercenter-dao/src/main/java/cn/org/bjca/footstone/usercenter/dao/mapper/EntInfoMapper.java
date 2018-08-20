@@ -23,7 +23,8 @@ public interface EntInfoMapper {
 
     EntInfo selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
+  int updateByExampleSelective(@Param("record") EntInfo record,
+      @Param("example") EntInfoExample example);
 
     int updateByExample(@Param("record") EntInfo record, @Param("example") EntInfoExample example);
 

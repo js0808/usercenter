@@ -16,12 +16,14 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoHistoryMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
+import cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
@@ -38,9 +40,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @description:企业信息管理
@@ -69,9 +73,13 @@ public class EntInfoService {
   @Autowired
   private AccountInfoMapper accountInfoMapper;
 
+  @Autowired
+  private EntInfoHistoryMapper entInfoHistoryMapper;
+
   /**
    * 修改企业信息并实名认证
    */
+  @Transactional(rollbackFor = Exception.class)
   public void updateEntInfo(Long uid, EntInfoRequest entInfoRequest) {
     //get entinfo by uid
     EntInfo entInfoOld = checkExist(uid);
@@ -80,13 +88,24 @@ public class EntInfoService {
     checkStatus(entInfoOld);
 //    checkRealName(entInfoRequest);
     //update ent info
-    BeanCopy.beans(entInfoRequest, entInfoOld).copy();
-    entInfoOld.setVersion(entInfoOld.getVersion() + 1);
-    int result = entInfoMapper.updateByPrimaryKeySelective(entInfoOld);
+    EntInfo updateEntInfo = new EntInfo();
+    BeanCopy.beans(entInfoRequest, updateEntInfo).copy();
+    updateEntInfo.setId(entInfoOld.getId());
+    updateEntInfo
+        .setRealNameType(entInfoOld.getRealNameType() + "," + entInfoRequest.getRealNameType());
+    updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
+    int result = 0;
+    try {
+      result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
+    } catch (DuplicateKeyException e) {
+      log.error("企业信息已经存在，企业名称{}", entInfoOld.getName(), e);
+      throw new BaseException(ReturnCodeEnum.RESOURCE_ALREADY_EXIST);
+    }
     if (result != 1) {
       throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
     }
-
+    //保存历史
+    saveHistory(entInfoOld);
     //TODO 保存消息
 
   }
@@ -94,6 +113,7 @@ public class EntInfoService {
   /**
    * 修改无需实名认证的企业信息
    */
+  @Transactional(rollbackFor = Exception.class)
   public void updateEntInfoSimple(Long uid, EntInfoBaseRequest entInfoBaseRequest) {
     //get entinfo by uid
     EntInfo entInfoOld = checkExist(uid);
@@ -110,20 +130,37 @@ public class EntInfoService {
     if (result != 1) {
       throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
     }
+
+    //保存历史
+    saveHistory(entInfoOld);
     //TODO 保存消息
 
   }
 
+  @Transactional(rollbackFor = Exception.class)
   public void updateEntStatus(Long uid, EntInfoStatusRequest entInfoStatusRequest) {
     //get entinfo by uid
-    EntInfo entInfo = checkExist(uid);
-    checkStatus(entInfo);
-    entInfo.setStatus(entInfoStatusRequest.getStatus().toString());
-    entInfo.setVersion(entInfo.getVersion() + 1);
-    int result = entInfoMapper.updateByPrimaryKeySelective(entInfo);
+    EntInfo entInfoOld = checkExist(uid);
+    checkStatus(entInfoOld);
+
+    //update ent info
+    EntInfo updateEntInfo = new EntInfo();
+    BeanCopy.beans(entInfoOld, updateEntInfo).copy();
+    updateEntInfo.setStatus(entInfoStatusRequest.getStatus().toString());
+    updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
+    int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     if (result != 1) {
       throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
     }
+    //保存历史
+    saveHistory(entInfoOld);
+  }
+
+  private void saveHistory(EntInfo entInfoHistory) {
+    EntInfoHistory history = new EntInfoHistory();
+    BeanCopy.beans(entInfoHistory, history).copy();
+    history.setId(null);
+    entInfoHistoryMapper.insert(history);
   }
 
   /**
@@ -196,10 +233,6 @@ public class EntInfoService {
    * 添加企业并实名认证
    */
   public EntInfoResponse addEntInfo(EntInfoRequest entInfoRequest) {
-    EntInfo entInfoAlready = getEntInfoByName(entInfoRequest.getName());
-    if (entInfoAlready != null) {
-      throw new BaseException(ReturnCodeEnum.RESOURCE_ALREADY_EXIST);
-    }
     checkRealNameParam(entInfoRequest);
     //调用身份核实
 //    checkRealName(entInfoRequest);
@@ -207,7 +240,15 @@ public class EntInfoService {
     EntInfo entInfo = new EntInfo();
     BeanCopy.beans(entInfoRequest, entInfo).copy();
     entInfo.setUid(SnowFlake.next());
-    entInfoMapper.insertSelective(entInfo);
+    entInfo.setRealNameFlag(1);
+    try {
+      entInfoMapper.insertSelective(entInfo);
+    } catch (Exception e) {
+      log.error("企业信息已经存在，企业名称{}", entInfoRequest.getName(), e);
+      throw new BaseException(ReturnCodeEnum.RESOURCE_ALREADY_EXIST);
+    }
+    //TODO 更新账号表UID
+
     EntInfoResponse response = new EntInfoResponse();
     response.setUid(entInfo.getUid());
     return response;

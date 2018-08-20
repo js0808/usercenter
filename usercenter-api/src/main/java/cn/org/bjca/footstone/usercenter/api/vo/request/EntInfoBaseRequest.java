@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.api.vo.request;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @description:企业基本信息不用实名认证的属性
@@ -11,6 +12,11 @@ import org.hibernate.validator.constraints.Length;
  **/
 @Data
 public class EntInfoBaseRequest {
+
+  @ApiModelProperty(value = "appId")
+  @NotBlank
+  @Length(max = 64)
+  private String appId = null;
 
   @ApiModelProperty(value = "企业头像地址")
   @Length(max = 256)
