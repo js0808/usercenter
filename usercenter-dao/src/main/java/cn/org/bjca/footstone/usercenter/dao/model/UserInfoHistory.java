@@ -3,7 +3,7 @@ package cn.org.bjca.footstone.usercenter.dao.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class EntInfo implements Serializable {
+public class UserInfoHistory implements Serializable {
     private Integer id;
 
     private Long uid;
@@ -12,27 +12,29 @@ public class EntInfo implements Serializable {
 
     private String name;
 
-    private String phone;
+    private String idType;
 
-    private String orgCode;
+    private String idNum;
 
-    private String bizLicense;
+    private String mobile;
 
-    private String socialCreditCode;
+    private String email;
 
-    private String legalName;
-
-    private Boolean realNameFlag;
+    private Integer realNameFlag;
 
     private String realNameType;
 
     private Boolean reviewFlag;
 
-    private String bizLicenseImageUrl;
+    private String bankCardNum;
 
-    private String orgCodeImageUrl;
+    private String faceIdImageUrl;
 
-    private String fromPlatform;
+    private String idCardFrontImageUrl;
+
+    private String idCardBackImageUrl;
+
+    private String appId;
 
     private String status;
 
@@ -52,7 +54,7 @@ public class EntInfo implements Serializable {
 
     private Date updateTime;
 
-    private byte[] legalIdNum;
+    private String oper;
 
     private static final long serialVersionUID = 1L;
 
@@ -90,51 +92,43 @@ public class EntInfo implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public String getPhone() {
-        return phone;
+    public String getIdType() {
+        return idType;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+    public void setIdType(String idType) {
+        this.idType = idType == null ? null : idType.trim();
     }
 
-    public String getOrgCode() {
-        return orgCode;
+    public String getIdNum() {
+        return idNum;
     }
 
-    public void setOrgCode(String orgCode) {
-        this.orgCode = orgCode == null ? null : orgCode.trim();
+    public void setIdNum(String idNum) {
+        this.idNum = idNum == null ? null : idNum.trim();
     }
 
-    public String getBizLicense() {
-        return bizLicense;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setBizLicense(String bizLicense) {
-        this.bizLicense = bizLicense == null ? null : bizLicense.trim();
+    public void setMobile(String mobile) {
+        this.mobile = mobile == null ? null : mobile.trim();
     }
 
-    public String getSocialCreditCode() {
-        return socialCreditCode;
+    public String getEmail() {
+        return email;
     }
 
-    public void setSocialCreditCode(String socialCreditCode) {
-        this.socialCreditCode = socialCreditCode == null ? null : socialCreditCode.trim();
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
     }
 
-    public String getLegalName() {
-        return legalName;
-    }
-
-    public void setLegalName(String legalName) {
-        this.legalName = legalName == null ? null : legalName.trim();
-    }
-
-    public Boolean getRealNameFlag() {
+    public Integer getRealNameFlag() {
         return realNameFlag;
     }
 
-    public void setRealNameFlag(Boolean realNameFlag) {
+    public void setRealNameFlag(Integer realNameFlag) {
         this.realNameFlag = realNameFlag;
     }
 
@@ -154,28 +148,44 @@ public class EntInfo implements Serializable {
         this.reviewFlag = reviewFlag;
     }
 
-    public String getBizLicenseImageUrl() {
-        return bizLicenseImageUrl;
+    public String getBankCardNum() {
+        return bankCardNum;
     }
 
-    public void setBizLicenseImageUrl(String bizLicenseImageUrl) {
-        this.bizLicenseImageUrl = bizLicenseImageUrl == null ? null : bizLicenseImageUrl.trim();
+    public void setBankCardNum(String bankCardNum) {
+        this.bankCardNum = bankCardNum == null ? null : bankCardNum.trim();
     }
 
-    public String getOrgCodeImageUrl() {
-        return orgCodeImageUrl;
+    public String getFaceIdImageUrl() {
+        return faceIdImageUrl;
     }
 
-    public void setOrgCodeImageUrl(String orgCodeImageUrl) {
-        this.orgCodeImageUrl = orgCodeImageUrl == null ? null : orgCodeImageUrl.trim();
+    public void setFaceIdImageUrl(String faceIdImageUrl) {
+        this.faceIdImageUrl = faceIdImageUrl == null ? null : faceIdImageUrl.trim();
     }
 
-    public String getFromPlatform() {
-        return fromPlatform;
+    public String getIdCardFrontImageUrl() {
+        return idCardFrontImageUrl;
     }
 
-    public void setFromPlatform(String fromPlatform) {
-        this.fromPlatform = fromPlatform == null ? null : fromPlatform.trim();
+    public void setIdCardFrontImageUrl(String idCardFrontImageUrl) {
+        this.idCardFrontImageUrl = idCardFrontImageUrl == null ? null : idCardFrontImageUrl.trim();
+    }
+
+    public String getIdCardBackImageUrl() {
+        return idCardBackImageUrl;
+    }
+
+    public void setIdCardBackImageUrl(String idCardBackImageUrl) {
+        this.idCardBackImageUrl = idCardBackImageUrl == null ? null : idCardBackImageUrl.trim();
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId == null ? null : appId.trim();
     }
 
     public String getStatus() {
@@ -250,12 +260,12 @@ public class EntInfo implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public byte[] getLegalIdNum() {
-        return legalIdNum;
+    public String getOper() {
+        return oper;
     }
 
-    public void setLegalIdNum(byte[] legalIdNum) {
-        this.legalIdNum = legalIdNum;
+    public void setOper(String oper) {
+        this.oper = oper == null ? null : oper.trim();
     }
 
     public String getUpdateSql() {

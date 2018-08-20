@@ -11,4 +11,5 @@ public class UserInfoSimpleVo {
 
   private String email;
   private String headImgUrl;
+  private String oper;
 }

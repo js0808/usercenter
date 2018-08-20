@@ -29,8 +29,10 @@ public class UserInfoVo {
 
   private String idCardBackImageUrl;
 
-  private String fromPlatform;
-
   private String realNameType;
+
+  private String oper;
+
+  private String appId;
 
 }

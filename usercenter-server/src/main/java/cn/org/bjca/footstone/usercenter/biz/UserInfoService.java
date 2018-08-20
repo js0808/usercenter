@@ -21,11 +21,13 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameChecker;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoHistoryMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
+import cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import com.google.common.base.Strings;
@@ -36,7 +38,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  * @author shuvigoss@gmail.com (ShuWei) 2018/8/13
@@ -51,8 +56,16 @@ public class UserInfoService {
 
   private static final BeanCopier USERINFO2RESPONSE = BeanCopier
       .create(UserInfo.class, QueryUserInfoResponse.class, false);
+
+  private static final BeanCopier USERINFO2HISTORY = BeanCopier
+      .create(UserInfo.class, UserInfoHistory.class, false);
+  @Autowired
+  private DataSourceTransactionManager transactionManager;
+
   @Autowired
   private UserInfoMapper userInfoMapper;
+  @Autowired
+  private UserInfoHistoryMapper historyMapper;
 
   @Autowired
   private AccountInfoMapper accountInfoMapper;
@@ -131,20 +144,19 @@ public class UserInfoService {
     }
 
     validateStatus(old);
+    UserInfo info = new UserInfo();
 
-    USERINFO_COPIER.copy(userInfo, old, null);
+    USERINFO_COPIER.copy(userInfo, info, null);
 
     verirfy(verify, userInfo.getRealNameType());
 
-    old.setRealNameType(old.getRealNameType() + "," + userInfo.getRealNameType());
-    old.setUpdateTime(new Date());
-    old.setVersion(old.getVersion() + 1);
+    info.setId(old.getId());
+    info.setRealNameType(old.getRealNameType() + "," + userInfo.getRealNameType());
+    info.setUpdateTime(new Date());
+    info.setVersion(old.getVersion() + 1);
 
-    int count = userInfoMapper.updateByPrimaryKeySelective(old);
-    if (count != 1) {
-      log.error("变更实名认证信息异常{}", userInfo);
-      throw new BaseException(SQL_EXCEPTION);
-    }
+    doUpdate(old, info);
+
     return buildRsp(old);
   }
 
@@ -196,11 +208,26 @@ public class UserInfoService {
     userInfo.setEmail(userInfoSimpleVo.getEmail());
     userInfo.setHeadImgUrl(userInfoSimpleVo.getHeadImgUrl());
     userInfo.setVersion(old.getVersion() + 1);
-    int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
-    if (count != 1) {
-      throw new BaseException(REALNAME_NOT_EXIST, uid);
-    }
+    doUpdate(old, userInfo);
+
     return buildRsp(old);
+  }
+
+  private void doUpdate(UserInfo userInfoOld, UserInfo userInfoNew) {
+
+    TransactionStatus transaction = transactionManager
+        .getTransaction(new DefaultTransactionDefinition());
+    try {
+      UserInfoHistory history = new UserInfoHistory();
+      USERINFO2HISTORY.copy(userInfoOld, history, null);
+      history.setId(null);
+      userInfoMapper.updateByPrimaryKeySelective(userInfoNew);
+      historyMapper.insertSelective(history);
+      transactionManager.commit(transaction);
+    } catch (Throwable e) {
+      log.error("插入数据库异常", e);
+      transactionManager.rollback(transaction);
+    }
   }
 
   public UserInfoResponse modUserStatus(Long uid, UserInfoStatusVo userInfoStatusVo) {
@@ -212,13 +239,12 @@ public class UserInfoService {
 
     UserInfo userInfo = new UserInfo();
     userInfo.setId(old.getId());
+    userInfo.setOper(userInfoStatusVo.getOper());
     userInfo.setStatus(userInfoStatusVo.getStatus().toString());
     userInfo.setVersion(old.getVersion() + 1);
 
-    int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
-    if (count != 1) {
-      throw new BaseException(REALNAME_NOT_EXIST, uid);
-    }
+    doUpdate(old, userInfo);
+
     return buildRsp(old);
   }
 

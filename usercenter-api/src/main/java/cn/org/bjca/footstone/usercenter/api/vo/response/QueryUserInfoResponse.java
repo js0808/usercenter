@@ -34,7 +34,7 @@ public class QueryUserInfoResponse {
 
   private String idCardBackImageUrl;
 
-  private String fromPlatform;
+  private String appId;
 
   private String status;
 
@@ -43,5 +43,7 @@ public class QueryUserInfoResponse {
   private Date createTime;
 
   private Date updateTime;
+
+  private String oper;
 
 }

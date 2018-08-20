@@ -34,7 +34,7 @@ public class UserInfo implements Serializable {
 
     private String idCardBackImageUrl;
 
-    private String fromPlatform;
+    private String appId;
 
     private String status;
 
@@ -53,6 +53,8 @@ public class UserInfo implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    private String oper;
 
     private static final long serialVersionUID = 1L;
 
@@ -178,12 +180,12 @@ public class UserInfo implements Serializable {
         this.idCardBackImageUrl = idCardBackImageUrl == null ? null : idCardBackImageUrl.trim();
     }
 
-    public String getFromPlatform() {
-        return fromPlatform;
+    public String getAppId() {
+        return appId;
     }
 
-    public void setFromPlatform(String fromPlatform) {
-        this.fromPlatform = fromPlatform == null ? null : fromPlatform.trim();
+    public void setAppId(String appId) {
+        this.appId = appId == null ? null : appId.trim();
     }
 
     public String getStatus() {
@@ -256,6 +258,14 @@ public class UserInfo implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getOper() {
+        return oper;
+    }
+
+    public void setOper(String oper) {
+        this.oper = oper == null ? null : oper.trim();
     }
 
     public String getUpdateSql() {

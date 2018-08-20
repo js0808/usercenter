@@ -156,8 +156,8 @@ public class UserInfoExample {
         return this;
     }
 
-    public UserInfoExample sumFromPlatform() {
-        this.sumCol="from_platform";
+    public UserInfoExample sumAppId() {
+        this.sumCol="app_id";
         return this;
     }
 
@@ -203,6 +203,11 @@ public class UserInfoExample {
 
     public UserInfoExample sumUpdateTime() {
         this.sumCol="update_time";
+        return this;
+    }
+
+    public UserInfoExample sumOper() {
+        this.sumCol="oper";
         return this;
     }
 
@@ -1279,73 +1284,73 @@ public class UserInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformIsNull() {
-            addCriterion("from_platform is null");
+        public Criteria andAppIdIsNull() {
+            addCriterion("app_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformIsNotNull() {
-            addCriterion("from_platform is not null");
+        public Criteria andAppIdIsNotNull() {
+            addCriterion("app_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformEqualTo(String value) {
-            addCriterion("from_platform =", value, "fromPlatform");
+        public Criteria andAppIdEqualTo(String value) {
+            addCriterion("app_id =", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotEqualTo(String value) {
-            addCriterion("from_platform <>", value, "fromPlatform");
+        public Criteria andAppIdNotEqualTo(String value) {
+            addCriterion("app_id <>", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformGreaterThan(String value) {
-            addCriterion("from_platform >", value, "fromPlatform");
+        public Criteria andAppIdGreaterThan(String value) {
+            addCriterion("app_id >", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformGreaterThanOrEqualTo(String value) {
-            addCriterion("from_platform >=", value, "fromPlatform");
+        public Criteria andAppIdGreaterThanOrEqualTo(String value) {
+            addCriterion("app_id >=", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformLessThan(String value) {
-            addCriterion("from_platform <", value, "fromPlatform");
+        public Criteria andAppIdLessThan(String value) {
+            addCriterion("app_id <", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformLessThanOrEqualTo(String value) {
-            addCriterion("from_platform <=", value, "fromPlatform");
+        public Criteria andAppIdLessThanOrEqualTo(String value) {
+            addCriterion("app_id <=", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformLike(String value) {
-            addCriterion("from_platform like", value, "fromPlatform");
+        public Criteria andAppIdLike(String value) {
+            addCriterion("app_id like", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotLike(String value) {
-            addCriterion("from_platform not like", value, "fromPlatform");
+        public Criteria andAppIdNotLike(String value) {
+            addCriterion("app_id not like", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformIn(List<String> values) {
-            addCriterion("from_platform in", values, "fromPlatform");
+        public Criteria andAppIdIn(List<String> values) {
+            addCriterion("app_id in", values, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotIn(List<String> values) {
-            addCriterion("from_platform not in", values, "fromPlatform");
+        public Criteria andAppIdNotIn(List<String> values) {
+            addCriterion("app_id not in", values, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformBetween(String value1, String value2) {
-            addCriterion("from_platform between", value1, value2, "fromPlatform");
+        public Criteria andAppIdBetween(String value1, String value2) {
+            addCriterion("app_id between", value1, value2, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotBetween(String value1, String value2) {
-            addCriterion("from_platform not between", value1, value2, "fromPlatform");
+        public Criteria andAppIdNotBetween(String value1, String value2) {
+            addCriterion("app_id not between", value1, value2, "appId");
             return (Criteria) this;
         }
 
@@ -1946,6 +1951,76 @@ public class UserInfoExample {
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
             addCriterion("update_time not between", value1, value2, "updateTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperIsNull() {
+            addCriterion("oper is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperIsNotNull() {
+            addCriterion("oper is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperEqualTo(String value) {
+            addCriterion("oper =", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperNotEqualTo(String value) {
+            addCriterion("oper <>", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperGreaterThan(String value) {
+            addCriterion("oper >", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperGreaterThanOrEqualTo(String value) {
+            addCriterion("oper >=", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperLessThan(String value) {
+            addCriterion("oper <", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperLessThanOrEqualTo(String value) {
+            addCriterion("oper <=", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperLike(String value) {
+            addCriterion("oper like", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperNotLike(String value) {
+            addCriterion("oper not like", value, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperIn(List<String> values) {
+            addCriterion("oper in", values, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperNotIn(List<String> values) {
+            addCriterion("oper not in", values, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperBetween(String value1, String value2) {
+            addCriterion("oper between", value1, value2, "oper");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperNotBetween(String value1, String value2) {
+            addCriterion("oper not between", value1, value2, "oper");
             return (Criteria) this;
         }
 

@@ -10,4 +10,5 @@ import lombok.Data;
 public class UserInfoStatusVo {
 
   private UserInfoStatusEnum status;
+  private String oper;
 }
