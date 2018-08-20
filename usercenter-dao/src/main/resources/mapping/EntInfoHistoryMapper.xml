@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper">
-  <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="uid" jdbcType="BIGINT" property="uid" />
-    <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="phone" jdbcType="VARCHAR" property="phone" />
-    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
-    <result column="biz_license" jdbcType="VARCHAR" property="bizLicense" />
-    <result column="social_credit_code" jdbcType="VARCHAR" property="socialCreditCode" />
-    <result column="legal_name" jdbcType="VARCHAR" property="legalName" />
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoHistoryMapper">
+  <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="uid" jdbcType="BIGINT" property="uid"/>
+    <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="phone" jdbcType="VARCHAR" property="phone"/>
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode"/>
+    <result column="biz_license" jdbcType="VARCHAR" property="bizLicense"/>
+    <result column="social_credit_code" jdbcType="VARCHAR" property="socialCreditCode"/>
+    <result column="legal_name" jdbcType="VARCHAR" property="legalName"/>
     <result column="legal_id_num" jdbcType="VARCHAR" property="legalIdNum"/>
-    <result column="real_name_flag" jdbcType="BIT" property="realNameFlag" />
-    <result column="real_name_type" jdbcType="VARCHAR" property="realNameType" />
-    <result column="review_flag" jdbcType="BIT" property="reviewFlag" />
-    <result column="biz_license_image_url" jdbcType="VARCHAR" property="bizLicenseImageUrl" />
-    <result column="org_code_image_url" jdbcType="VARCHAR" property="orgCodeImageUrl" />
+    <result column="real_name_flag" jdbcType="BIT" property="realNameFlag"/>
+    <result column="real_name_type" jdbcType="VARCHAR" property="realNameType"/>
+    <result column="review_flag" jdbcType="BIT" property="reviewFlag"/>
+    <result column="biz_license_image_url" jdbcType="VARCHAR" property="bizLicenseImageUrl"/>
+    <result column="org_code_image_url" jdbcType="VARCHAR" property="orgCodeImageUrl"/>
     <result column="app_id" jdbcType="VARCHAR" property="appId"/>
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="ext_field1" jdbcType="VARCHAR" property="extField1" />
-    <result column="ext_field2" jdbcType="VARCHAR" property="extField2" />
-    <result column="ext_field3" jdbcType="VARCHAR" property="extField3" />
-    <result column="ext_field4" jdbcType="VARCHAR" property="extField4" />
-    <result column="ext_config" jdbcType="VARCHAR" property="extConfig" />
-    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="status" jdbcType="VARCHAR" property="status"/>
+    <result column="ext_field1" jdbcType="VARCHAR" property="extField1"/>
+    <result column="ext_field2" jdbcType="VARCHAR" property="extField2"/>
+    <result column="ext_field3" jdbcType="VARCHAR" property="extField3"/>
+    <result column="ext_field4" jdbcType="VARCHAR" property="extField4"/>
+    <result column="ext_config" jdbcType="VARCHAR" property="extConfig"/>
+    <result column="version" jdbcType="INTEGER" property="version"/>
     <result column="oper" jdbcType="VARCHAR" property="oper"/>
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -47,7 +48,8 @@
                 </when>
                 <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach close=")" collection="criterion.value" item="listItem" open="("
+                    separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -76,7 +78,8 @@
                 </when>
                 <when test="criterion.listValue">
                   and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                  <foreach close=")" collection="criterion.value" item="listItem" open="("
+                    separator=",">
                     #{listItem}
                   </foreach>
                 </when>
@@ -93,15 +96,17 @@
     org_code_image_url, app_id, status, ext_field1, ext_field2, ext_field3, ext_field4, 
     ext_config, version, oper, create_time, update_time
   </sql>
-  <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistoryExample"
+    resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from ent_info
+    <include refid="Base_Column_List"/>
+    from ent_info_history
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause"/>
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
@@ -111,23 +116,24 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from ent_info
+    select
+    <include refid="Base_Column_List"/>
+    from ent_info_history
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from ent_info
+    delete from ent_info_history
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample">
-    delete from ent_info
+  <delete id="deleteByExample"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistoryExample">
+    delete from ent_info_history
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause"/>
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
-    insert into ent_info (id, uid, head_img_url, 
+  <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory">
+    insert into ent_info_history (id, uid, head_img_url, 
       name, phone, org_code, 
       biz_license, social_credit_code, legal_name, 
       legal_id_num, real_name_flag, real_name_type, 
@@ -146,8 +152,9 @@
       #{extConfig,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{oper,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
-    insert into ent_info
+  <insert id="insertSelective"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory">
+    insert into ent_info_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -309,14 +316,16 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample" resultType="java.lang.Long">
-    select count(*) from ent_info
+  <select id="countByExample"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistoryExample"
+    resultType="java.lang.Long">
+    select count(*) from ent_info_history
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause"/>
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update ent_info
+    update ent_info_history
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -396,48 +405,49 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateSql != null" >
+      <if test="record.updateSql != null">
         ${record.updateSql},
       </if>
     </set>
     <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
+      <include refid="Update_By_Example_Where_Clause"/>
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update ent_info
+    update ent_info_history
     set id = #{record.id,jdbcType=INTEGER},
-      uid = #{record.uid,jdbcType=BIGINT},
-      head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      phone = #{record.phone,jdbcType=VARCHAR},
-      org_code = #{record.orgCode,jdbcType=VARCHAR},
-      biz_license = #{record.bizLicense,jdbcType=VARCHAR},
-      social_credit_code = #{record.socialCreditCode,jdbcType=VARCHAR},
-      legal_name = #{record.legalName,jdbcType=VARCHAR},
+    uid = #{record.uid,jdbcType=BIGINT},
+    head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
+    name = #{record.name,jdbcType=VARCHAR},
+    phone = #{record.phone,jdbcType=VARCHAR},
+    org_code = #{record.orgCode,jdbcType=VARCHAR},
+    biz_license = #{record.bizLicense,jdbcType=VARCHAR},
+    social_credit_code = #{record.socialCreditCode,jdbcType=VARCHAR},
+    legal_name = #{record.legalName,jdbcType=VARCHAR},
     legal_id_num = #{record.legalIdNum,jdbcType=VARCHAR},
-      real_name_flag = #{record.realNameFlag,jdbcType=BIT},
-      real_name_type = #{record.realNameType,jdbcType=VARCHAR},
-      review_flag = #{record.reviewFlag,jdbcType=BIT},
-      biz_license_image_url = #{record.bizLicenseImageUrl,jdbcType=VARCHAR},
-      org_code_image_url = #{record.orgCodeImageUrl,jdbcType=VARCHAR},
+    real_name_flag = #{record.realNameFlag,jdbcType=BIT},
+    real_name_type = #{record.realNameType,jdbcType=VARCHAR},
+    review_flag = #{record.reviewFlag,jdbcType=BIT},
+    biz_license_image_url = #{record.bizLicenseImageUrl,jdbcType=VARCHAR},
+    org_code_image_url = #{record.orgCodeImageUrl,jdbcType=VARCHAR},
     app_id = #{record.appId,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      ext_field1 = #{record.extField1,jdbcType=VARCHAR},
-      ext_field2 = #{record.extField2,jdbcType=VARCHAR},
-      ext_field3 = #{record.extField3,jdbcType=VARCHAR},
-      ext_field4 = #{record.extField4,jdbcType=VARCHAR},
-      ext_config = #{record.extConfig,jdbcType=VARCHAR},
-      version = #{record.version,jdbcType=INTEGER},
+    status = #{record.status,jdbcType=VARCHAR},
+    ext_field1 = #{record.extField1,jdbcType=VARCHAR},
+    ext_field2 = #{record.extField2,jdbcType=VARCHAR},
+    ext_field3 = #{record.extField3,jdbcType=VARCHAR},
+    ext_field4 = #{record.extField4,jdbcType=VARCHAR},
+    ext_config = #{record.extConfig,jdbcType=VARCHAR},
+    version = #{record.version,jdbcType=INTEGER},
     oper = #{record.oper,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    create_time = #{record.createTime,jdbcType=TIMESTAMP},
+    update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
+      <include refid="Update_By_Example_Where_Clause"/>
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
-    update ent_info
+  <update id="updateByPrimaryKeySelective"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory">
+    update ent_info_history
     <set>
       <if test="uid != null">
         uid = #{uid,jdbcType=BIGINT},
@@ -517,8 +527,9 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
-    update ent_info
+  <update id="updateByPrimaryKey"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory">
+    update ent_info_history
     set uid = #{uid,jdbcType=BIGINT},
       head_img_url = #{headImgUrl,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
@@ -546,29 +557,33 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistoryExample"
+    resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from ent_info
+    <include refid="Base_Column_List"/>
+    from ent_info_history
     <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
+      <include refid="Example_Where_Clause"/>
     </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
   </select>
-  <select id="sumByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample" resultType="long" >
-    select sum(${sumCol}) from ent_info
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
+  <select id="sumByExample"
+    parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistoryExample"
+    resultType="long">
+    select sum(${sumCol}) from ent_info_history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause"/>
     </if>
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-      insert into ent_info (id, uid, head_img_url,
+      insert into ent_info_history (id, uid, head_img_url,
       name, phone, org_code,
       biz_license, social_credit_code, legal_name,
       legal_id_num, real_name_flag, real_name_type,

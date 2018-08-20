@@ -50,6 +50,8 @@ public class EntInfo implements Serializable {
 
     private Integer version;
 
+  private String oper;
+
     private Date createTime;
 
     private Date updateTime;
@@ -241,6 +243,14 @@ public class EntInfo implements Serializable {
     public void setVersion(Integer version) {
         this.version = version;
     }
+
+  public String getOper() {
+    return oper;
+  }
+
+  public void setOper(String oper) {
+    this.oper = oper == null ? null : oper.trim();
+  }
 
     public Date getCreateTime() {
         return createTime;
