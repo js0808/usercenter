@@ -34,7 +34,7 @@ public class EntInfo implements Serializable {
 
     private String orgCodeImageUrl;
 
-    private String fromPlatform;
+  private String appId;
 
     private String status;
 
@@ -178,12 +178,12 @@ public class EntInfo implements Serializable {
         this.orgCodeImageUrl = orgCodeImageUrl == null ? null : orgCodeImageUrl.trim();
     }
 
-    public String getFromPlatform() {
-        return fromPlatform;
+  public String getAppId() {
+    return appId;
     }
 
-    public void setFromPlatform(String fromPlatform) {
-        this.fromPlatform = fromPlatform == null ? null : fromPlatform.trim();
+  public void setAppId(String appId) {
+    this.appId = appId == null ? null : appId.trim();
     }
 
     public String getStatus() {

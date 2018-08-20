@@ -13,6 +13,11 @@ import org.hibernate.validator.constraints.NotBlank;
 @Data
 public class EntInfoRequest {
 
+  @ApiModelProperty(value = "appId")
+  @NotBlank
+  @Length(max = 64)
+  private String appId = null;
+
   @ApiModelProperty(value = "法人姓名")
   @Length(max = 256)
   private String legalName = null;

@@ -17,7 +17,7 @@
     <result column="review_flag" jdbcType="BIT" property="reviewFlag" />
     <result column="biz_license_image_url" jdbcType="VARCHAR" property="bizLicenseImageUrl" />
     <result column="org_code_image_url" jdbcType="VARCHAR" property="orgCodeImageUrl" />
-    <result column="from_platform" jdbcType="VARCHAR" property="fromPlatform" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId"/>
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="ext_field1" jdbcType="VARCHAR" property="extField1" />
     <result column="ext_field2" jdbcType="VARCHAR" property="extField2" />
@@ -89,7 +89,7 @@
   <sql id="Base_Column_List">
     id, uid, head_img_url, name, phone, org_code, biz_license, social_credit_code, legal_name, 
     legal_id_num, real_name_flag, real_name_type, review_flag, biz_license_image_url, 
-    org_code_image_url, from_platform, status, ext_field1, ext_field2, ext_field3, ext_field4, 
+    org_code_image_url, app_id, status, ext_field1, ext_field2, ext_field3, ext_field4, 
     ext_config, version, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample" resultMap="BaseResultMap">
@@ -131,7 +131,7 @@
       biz_license, social_credit_code, legal_name, 
       legal_id_num, real_name_flag, real_name_type, 
       review_flag, biz_license_image_url, org_code_image_url, 
-      from_platform, status, ext_field1, 
+      app_id, status, ext_field1, 
       ext_field2, ext_field3, ext_field4, 
       ext_config, version, create_time, 
       update_time)
@@ -140,7 +140,7 @@
       #{bizLicense,jdbcType=VARCHAR}, #{socialCreditCode,jdbcType=VARCHAR}, #{legalName,jdbcType=VARCHAR}, 
       #{legalIdNum,jdbcType=VARCHAR}, #{realNameFlag,jdbcType=BIT}, #{realNameType,jdbcType=VARCHAR}, 
       #{reviewFlag,jdbcType=BIT}, #{bizLicenseImageUrl,jdbcType=VARCHAR}, #{orgCodeImageUrl,jdbcType=VARCHAR}, 
-      #{fromPlatform,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, 
+      #{appId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, 
       #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, 
       #{extConfig,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
@@ -193,8 +193,8 @@
       <if test="orgCodeImageUrl != null">
         org_code_image_url,
       </if>
-      <if test="fromPlatform != null">
-        from_platform,
+      <if test="appId != null">
+        app_id,
       </if>
       <if test="status != null">
         status,
@@ -270,8 +270,8 @@
       <if test="orgCodeImageUrl != null">
         #{orgCodeImageUrl,jdbcType=VARCHAR},
       </if>
-      <if test="fromPlatform != null">
-        #{fromPlatform,jdbcType=VARCHAR},
+      <if test="appId != null">
+        #{appId,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
@@ -356,8 +356,8 @@
       <if test="record.orgCodeImageUrl != null">
         org_code_image_url = #{record.orgCodeImageUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.fromPlatform != null">
-        from_platform = #{record.fromPlatform,jdbcType=VARCHAR},
+      <if test="record.appId != null">
+        app_id = #{record.appId,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
@@ -411,7 +411,7 @@
       review_flag = #{record.reviewFlag,jdbcType=BIT},
       biz_license_image_url = #{record.bizLicenseImageUrl,jdbcType=VARCHAR},
       org_code_image_url = #{record.orgCodeImageUrl,jdbcType=VARCHAR},
-      from_platform = #{record.fromPlatform,jdbcType=VARCHAR},
+    app_id = #{record.appId,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       ext_field1 = #{record.extField1,jdbcType=VARCHAR},
       ext_field2 = #{record.extField2,jdbcType=VARCHAR},
@@ -470,8 +470,8 @@
       <if test="orgCodeImageUrl != null">
         org_code_image_url = #{orgCodeImageUrl,jdbcType=VARCHAR},
       </if>
-      <if test="fromPlatform != null">
-        from_platform = #{fromPlatform,jdbcType=VARCHAR},
+      <if test="appId != null">
+        app_id = #{appId,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
@@ -519,7 +519,7 @@
       review_flag = #{reviewFlag,jdbcType=BIT},
       biz_license_image_url = #{bizLicenseImageUrl,jdbcType=VARCHAR},
       org_code_image_url = #{orgCodeImageUrl,jdbcType=VARCHAR},
-      from_platform = #{fromPlatform,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       ext_field1 = #{extField1,jdbcType=VARCHAR},
       ext_field2 = #{extField2,jdbcType=VARCHAR},
@@ -558,7 +558,7 @@
       biz_license, social_credit_code, legal_name,
       legal_id_num, real_name_flag, real_name_type,
       review_flag, biz_license_image_url, org_code_image_url,
-      from_platform, status, ext_field1,
+      app_id, status, ext_field1,
       ext_field2, ext_field3, ext_field4,
       ext_config, version, create_time,
       update_time)
@@ -574,7 +574,7 @@
         #{item.realNameType,jdbcType=VARCHAR},
         #{item.reviewFlag,jdbcType=BIT}, #{item.bizLicenseImageUrl,jdbcType=VARCHAR},
         #{item.orgCodeImageUrl,jdbcType=VARCHAR},
-        #{item.fromPlatform,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR},
+        #{item.appId,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR},
         #{item.extField1,jdbcType=VARCHAR},
         #{item.extField2,jdbcType=VARCHAR}, #{item.extField3,jdbcType=VARCHAR},
         #{item.extField4,jdbcType=VARCHAR},

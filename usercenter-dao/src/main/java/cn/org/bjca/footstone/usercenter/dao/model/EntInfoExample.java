@@ -156,8 +156,8 @@ public class EntInfoExample {
         return this;
     }
 
-    public EntInfoExample sumFromPlatform() {
-        this.sumCol="from_platform";
+  public EntInfoExample sumAppId() {
+    this.sumCol = "app_id";
         return this;
     }
 
@@ -1279,73 +1279,73 @@ public class EntInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformIsNull() {
-            addCriterion("from_platform is null");
+      public Criteria andAppIdIsNull() {
+        addCriterion("app_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformIsNotNull() {
-            addCriterion("from_platform is not null");
+      public Criteria andAppIdIsNotNull() {
+        addCriterion("app_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformEqualTo(String value) {
-            addCriterion("from_platform =", value, "fromPlatform");
+      public Criteria andAppIdEqualTo(String value) {
+        addCriterion("app_id =", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotEqualTo(String value) {
-            addCriterion("from_platform <>", value, "fromPlatform");
+      public Criteria andAppIdNotEqualTo(String value) {
+        addCriterion("app_id <>", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformGreaterThan(String value) {
-            addCriterion("from_platform >", value, "fromPlatform");
+      public Criteria andAppIdGreaterThan(String value) {
+        addCriterion("app_id >", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformGreaterThanOrEqualTo(String value) {
-            addCriterion("from_platform >=", value, "fromPlatform");
+      public Criteria andAppIdGreaterThanOrEqualTo(String value) {
+        addCriterion("app_id >=", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformLessThan(String value) {
-            addCriterion("from_platform <", value, "fromPlatform");
+      public Criteria andAppIdLessThan(String value) {
+        addCriterion("app_id <", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformLessThanOrEqualTo(String value) {
-            addCriterion("from_platform <=", value, "fromPlatform");
+      public Criteria andAppIdLessThanOrEqualTo(String value) {
+        addCriterion("app_id <=", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformLike(String value) {
-            addCriterion("from_platform like", value, "fromPlatform");
+      public Criteria andAppIdLike(String value) {
+        addCriterion("app_id like", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotLike(String value) {
-            addCriterion("from_platform not like", value, "fromPlatform");
+      public Criteria andAppIdNotLike(String value) {
+        addCriterion("app_id not like", value, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformIn(List<String> values) {
-            addCriterion("from_platform in", values, "fromPlatform");
+      public Criteria andAppIdIn(List<String> values) {
+        addCriterion("app_id in", values, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotIn(List<String> values) {
-            addCriterion("from_platform not in", values, "fromPlatform");
+      public Criteria andAppIdNotIn(List<String> values) {
+        addCriterion("app_id not in", values, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformBetween(String value1, String value2) {
-            addCriterion("from_platform between", value1, value2, "fromPlatform");
+      public Criteria andAppIdBetween(String value1, String value2) {
+        addCriterion("app_id between", value1, value2, "appId");
             return (Criteria) this;
         }
 
-        public Criteria andFromPlatformNotBetween(String value1, String value2) {
-            addCriterion("from_platform not between", value1, value2, "fromPlatform");
+      public Criteria andAppIdNotBetween(String value1, String value2) {
+        addCriterion("app_id not between", value1, value2, "appId");
             return (Criteria) this;
         }
 
