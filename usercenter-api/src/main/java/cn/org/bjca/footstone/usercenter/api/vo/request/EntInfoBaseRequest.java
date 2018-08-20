@@ -26,4 +26,9 @@ public class EntInfoBaseRequest {
   @Length(max = 64)
   private String phone = null;
 
+
+  @ApiModelProperty(value = "操作者账号")
+  @Length(max = 128)
+  private String oper = null;
+
 }

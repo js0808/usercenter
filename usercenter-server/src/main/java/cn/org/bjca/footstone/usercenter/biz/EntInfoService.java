@@ -243,7 +243,7 @@ public class EntInfoService {
     entInfo.setRealNameFlag(1);
     try {
       entInfoMapper.insertSelective(entInfo);
-    } catch (Exception e) {
+    } catch (DuplicateKeyException e) {
       log.error("企业信息已经存在，企业名称{}", entInfoRequest.getName(), e);
       throw new BaseException(ReturnCodeEnum.RESOURCE_ALREADY_EXIST);
     }
