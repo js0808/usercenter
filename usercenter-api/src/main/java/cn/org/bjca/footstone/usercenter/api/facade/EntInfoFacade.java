@@ -62,7 +62,7 @@ public interface EntInfoFacade {
   @RequestMapping(value = "", method = RequestMethod.GET)
   ReturnResult query(EntInfoQueryRequest request);
 
-  @ApiOperation(value = "修改无需实名认证的企业信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "修改无需实名认证的企业信息")
+  @ApiOperation(value = "修改无需实名认证的企业信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "修改无需实名认证的企业信息")
   @ApiImplicitParams(value = {
       @ApiImplicitParam(name = "entInfoBaseRequest", value = "EntInfoBaseRequest payload", required = true, paramType = "body", dataType = "EntInfoBaseRequest")
   })

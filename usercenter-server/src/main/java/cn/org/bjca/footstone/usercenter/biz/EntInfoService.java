@@ -81,9 +81,14 @@ public class EntInfoService {
    */
   @Transactional(rollbackFor = Exception.class)
   public void updateEntInfo(Long uid, EntInfoRequest entInfoRequest) {
+    //目前只支持:ent_base,企业基本信息认证
+    String realNameType = entInfoRequest.getRealNameType();
+    if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.value())) {
+      throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
+    }
     //get entinfo by uid
     EntInfo entInfoOld = checkExist(uid);
-    checkRealNameParam(entInfoRequest);
+
     //判断状态
     checkStatus(entInfoOld);
 //    checkRealName(entInfoRequest);

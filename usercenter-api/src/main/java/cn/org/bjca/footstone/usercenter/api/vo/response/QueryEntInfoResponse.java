@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.api.vo.response;
 
+import java.util.Date;
 import lombok.Data;
 
 /**
@@ -57,4 +58,8 @@ public class QueryEntInfoResponse {
   private Integer version;
 
   private String oper;
+
+  private Date createTime;
+
+  private Date updateTime;
 }
