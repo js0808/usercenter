@@ -6,9 +6,11 @@
     <id column="id" jdbcType="INTEGER" property="id"/>
     <result column="uid" jdbcType="BIGINT" property="uid"/>
     <result column="user_type" jdbcType="VARCHAR" property="userType"/>
+    <result column="account" jdbcType="VARCHAR" property="account"/>
     <result column="notify_type" jdbcType="VARCHAR" property="notifyType"/>
     <result column="notify_status" jdbcType="VARCHAR" property="notifyStatus"/>
     <result column="notify_num" jdbcType="INTEGER" property="notifyNum"/>
+    <result column="notify_max_num" jdbcType="INTEGER" property="notifyMaxNum"/>
     <result column="notify_msg" jdbcType="VARCHAR" property="notifyMsg"/>
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
@@ -74,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, uid, user_type, notify_type, notify_status, notify_num, notify_msg, create_time, 
-    update_time
+    id, uid, user_type, account, notify_type, notify_status, notify_num, notify_max_num, 
+    notify_msg, create_time, update_time
   </sql>
   <select id="selectByExample"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.NotifyInfoExample"
@@ -114,27 +116,34 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo">
-    insert into notify_info (id, uid, user_type, 
-      notify_type, notify_status, notify_num, 
-      notify_msg, create_time, update_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, 
-      #{notifyType,jdbcType=VARCHAR}, #{notifyStatus,jdbcType=VARCHAR}, #{notifyNum,jdbcType=INTEGER}, 
-      #{notifyMsg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into notify_info (uid, user_type, account, 
+      notify_type, notify_status, notify_num,
+    notify_max_num, notify_msg, create_time,
+    update_time)
+    values (#{uid,jdbcType=BIGINT}, #{userType,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{notifyType,jdbcType=VARCHAR}, #{notifyStatus,jdbcType=VARCHAR}, #{notifyNum,jdbcType=INTEGER},
+    #{notifyMaxNum,jdbcType=INTEGER}, #{notifyMsg,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective"
     parameterType="cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into notify_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="uid != null">
         uid,
       </if>
       <if test="userType != null">
         user_type,
+      </if>
+      <if test="account != null">
+        account,
       </if>
       <if test="notifyType != null">
         notify_type,
@@ -144,6 +153,9 @@
       </if>
       <if test="notifyNum != null">
         notify_num,
+      </if>
+      <if test="notifyMaxNum != null">
+        notify_max_num,
       </if>
       <if test="notifyMsg != null">
         notify_msg,
@@ -156,14 +168,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="uid != null">
         #{uid,jdbcType=BIGINT},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
       </if>
       <if test="notifyType != null">
         #{notifyType,jdbcType=VARCHAR},
@@ -173,6 +185,9 @@
       </if>
       <if test="notifyNum != null">
         #{notifyNum,jdbcType=INTEGER},
+      </if>
+      <if test="notifyMaxNum != null">
+        #{notifyMaxNum,jdbcType=INTEGER},
       </if>
       <if test="notifyMsg != null">
         #{notifyMsg,jdbcType=VARCHAR},
@@ -205,6 +220,9 @@
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
       </if>
+      <if test="record.account != null">
+        account = #{record.account,jdbcType=VARCHAR},
+      </if>
       <if test="record.notifyType != null">
         notify_type = #{record.notifyType,jdbcType=VARCHAR},
       </if>
@@ -213,6 +231,9 @@
       </if>
       <if test="record.notifyNum != null">
         notify_num = #{record.notifyNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifyMaxNum != null">
+        notify_max_num = #{record.notifyMaxNum,jdbcType=INTEGER},
       </if>
       <if test="record.notifyMsg != null">
         notify_msg = #{record.notifyMsg,jdbcType=VARCHAR},
@@ -236,9 +257,11 @@
     set id = #{record.id,jdbcType=INTEGER},
     uid = #{record.uid,jdbcType=BIGINT},
     user_type = #{record.userType,jdbcType=VARCHAR},
+    account = #{record.account,jdbcType=VARCHAR},
     notify_type = #{record.notifyType,jdbcType=VARCHAR},
     notify_status = #{record.notifyStatus,jdbcType=VARCHAR},
     notify_num = #{record.notifyNum,jdbcType=INTEGER},
+    notify_max_num = #{record.notifyMaxNum,jdbcType=INTEGER},
     notify_msg = #{record.notifyMsg,jdbcType=VARCHAR},
     create_time = #{record.createTime,jdbcType=TIMESTAMP},
     update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -256,6 +279,9 @@
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
       </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
       <if test="notifyType != null">
         notify_type = #{notifyType,jdbcType=VARCHAR},
       </if>
@@ -264,6 +290,9 @@
       </if>
       <if test="notifyNum != null">
         notify_num = #{notifyNum,jdbcType=INTEGER},
+      </if>
+      <if test="notifyMaxNum != null">
+        notify_max_num = #{notifyMaxNum,jdbcType=INTEGER},
       </if>
       <if test="notifyMsg != null">
         notify_msg = #{notifyMsg,jdbcType=VARCHAR},
@@ -282,9 +311,11 @@
     update notify_info
     set uid = #{uid,jdbcType=BIGINT},
       user_type = #{userType,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
       notify_type = #{notifyType,jdbcType=VARCHAR},
       notify_status = #{notifyStatus,jdbcType=VARCHAR},
       notify_num = #{notifyNum,jdbcType=INTEGER},
+      notify_max_num = #{notifyMaxNum,jdbcType=INTEGER},
       notify_msg = #{notifyMsg,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
@@ -315,19 +346,19 @@
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-      insert into notify_info (id, uid, user_type,
+      insert into notify_info (uid, user_type, account,
       notify_type, notify_status, notify_num,
-      notify_msg, create_time, update_time
-      )
+      notify_max_num, notify_msg, create_time,
+      update_time)
       values
       <foreach collection="items" item="item" index="index" separator=",">
-        (#{item.id,jdbcType=INTEGER}, #{item.uid,jdbcType=BIGINT},
-        #{item.userType,jdbcType=VARCHAR},
+        (#{item.uid,jdbcType=BIGINT}, #{item.userType,jdbcType=VARCHAR},
+        #{item.account,jdbcType=VARCHAR},
         #{item.notifyType,jdbcType=VARCHAR}, #{item.notifyStatus,jdbcType=VARCHAR},
         #{item.notifyNum,jdbcType=INTEGER},
-        #{item.notifyMsg,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP},
-        #{item.updateTime,jdbcType=TIMESTAMP}
-        )
+        #{item.notifyMaxNum,jdbcType=INTEGER}, #{item.notifyMsg,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP})
       </foreach>
     </if>
   </insert>

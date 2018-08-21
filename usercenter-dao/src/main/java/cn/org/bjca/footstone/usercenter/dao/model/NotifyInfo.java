@@ -4,18 +4,21 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class NotifyInfo implements Serializable {
-
     private Integer id;
 
     private Long uid;
 
     private String userType;
 
+    private String account;
+
     private String notifyType;
 
     private String notifyStatus;
 
     private Integer notifyNum;
+
+    private Integer notifyMaxNum;
 
     private String notifyMsg;
 
@@ -51,6 +54,14 @@ public class NotifyInfo implements Serializable {
         this.userType = userType == null ? null : userType.trim();
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account == null ? null : account.trim();
+    }
+
     public String getNotifyType() {
         return notifyType;
     }
@@ -73,6 +84,14 @@ public class NotifyInfo implements Serializable {
 
     public void setNotifyNum(Integer notifyNum) {
         this.notifyNum = notifyNum;
+    }
+
+    public Integer getNotifyMaxNum() {
+        return notifyMaxNum;
+    }
+
+    public void setNotifyMaxNum(Integer notifyMaxNum) {
+        this.notifyMaxNum = notifyMaxNum;
     }
 
     public String getNotifyMsg() {
