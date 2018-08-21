@@ -4,6 +4,7 @@ import cn.org.bjca.footstone.usercenter.api.enmus.AccountTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
@@ -29,6 +30,8 @@ public class AccountRegisterService {
   private AccountInfoMapper accountInfoMapper;
   @Autowired
   private AuthCodeService authCodeService;
+  @Autowired
+  private AccountInfoService accountInfoService;
 
   public void accountRegister(AccountRegisterRequest request) throws Exception {
     /**检查帐号是否存在**/
@@ -48,9 +51,7 @@ public class AccountRegisterService {
     String password = PwdUtil.cipher(request.getPassword());
     /**添加帐号信息**/
     AccountInfo info = new AccountInfo();
-    Pattern p = Pattern.compile(authCodeService.regexp);
-    Matcher m = p.matcher(request.getAccount());
-    if (m.matches()) {
+    if (authCodeService.isMobile(request.getAccount())) {
       info.setAccountType(AccountTypeEnum.MOBILE.value());
     } else {
       info.setAccountType(AccountTypeEnum.EMAIL.value());
@@ -84,5 +85,15 @@ public class AccountRegisterService {
     /**强制解锁当前帐号**/
     info.setIsLocked(false);
     accountInfoMapper.updateByPrimaryKeySelective(info);
+  }
+
+  public void accountStatus(AccountStatusUpdateRequest request) throws Exception {
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
+    if (accountInfo == null) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
+    }
+    /**变更帐号状态**/
+    accountInfo.setAccount(request.getStatus());
+    accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 }
