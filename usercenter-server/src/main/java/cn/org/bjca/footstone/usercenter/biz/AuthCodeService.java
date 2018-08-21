@@ -153,6 +153,12 @@ public class AuthCodeService {
     }
   }
 
+  public boolean isMobile(String account) {
+    Pattern p = Pattern.compile(regexp);
+    Matcher m = p.matcher(account);
+    return m.matches();
+  }
+
   public String getFixLenthString(int strLength) {
     Random rm = new Random();
     // 获得随机数

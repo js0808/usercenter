@@ -21,29 +21,29 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface AuthCodeType {
 
-    String message() default "验证码类型非法";
+  String message() default "验证码类型非法";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 
-    public class AuthCodeTypeValidator implements ConstraintValidator<AuthCodeType, String> {
+  public class AuthCodeTypeValidator implements ConstraintValidator<AuthCodeType, String> {
 
-        private HashSet<String> typeIds;
+    private HashSet<String> typeIds;
 
-        @Override
-        public void initialize(AuthCodeType constraintAnnotation) {
-            typeIds = AuthCodeTypeEnum.hashSet;
-        }
-
-        @Override
-        public boolean isValid(String value, ConstraintValidatorContext context) {
-            for (String type : typeIds) {
-                if (type.equals(value)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+    @Override
+    public void initialize(AuthCodeType constraintAnnotation) {
+      typeIds = AuthCodeTypeEnum.hashSet;
     }
+
+    @Override
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+      for (String type : typeIds) {
+        if (type.equals(value)) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
 }
