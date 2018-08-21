@@ -11,15 +11,14 @@ import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.PwdUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 @Service
@@ -52,7 +51,7 @@ public class AccountRegisterService {
     Pattern p = Pattern.compile(authCodeService.regexp);
     Matcher m = p.matcher(request.getAccount());
     if (m.matches()) {
-      info.setAccountType(AccountTypeEnum.MOBIE.value());
+      info.setAccountType(AccountTypeEnum.MOBILE.value());
     } else {
       info.setAccountType(AccountTypeEnum.EMAIL.value());
     }
