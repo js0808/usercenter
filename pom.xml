@@ -32,6 +32,7 @@
     <module>usercenter-server</module>
     <module>usercenter-mybatisGen</module>
     <module>usercenter-dao</module>
+    <module>usercenter-tasks</module>
   </modules>
 
   <dependencies>

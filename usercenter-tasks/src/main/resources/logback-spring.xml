@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- use Spring default values -->
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <property name="log.dir" value="${bjca.log.dir}"/>
+  <property name="log.maxHistory" value="${bjca.log.maxHistory}"/>
+  <property name="BJCA_FILE_LOG_PATTERN"
+    value="${BJCA_FILE_LOG_PATTERN:-%date{ISO8601} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] [%X{__trace_id}] %logger{50} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>${BJCA_FILE_LOG_PATTERN}</pattern>
+    </layout>
+  </appender>
+
+  <appender name="all_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${log.dir}/bjca_all_log.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${BJCA_FILE_LOG_PATTERN}</pattern>
+    </encoder>
+
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- rollover daily -->
+      <fileNamePattern>${log.dir}/bjca_all_log.log.%d{yyyy-MM-dd}</fileNamePattern>
+      <maxHistory>${log.maxHistory}</maxHistory>
+      <cleanHistoryOnStart>true</cleanHistoryOnStart>
+    </rollingPolicy>
+  </appender>
+
+  <appender name="async_all_log" class="ch.qos.logback.classic.AsyncAppender">
+    <discardingThreshold>0</discardingThreshold>
+    <queueSize>1024</queueSize>
+    <appender-ref ref="all_log"/>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="all_log"/>
+    <!--<appender-ref ref="STDOUT"/>-->
+  </root>
+</configuration>
