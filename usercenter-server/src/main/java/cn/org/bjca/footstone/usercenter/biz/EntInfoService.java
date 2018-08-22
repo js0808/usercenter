@@ -6,13 +6,15 @@ import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.ENT;
 import static java.util.Objects.isNull;
 
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
+import cn.org.bjca.footstone.usercenter.api.enmus.NotifyTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
+import cn.org.bjca.footstone.usercenter.api.enmus.UserInfoStatusEnum;
+import cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
@@ -24,6 +26,7 @@ import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory;
+import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
@@ -111,8 +114,8 @@ public class EntInfoService {
     }
     //保存历史
     saveHistory(entInfoOld);
-    //TODO 保存消息
-
+    //保存notify
+    saveUpdateNotifyInfo(uid, JSONObject.toJSONString(updateEntInfo));
   }
 
   /**
@@ -138,8 +141,6 @@ public class EntInfoService {
 
     //保存历史
     saveHistory(entInfoOld);
-    //TODO 保存消息
-
   }
 
   @Transactional(rollbackFor = Exception.class)
@@ -257,8 +258,6 @@ public class EntInfoService {
     EntInfoResponse response = new EntInfoResponse();
     response.setUid(entInfo.getUid());
     return response;
-    //TODO 保存消息
-
   }
 
   /**
@@ -345,5 +344,14 @@ public class EntInfoService {
       return null;
     }
     return accountInfo.getUid();
+  }
+
+  private void saveUpdateNotifyInfo(Long uid, String msg) {
+    NotifyInfo notifyInfo = new NotifyInfo();
+    notifyInfo.setUid(uid);
+    notifyInfo.setUserType(UserTypeEnum.ENT.name());
+    notifyInfo.setNotifyType(NotifyTypeEnum.UPDATE_ENT.name());
+    notifyInfo.setNotifyMsg(msg);
+    notifyInfoMapper.insertSelective(notifyInfo);
   }
 }

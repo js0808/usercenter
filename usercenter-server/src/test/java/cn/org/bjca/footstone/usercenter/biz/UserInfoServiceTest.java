@@ -1,13 +1,12 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
-import static java.util.Objects.nonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import cn.org.bjca.footstone.usercenter.BaseTest;
+import cn.org.bjca.footstone.usercenter.api.enmus.UserInfoStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoQueryVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
-import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoVo;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryUserInfoResponse;

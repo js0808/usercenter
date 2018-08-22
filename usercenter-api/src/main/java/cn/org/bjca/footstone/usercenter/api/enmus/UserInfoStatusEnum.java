@@ -1,4 +1,4 @@
-package cn.org.bjca.footstone.usercenter.api.vo.request;
+package cn.org.bjca.footstone.usercenter.api.enmus;
 
 /**
  * @author shuvigoss@gmail.com (ShuWei) 2018/8/15
