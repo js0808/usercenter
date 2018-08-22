@@ -115,7 +115,7 @@ public class EntInfoService {
     //保存历史
     saveHistory(entInfoOld);
     //保存notify
-    saveUpdateNotifyInfo(uid, JSONObject.toJSONString(updateEntInfo));
+    //saveUpdateNotifyInfo(uid, JSONObject.toJSONString(updateEntInfo));
   }
 
   /**
@@ -245,7 +245,8 @@ public class EntInfoService {
     //保存ent info
     EntInfo entInfo = new EntInfo();
     BeanCopy.beans(entInfoRequest, entInfo).copy();
-    entInfo.setUid(SnowFlake.next());
+    Long uid = SnowFlake.next();
+    entInfo.setUid(uid);
     entInfo.setRealNameFlag(1);
     try {
       entInfoMapper.insertSelective(entInfo);
@@ -253,11 +254,19 @@ public class EntInfoService {
       log.error("企业信息已经存在，企业名称{}", entInfoRequest.getName(), e);
       throw new BaseException(ReturnCodeEnum.RESOURCE_ALREADY_EXIST);
     }
-    //TODO 更新账号表UID
-
+    //更新账号表UID
+//    bindUidByAccount(entInfoRequest.getOper(),uid);
     EntInfoResponse response = new EntInfoResponse();
     response.setUid(entInfo.getUid());
     return response;
+  }
+
+  private void bindUidByAccount(String account, Long uid) {
+    AccountInfo accountInfo = new AccountInfo();
+    accountInfo.setUid(uid);
+    AccountInfoExample accountInfoExample = new AccountInfoExample();
+    accountInfoExample.createCriteria().andAccountEqualTo(account);
+    accountInfoMapper.updateByExampleSelective(accountInfo, accountInfoExample);
   }
 
   /**
