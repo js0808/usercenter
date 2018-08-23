@@ -111,9 +111,7 @@ public class AuthCodeService {
   }
 
   public void validate(AuthCodeValidateRequest request) throws Exception {
-    Pattern p = Pattern.compile(regexp);
-    Matcher m = p.matcher(request.getUserName());
-    if (m.matches()) {
+    if (isMobile(request.getUserName())) {
       CodeValidateReqVo send = new CodeValidateReqVo();
       send.setAppId(authCodeConfig.getAppId());
       send.setDeviceId(authCodeConfig.getDeviceId());

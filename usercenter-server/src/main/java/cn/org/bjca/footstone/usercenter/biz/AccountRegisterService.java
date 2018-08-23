@@ -6,6 +6,7 @@ import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
@@ -35,10 +36,8 @@ public class AccountRegisterService {
 
   public void accountRegister(AccountRegisterRequest request) throws Exception {
     /**检查帐号是否存在**/
-    AccountInfoExample example = new AccountInfoExample();
-    example.createCriteria().andAccountEqualTo(request.getAccount());
-    List<AccountInfo> infos = accountInfoMapper.selectByExample(example);
-    if (CollectionUtils.isNotEmpty(infos)) {
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
+    if (accountInfo != null) {
       throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_EXIT_ERROR);
     }
     /**验证码验证**/
@@ -66,13 +65,10 @@ public class AccountRegisterService {
 
   public void resetPassword(ResetPasswordRequest request) throws Exception {
     /**检查帐号是否存在**/
-    AccountInfoExample example = new AccountInfoExample();
-    example.createCriteria().andAccountEqualTo(request.getAccount());
-    List<AccountInfo> infos = accountInfoMapper.selectByExample(example);
-    if (CollectionUtils.isEmpty(infos)) {
+    AccountInfo info = accountInfoService.findAccountInfoByAccount(request.getAccount());
+    if (info == null) {
       throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
     }
-    AccountInfo info = infos.get(0);
     /**验证码验证**/
     AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
     validateRequest.setUserName(request.getAccount());
@@ -94,6 +90,24 @@ public class AccountRegisterService {
     }
     /**变更帐号状态**/
     accountInfo.setAccount(request.getStatus());
+    accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
+  }
+
+  public void modifyPassword(ModifyPasswordRequest request) throws Exception {
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
+    if (accountInfo == null) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
+    }
+    if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
+        .after(new Date())) {
+      throw new BjcaBizException(ReturnCodeEnum.USER_IS_LOCKED);
+    }
+    /**验证原密码**/
+    boolean matches = PwdUtil.verify(accountInfo.getPassword(), request.getOldPassword());
+    if (!matches) {
+      throw new BjcaBizException(ReturnCodeEnum.USER_OR_PWD_ERROR);
+    }
+    accountInfo.setPassword(PwdUtil.cipher(request.getNewPassword()));
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 }
