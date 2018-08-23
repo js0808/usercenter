@@ -77,7 +77,7 @@ public class NotifyTask {
         NotifyInfo failNotify = new NotifyInfo();
         failNotify.setId(notifyInfo.getId());
         failNotify.setNotifyNum(notifyInfo.getNotifyNum() + 1);
-        log.error("发送用户中心通知，UID[{}],用户类型[{}],通知类型[{}]", notifyInfo.getUid(),
+        log.error("发送用户中心通知失败，UID[{}],用户类型[{}],通知类型[{}]", notifyInfo.getUid(),
             notifyInfo.getUserType(), notifyInfo.getNotifyType());
       }
     }
