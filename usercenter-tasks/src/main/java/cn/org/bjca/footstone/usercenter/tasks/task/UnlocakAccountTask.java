@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,7 +29,7 @@ public class UnlocakAccountTask {
   @Autowired
   private AccountAttemptsMapper accountAttemptsMapper = null;
 
-  @Scheduled(cron = "${bjca.task.cron-unlock-account}")
+  //  @Scheduled(cron = "${bjca.task.cron-unlock-account}")
   public void unlockAccount() {
     if (JobRunningStatus.isSuccess()) {
       log.info("unlockAccount开始执行...");

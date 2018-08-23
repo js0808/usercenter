@@ -32,8 +32,11 @@ import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceCheckEntReqVo;
+import cn.org.bjca.footstone.usercenter.vo.NotifyInfoDataVo;
+import cn.org.bjca.footstone.usercenter.vo.NotifyInfoVo;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -115,7 +118,7 @@ public class EntInfoService {
     //保存历史
     saveHistory(entInfoOld);
     //保存notify
-    //saveUpdateNotifyInfo(uid, JSONObject.toJSONString(updateEntInfo));
+    saveUpdateNotifyInfo(uid);
   }
 
   /**
@@ -355,12 +358,17 @@ public class EntInfoService {
     return accountInfo.getUid();
   }
 
-  private void saveUpdateNotifyInfo(Long uid, String msg) {
+  private void saveUpdateNotifyInfo(Long uid) {
+    NotifyInfoDataVo notifyInfoDataVo = NotifyInfoDataVo.builder().uid(uid)
+        .userType(UserTypeEnum.ENT.name()).build();
+    NotifyInfoVo notifyInfoVo = NotifyInfoVo.builder().data(notifyInfoDataVo)
+        .type(NotifyTypeEnum.UPDATE_ENT.name()).timestamp(new Date()).build();
+
     NotifyInfo notifyInfo = new NotifyInfo();
     notifyInfo.setUid(uid);
     notifyInfo.setUserType(UserTypeEnum.ENT.name());
     notifyInfo.setNotifyType(NotifyTypeEnum.UPDATE_ENT.name());
-    notifyInfo.setNotifyMsg(msg);
+    notifyInfo.setNotifyMsg(JSONObject.toJSONString(notifyInfoVo));
     notifyInfoMapper.insertSelective(notifyInfo);
   }
 }
