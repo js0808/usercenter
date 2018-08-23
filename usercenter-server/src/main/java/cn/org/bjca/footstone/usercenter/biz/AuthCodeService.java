@@ -7,6 +7,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeValidateResponse;
 import cn.org.bjca.footstone.usercenter.vo.AuthorCodeReqVo;
 import cn.org.bjca.footstone.usercenter.vo.CodeValidateReqVo;
 import cn.org.bjca.footstone.usercenter.vo.MailCodeReqVo;
@@ -14,6 +15,7 @@ import cn.org.bjca.footstone.usercenter.config.AuthCodeConfig;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.SignatureUtils;
 import com.alibaba.fastjson.JSONObject;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,10 @@ import static cn.org.bjca.footstone.usercenter.util.RestUtils.post;
 public class AuthCodeService {
 
   private final String redis_key = "usercenter_";
+  private final String validate_key = "validate_";
   private String message = "亲爱的%s用户您好, \n验证码：%s，5分钟内输入有效，请输入验证码完成%s，勿将验证码告诉其他人。";
-  public final String regexp = "1[3|4|5|7|8][0-9]\\d{8}";
+  private final String rule_email = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
+
   @Autowired
   private AuthCodeConfig authCodeConfig;
 
@@ -110,10 +114,8 @@ public class AuthCodeService {
         .set(key, emailCode, authCodeConfig.getExpire(), TimeUnit.SECONDS);
   }
 
-  public void validate(AuthCodeValidateRequest request) throws Exception {
-    Pattern p = Pattern.compile(regexp);
-    Matcher m = p.matcher(request.getUserName());
-    if (m.matches()) {
+  public AuthCodeValidateResponse validate(AuthCodeValidateRequest request) throws Exception {
+    if (!isEmail(request.getUserName())) {
       CodeValidateReqVo send = new CodeValidateReqVo();
       send.setAppId(authCodeConfig.getAppId());
       send.setDeviceId(authCodeConfig.getDeviceId());
@@ -151,10 +153,18 @@ public class AuthCodeService {
         throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
       }
     }
+    AuthCodeValidateResponse response = new AuthCodeValidateResponse();
+    if (StringUtils.equals(AuthCodeTypeEnum.CHANGE.value(), request.getType())) {
+      String key = validate_key + request.getType() + "_" + request.getUserName();
+      String uuidValue = getUUID();
+      stringRedisTemplate.opsForValue().set(key, uuidValue, 10, TimeUnit.MINUTES);
+      response.setValidateId(uuidValue);
+    }
+    return response;
   }
 
-  public boolean isMobile(String account) {
-    Pattern p = Pattern.compile(regexp);
+  public boolean isEmail(String account) {
+    Pattern p = Pattern.compile(rule_email);
     Matcher m = p.matcher(account);
     return m.matches();
   }
@@ -166,5 +176,18 @@ public class AuthCodeService {
 
     // 返回固定的长度的随机数
     return String.valueOf(pross).substring(1, strLength + 1);
+  }
+
+  public String getUUID() {
+    UUID uuid = UUID.randomUUID();
+    return uuid.toString();
+  }
+
+  public String getRedis_key() {
+    return redis_key;
+  }
+
+  public String getValidate_key() {
+    return validate_key;
   }
 }
