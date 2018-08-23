@@ -65,7 +65,7 @@ public class AccountController implements AccountInfoFacade {
   }
 
   @Override
-  public ReturnResult accountStatus(AccountStatusUpdateRequest request) {
+  public ReturnResult accountStatus(@Validated @RequestBody AccountStatusUpdateRequest request) {
     MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "帐号状态", "帐号状态变更");
     try {
       registerService.accountStatus(request);
@@ -83,7 +83,7 @@ public class AccountController implements AccountInfoFacade {
   }
 
   @Override
-  public ReturnResult modifyPassword(ModifyPasswordRequest request) {
+  public ReturnResult modifyPassword(@Validated @RequestBody ModifyPasswordRequest request) {
     MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "修改密码");
     try {
       registerService.modifyPassword(request);
@@ -101,7 +101,7 @@ public class AccountController implements AccountInfoFacade {
   }
 
   @Override
-  public ReturnResult accountChange(AccountChangeRequest request) {
+  public ReturnResult accountChange(@Validated @RequestBody AccountChangeRequest request) {
     MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "登录帐号变更");
     try {
       registerService.accountChange(request);

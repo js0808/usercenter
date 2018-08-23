@@ -84,12 +84,11 @@ public class AccountRegisterService {
   }
 
   public void accountStatus(AccountStatusUpdateRequest request) throws Exception {
-    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
-    if (accountInfo == null) {
-      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
-    }
+    AccountInfo accountInfo = accountExit(request.getAccount());
     /**变更帐号状态**/
     accountInfo.setAccount(request.getStatus());
+    accountInfo.setUpdateTime(new Date());
+    accountInfo.setVersion(accountInfo.getVersion() + 1);
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 
@@ -116,12 +115,13 @@ public class AccountRegisterService {
       throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_EXIT_ERROR);
     }
     /**检查验证标示是否存在**/
-    String key = authCodeService.getValidate_key() + request.getType() + request.getOldAccount();
+    String key =
+        authCodeService.getValidate_key() + request.getType() + "_" + request.getOldAccount();
     String validateId = stringRedisTemplate.opsForValue().get(key);
     if (StringUtils.isEmpty(validateId)) {
       throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
     }
-    if (StringUtils.equals(request.getValidateId(), validateId)) {
+    if (!StringUtils.equals(request.getValidateId(), validateId)) {
       throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
     }
     AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
