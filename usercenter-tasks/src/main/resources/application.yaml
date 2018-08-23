@@ -55,4 +55,8 @@ server:
       rotate: true
 bjca:
   task:
-    cron-unlock-account: @cron.unlock.account@
+    cron-notify: @cron.notify@
+    notify-max-num: @notify.max.num@
+kafka:
+  bootstrap-servers: @kafka.bootstrap.servers@
+  topic-notify: @kafka.topic.notify@
