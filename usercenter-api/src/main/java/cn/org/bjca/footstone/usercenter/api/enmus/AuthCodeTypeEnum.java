@@ -12,6 +12,7 @@ public enum AuthCodeTypeEnum {
 
     REGIST("REGIST", "用户注册"),
     LOGIN("LOGIN", "用户登录"),
+    CHANGE("CHANGE", "信息变更"),
     RESET("RESET", "密码重置");
 
     /**

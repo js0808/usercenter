@@ -5,8 +5,10 @@ import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.facade.AuthCodeFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeApplyRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeValidateResponse;
 import cn.org.bjca.footstone.usercenter.biz.AuthCodeService;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +29,8 @@ public class AuthCodeController implements AuthCodeFacade {
   private AuthCodeService authCodeService;
 
   @Override
-  public ReturnResult<AuthCodeApplyResponse> codeApply(@Validated @RequestBody AuthCodeApplyRequest request) {
+  public ReturnResult<AuthCodeApplyResponse> codeApply(
+      @Validated @RequestBody AuthCodeApplyRequest request) {
     MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码申请", "短信验证码申请交易");
     AuthCodeApplyResponse response = new AuthCodeApplyResponse();
     try {
@@ -61,5 +64,25 @@ public class AuthCodeController implements AuthCodeFacade {
       metrics.qps().rt().sr_incrTotal();
     }
     return ReturnResult.success("success");
+  }
+
+  @Override
+  public ReturnResult<AuthCodeValidateResponse> validate(
+      @Validated @RequestBody AuthCodeValidateRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "验证码验证");
+    AuthCodeValidateResponse response = new AuthCodeValidateResponse();
+    try {
+      response = authCodeService.validate(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("validate 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("validate 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
+    }
+    return ReturnResult.success(response);
   }
 }

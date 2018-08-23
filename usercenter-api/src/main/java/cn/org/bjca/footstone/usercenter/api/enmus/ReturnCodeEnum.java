@@ -34,7 +34,8 @@ public enum ReturnCodeEnum {
   USER_IS_LOCKED(60604021, "用户被锁定"),
   USER_TOKEN_WRONG(60604022, "用户TOKEN不正确"),
   ENT_INFO_NOT_ENOUGH(60604023, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空"),
-  ENT_INFO_STATUS_ERROR(60604024, "企业信息状态异常");
+  ENT_INFO_STATUS_ERROR(60604024, "企业信息状态异常"),
+  VALIDATE_ID_NOT_EXIT_ERROR(60604025, "验证标识错误"),;
 
   /**
    * The value.

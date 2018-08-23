@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.biz;
 import cn.org.bjca.footstone.usercenter.api.enmus.AccountTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
@@ -10,16 +11,13 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
-import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.PwdUtil;
 import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -33,6 +31,8 @@ public class AccountRegisterService {
   private AuthCodeService authCodeService;
   @Autowired
   private AccountInfoService accountInfoService;
+  @Autowired
+  private StringRedisTemplate stringRedisTemplate;
 
   public void accountRegister(AccountRegisterRequest request) throws Exception {
     /**检查帐号是否存在**/
@@ -50,10 +50,10 @@ public class AccountRegisterService {
     String password = PwdUtil.cipher(request.getPassword());
     /**添加帐号信息**/
     AccountInfo info = new AccountInfo();
-    if (authCodeService.isMobile(request.getAccount())) {
-      info.setAccountType(AccountTypeEnum.MOBILE.value());
-    } else {
+    if (authCodeService.isEmail(request.getAccount())) {
       info.setAccountType(AccountTypeEnum.EMAIL.value());
+    } else {
+      info.setAccountType(AccountTypeEnum.MOBILE.value());
     }
     info.setAccount(request.getAccount());
     info.setPassword(password);
@@ -94,10 +94,7 @@ public class AccountRegisterService {
   }
 
   public void modifyPassword(ModifyPasswordRequest request) throws Exception {
-    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
-    if (accountInfo == null) {
-      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
-    }
+    AccountInfo accountInfo = accountExit(request.getAccount());
     if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
         .after(new Date())) {
       throw new BjcaBizException(ReturnCodeEnum.USER_IS_LOCKED);
@@ -109,5 +106,41 @@ public class AccountRegisterService {
     }
     accountInfo.setPassword(PwdUtil.cipher(request.getNewPassword()));
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
+  }
+
+  public void accountChange(AccountChangeRequest request) throws Exception {
+    AccountInfo oldaccountInfo = accountExit(request.getOldAccount());
+    /**检查待变更帐号是否已存在**/
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
+    if (accountInfo != null) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_EXIT_ERROR);
+    }
+    /**检查验证标示是否存在**/
+    String key = authCodeService.getValidate_key() + request.getType() + request.getOldAccount();
+    String validateId = stringRedisTemplate.opsForValue().get(key);
+    if (StringUtils.isEmpty(validateId)) {
+      throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
+    }
+    if (StringUtils.equals(request.getValidateId(), validateId)) {
+      throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
+    }
+    AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
+    validateRequest.setAuthCode(request.getAuthCode());
+    validateRequest.setUserName(request.getAccount());
+    validateRequest.setType(AuthCodeTypeEnum.CHANGE.value());
+    authCodeService.validate(validateRequest);
+
+    oldaccountInfo.setAccount(request.getAccount());
+    oldaccountInfo.setUpdateTime(new Date());
+    oldaccountInfo.setVersion(oldaccountInfo.getVersion() + 1);
+    accountInfoMapper.updateByPrimaryKeySelective(oldaccountInfo);
+  }
+
+  public AccountInfo accountExit(String account) {
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(account);
+    if (accountInfo == null) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
+    }
+    return accountInfo;
   }
 }

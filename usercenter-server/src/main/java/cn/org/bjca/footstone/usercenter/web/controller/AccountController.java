@@ -4,6 +4,7 @@ import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.facade.AccountInfoFacade;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
@@ -92,6 +93,24 @@ public class AccountController implements AccountInfoFacade {
       throw ex;
     } catch (Exception e) {
       log.error("modifyPassword 异常信息", e);
+      throw new BjcaBizException(ReturnCodeEnum.ERROR);
+    } finally {
+      metrics.qps().rt().sr_incrTotal();
+    }
+    return ReturnResult.success("success");
+  }
+
+  @Override
+  public ReturnResult accountChange(AccountChangeRequest request) {
+    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "登录帐号变更");
+    try {
+      registerService.accountChange(request);
+      metrics.sr_incrSuccess();
+    } catch (BjcaBizException ex) {
+      log.error("accountChange 异常信息", ex);
+      throw ex;
+    } catch (Exception e) {
+      log.error("accountChange 异常信息", e);
       throw new BjcaBizException(ReturnCodeEnum.ERROR);
     } finally {
       metrics.qps().rt().sr_incrTotal();
