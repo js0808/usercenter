@@ -2,10 +2,10 @@ package cn.org.bjca.footstone.usercenter.tasks.task;
 
 
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapperCustom;
 import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
 import cn.org.bjca.footstone.usercenter.tasks.lock.JobRunningStatus;
 import cn.org.bjca.footstone.usercenter.tasks.util.KafkaProducerClient;
-import java.util.Date;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +13,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+
 /**
- * 用户信息新增、变更通知
- */
+ * @description:用户信息新增、变更通知
+ * @author: ZHAOZHIWEI
+ * @create: 2018/8/23
+ **/
 @Component
 @Slf4j
 public class NotifyTask {
@@ -27,6 +30,9 @@ public class NotifyTask {
   private String topicNotify = null;
   @Value("${bjca.task.notify-max-num}")
   private int notifyMaxNum = 5;
+
+  @Autowired
+  private NotifyInfoMapperCustom notifyInfoMapperCustom;
 
   @Autowired
   private NotifyInfoMapper notifyInfoMapper;
@@ -43,10 +49,8 @@ public class NotifyTask {
       return;
     }
 
-    //查询未发送和发送失败的记录
-    Date now = new Date();
     //查询待通知记录
-    List<NotifyInfo> notifyInfos = null;
+    List<NotifyInfo> notifyInfos = notifyInfoMapperCustom.selectInitNotify();
     log.info("发送用户中心通知，条数[{}]", notifyInfos.size());
 
     for (NotifyInfo notifyInfo : notifyInfos) {

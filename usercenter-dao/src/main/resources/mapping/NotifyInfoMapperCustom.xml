@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapperCustom">
+  <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="uid" jdbcType="BIGINT" property="uid"/>
+    <result column="user_type" jdbcType="VARCHAR" property="userType"/>
+    <result column="account" jdbcType="VARCHAR" property="account"/>
+    <result column="notify_type" jdbcType="VARCHAR" property="notifyType"/>
+    <result column="notify_status" jdbcType="VARCHAR" property="notifyStatus"/>
+    <result column="notify_num" jdbcType="INTEGER" property="notifyNum"/>
+    <result column="notify_max_num" jdbcType="INTEGER" property="notifyMaxNum"/>
+    <result column="notify_msg" jdbcType="VARCHAR" property="notifyMsg"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+  </resultMap>
+
+  <select id="selectInitNotify" resultMap="BaseResultMap">
+    select * from notify_info where notify_status='INIT' limit 0,200
+  </select>
+</mapper>
