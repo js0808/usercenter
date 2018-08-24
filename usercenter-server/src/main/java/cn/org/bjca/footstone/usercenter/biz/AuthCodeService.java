@@ -37,7 +37,7 @@ public class AuthCodeService {
 
   private final String redis_key = "usercenter_";
   private final String validate_key = "validate_";
-  private String message = "亲爱的%s用户您好, \n验证码：%s，5分钟内输入有效，请输入验证码完成%s，勿将验证码告诉其他人。";
+
   private final String rule_email = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
 
   @Autowired
@@ -93,7 +93,8 @@ public class AuthCodeService {
     send.setFromName(authCodeConfig.getFromName());
     AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
     String emailCode = getFixLenthString(6);
-    String sendMsg = String.format(message, request.getEmail(), emailCode, typeEnum.getDesc());
+    String sendMsg = String
+        .format(authCodeConfig.getEmailBody(), request.getEmail(), emailCode, typeEnum.getDesc());
     send.setPlainText(sendMsg);
     ResponseEntity<ReturnResult> responseEntity = null;
     responseEntity = post(authCodeConfig.getEmailUrl(), false, ReturnResult.class, send);
