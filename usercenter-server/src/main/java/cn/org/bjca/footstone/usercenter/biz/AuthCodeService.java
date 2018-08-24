@@ -8,6 +8,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeValidateResponse;
+import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.vo.AuthorCodeReqVo;
 import cn.org.bjca.footstone.usercenter.vo.CodeValidateReqVo;
 import cn.org.bjca.footstone.usercenter.vo.MailCodeReqVo;
@@ -15,10 +16,12 @@ import cn.org.bjca.footstone.usercenter.config.AuthCodeConfig;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.SignatureUtils;
 import com.alibaba.fastjson.JSONObject;
+import java.util.Map;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -62,8 +65,10 @@ public class AuthCodeService {
     String signStr = SignatureUtils
         .signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
     send.setSignature(signStr);
-    ResponseEntity<ReturnResult> responseEntity = null;
-    responseEntity = post(authCodeConfig.getCodeUrl(), false, ReturnResult.class, send);
+    ResponseEntity<ReturnResult<AuthCodeApplyResponse>> responseEntity = null;
+    responseEntity = RestUtils.post(authCodeConfig.getCodeUrl(),
+        new ParameterizedTypeReference<ReturnResult<AuthCodeApplyResponse>>() {
+        }, send);
     log.info("codeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
     if (isOk(responseEntity)) {
       ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
@@ -72,9 +77,7 @@ public class AuthCodeService {
       }
       log.info("data:[{}]", JSONObject.toJSONString(returnResult.getData()));
 
-      AuthCodeApplyResponse response = JSONObject
-          .parseObject(JSONObject.toJSONString(returnResult.getData()),
-              AuthCodeApplyResponse.class);
+      AuthCodeApplyResponse response = responseEntity.getBody().getData();
       return response;
     } else {
       log.error("status:[{}]", responseEntity.getStatusCode().value());
