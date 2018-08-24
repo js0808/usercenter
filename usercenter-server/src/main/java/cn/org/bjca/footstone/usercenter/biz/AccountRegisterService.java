@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Service;
 
 
@@ -33,6 +34,8 @@ public class AccountRegisterService {
   private AccountInfoService accountInfoService;
   @Autowired
   private StringRedisTemplate stringRedisTemplate;
+  @Autowired
+  private AccountAttemptsService accountAttemptsService;
 
   public void accountRegister(AccountRegisterRequest request) throws Exception {
     /**检查帐号是否存在**/
@@ -101,10 +104,17 @@ public class AccountRegisterService {
     /**验证原密码**/
     boolean matches = PwdUtil.verify(accountInfo.getPassword(), request.getOldPassword());
     if (!matches) {
+      try {
+        accountAttemptsService.updateFailAttempts(request.getAccount());
+      } catch (LockedException e) {
+        throw new BjcaBizException(ReturnCodeEnum.USER_IS_LOCKED);
+      }
       throw new BjcaBizException(ReturnCodeEnum.USER_OR_PWD_ERROR);
     }
     accountInfo.setPassword(PwdUtil.cipher(request.getNewPassword()));
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
+
+    accountAttemptsService.resetFailAttempts(request.getAccount());
   }
 
   public void accountChange(AccountChangeRequest request) throws Exception {
@@ -130,6 +140,11 @@ public class AccountRegisterService {
     validateRequest.setType(AuthCodeTypeEnum.CHANGE.value());
     authCodeService.validate(validateRequest);
 
+    if (authCodeService.isEmail(request.getAccount())) {
+      oldaccountInfo.setAccountType(AccountTypeEnum.EMAIL.value());
+    } else {
+      oldaccountInfo.setAccountType(AccountTypeEnum.MOBILE.value());
+    }
     oldaccountInfo.setAccount(request.getAccount());
     oldaccountInfo.setUpdateTime(new Date());
     oldaccountInfo.setVersion(oldaccountInfo.getVersion() + 1);
