@@ -12,6 +12,8 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
+import cn.org.bjca.footstone.usercenter.api.enmus.NotifyTypeEnum;
+import cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoQueryVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoSimpleVo;
 import cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusVo;
@@ -21,15 +23,20 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.UserInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameChecker;
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoHistoryMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
+import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
+import cn.org.bjca.footstone.usercenter.vo.NotifyInfoDataVo;
+import cn.org.bjca.footstone.usercenter.vo.NotifyInfoVo;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
@@ -66,12 +73,12 @@ public class UserInfoService {
   private UserInfoMapper userInfoMapper;
   @Autowired
   private UserInfoHistoryMapper historyMapper;
-
   @Autowired
   private AccountInfoMapper accountInfoMapper;
-
   @Autowired
   private RealNameChecker checker;
+  @Autowired
+  private NotifyInfoMapper notifyInfoMapper;
 
   public UserInfoResponse addUser(UserInfoVo userInfoVo) {
     log.info("请求实名认证{}", userInfoVo);
@@ -88,11 +95,7 @@ public class UserInfoService {
 
     doVerify(verify, userInfo);
 
-    int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
-    if (count != 1) {
-      log.error("变更实名认证信息异常{}", userInfo);
-      throw new BaseException(SQL_EXCEPTION);
-    }
+    doUpdate(null, userInfo);
 
     return buildRsp(userInfo);
   }
@@ -218,16 +221,40 @@ public class UserInfoService {
     TransactionStatus transaction = transactionManager
         .getTransaction(new DefaultTransactionDefinition());
     try {
-      UserInfoHistory history = new UserInfoHistory();
-      USERINFO2HISTORY.copy(userInfoOld, history, null);
-      history.setId(null);
+      //历史记录
+      if (nonNull(userInfoOld)) {
+        UserInfoHistory history = new UserInfoHistory();
+        USERINFO2HISTORY.copy(userInfoOld, history, null);
+        history.setId(null);
+        historyMapper.insertSelective(history);
+      }
+      //通知
+      NotifyInfo notifyInfo = createNotify(userInfoOld, userInfoNew);
+      notifyInfoMapper.insertSelective(notifyInfo);
       userInfoMapper.updateByPrimaryKeySelective(userInfoNew);
-      historyMapper.insertSelective(history);
+
       transactionManager.commit(transaction);
     } catch (Throwable e) {
       log.error("插入数据库异常", e);
       transactionManager.rollback(transaction);
     }
+  }
+
+  private NotifyInfo createNotify(UserInfo old, UserInfo userInfo) {
+    Long uid = isNull(old) ? userInfo.getUid() : old.getUid();
+
+    NotifyInfoDataVo notifyInfoDataVo = NotifyInfoDataVo.builder().uid(uid)
+        .userType(UserTypeEnum.USER.name()).build();
+    NotifyInfoVo notifyInfoVo = NotifyInfoVo.builder().data(notifyInfoDataVo)
+        .type(isNull(old) ? NotifyTypeEnum.NEW.name() : NotifyTypeEnum.UPDATE.name())
+        .timestamp(new Date()).build();
+
+    NotifyInfo notifyInfo = new NotifyInfo();
+    notifyInfo.setUid(uid);
+    notifyInfo.setUserType(UserTypeEnum.USER.name());
+    notifyInfo.setNotifyType(notifyInfoVo.getType());
+    notifyInfo.setNotifyMsg(JSONObject.toJSONString(notifyInfoVo));
+    return notifyInfo;
   }
 
   public UserInfoResponse modUserStatus(Long uid, UserInfoStatusVo userInfoStatusVo) {
