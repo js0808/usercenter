@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    druid:
+      initial-size: @db.initial-size@
+      max-active: @db.max-active@
+      min-idle: @db.min-idle@
+      max-wait: @db.max-wait@
+      pool-prepared-statements: false
+      max-open-prepared-statements: 0
+      validation-query: SELECT 'X'
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 3000
+      min-evictable-idle-time-millis: 300000
+      default-datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: @db.url@
+        username: @db.username@
+        password: @db.password@
+        initial-size: @db.initial-size@
+        max-active: @db.max-active@
+        max-wait: @db.max-wait@
+  redis:
+        host: @redis.host@
+        port: @redis.port@
+        password: @redis.password@
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  mvc:
+      throw-exception-if-no-handler-found: true
+  resources:
+      add-mappings: false
+server:
+  port: @server.port@
+  connection-timeout: 40000
+  tomcat:
+    basedir: ./tmp
+    background-processor-delay: 30
+    max-http-post-size: 10000000
+    accesslog:
+      enabled: true
+      buffered: true
+      directory: ./log
+      file-date-format: .yyyy-MM-dd
+      pattern: '%h %l %u %t "%r" %s %b "%{Referer}i" "%{User-Agent}i" %D'
+      prefix: access_log
+      suffix: .log
+      rename-on-rotate: false
+      request-attributes-enabled: false
+      rotate: true
+bjca:
+  task:
+    cron-notify: @cron.notify@
+    notify-max-num: @notify.max.num@
+kafka:
+  bootstrap-servers: @kafka.bootstrap.servers@
+  topic-notify: @kafka.topic.notify@

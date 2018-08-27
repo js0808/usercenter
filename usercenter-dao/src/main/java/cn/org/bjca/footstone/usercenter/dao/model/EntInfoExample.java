@@ -126,10 +126,10 @@ public class EntInfoExample {
         return this;
     }
 
-  public EntInfoExample sumLegalIdNum() {
-    this.sumCol = "legal_id_num";
-    return this;
-  }
+    public EntInfoExample sumLegalIdNum() {
+        this.sumCol = "legal_id_num";
+        return this;
+    }
 
     public EntInfoExample sumRealNameFlag() {
         this.sumCol="real_name_flag";
@@ -156,8 +156,8 @@ public class EntInfoExample {
         return this;
     }
 
-  public EntInfoExample sumAppId() {
-    this.sumCol = "app_id";
+    public EntInfoExample sumAppId() {
+        this.sumCol = "app_id";
         return this;
     }
 
@@ -196,10 +196,10 @@ public class EntInfoExample {
         return this;
     }
 
-  public EntInfoExample sumOper() {
-    this.sumCol = "oper";
-    return this;
-  }
+    public EntInfoExample sumOper() {
+        this.sumCol = "oper";
+        return this;
+    }
 
     public EntInfoExample sumCreateTime() {
         this.sumCol="create_time";
@@ -884,75 +884,75 @@ public class EntInfoExample {
             return (Criteria) this;
         }
 
-      public Criteria andLegalIdNumIsNull() {
-        addCriterion("legal_id_num is null");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumIsNull() {
+            addCriterion("legal_id_num is null");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumIsNotNull() {
-        addCriterion("legal_id_num is not null");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumIsNotNull() {
+            addCriterion("legal_id_num is not null");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumEqualTo(String value) {
-        addCriterion("legal_id_num =", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumEqualTo(String value) {
+            addCriterion("legal_id_num =", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumNotEqualTo(String value) {
-        addCriterion("legal_id_num <>", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumNotEqualTo(String value) {
+            addCriterion("legal_id_num <>", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumGreaterThan(String value) {
-        addCriterion("legal_id_num >", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumGreaterThan(String value) {
+            addCriterion("legal_id_num >", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumGreaterThanOrEqualTo(String value) {
-        addCriterion("legal_id_num >=", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumGreaterThanOrEqualTo(String value) {
+            addCriterion("legal_id_num >=", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumLessThan(String value) {
-        addCriterion("legal_id_num <", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumLessThan(String value) {
+            addCriterion("legal_id_num <", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumLessThanOrEqualTo(String value) {
-        addCriterion("legal_id_num <=", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumLessThanOrEqualTo(String value) {
+            addCriterion("legal_id_num <=", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumLike(String value) {
-        addCriterion("legal_id_num like", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumLike(String value) {
+            addCriterion("legal_id_num like", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumNotLike(String value) {
-        addCriterion("legal_id_num not like", value, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumNotLike(String value) {
+            addCriterion("legal_id_num not like", value, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumIn(List<String> values) {
-        addCriterion("legal_id_num in", values, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumIn(List<String> values) {
+            addCriterion("legal_id_num in", values, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumNotIn(List<String> values) {
-        addCriterion("legal_id_num not in", values, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumNotIn(List<String> values) {
+            addCriterion("legal_id_num not in", values, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumBetween(String value1, String value2) {
-        addCriterion("legal_id_num between", value1, value2, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumBetween(String value1, String value2) {
+            addCriterion("legal_id_num between", value1, value2, "legalIdNum");
+            return (Criteria) this;
+        }
 
-      public Criteria andLegalIdNumNotBetween(String value1, String value2) {
-        addCriterion("legal_id_num not between", value1, value2, "legalIdNum");
-        return (Criteria) this;
-      }
+        public Criteria andLegalIdNumNotBetween(String value1, String value2) {
+            addCriterion("legal_id_num not between", value1, value2, "legalIdNum");
+            return (Criteria) this;
+        }
 
         public Criteria andRealNameFlagIsNull() {
             addCriterion("real_name_flag is null");
@@ -964,52 +964,52 @@ public class EntInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagEqualTo(Boolean value) {
+        public Criteria andRealNameFlagEqualTo(Integer value) {
             addCriterion("real_name_flag =", value, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagNotEqualTo(Boolean value) {
+        public Criteria andRealNameFlagNotEqualTo(Integer value) {
             addCriterion("real_name_flag <>", value, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagGreaterThan(Boolean value) {
+        public Criteria andRealNameFlagGreaterThan(Integer value) {
             addCriterion("real_name_flag >", value, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andRealNameFlagGreaterThanOrEqualTo(Integer value) {
             addCriterion("real_name_flag >=", value, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagLessThan(Boolean value) {
+        public Criteria andRealNameFlagLessThan(Integer value) {
             addCriterion("real_name_flag <", value, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagLessThanOrEqualTo(Boolean value) {
+        public Criteria andRealNameFlagLessThanOrEqualTo(Integer value) {
             addCriterion("real_name_flag <=", value, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagIn(List<Boolean> values) {
+        public Criteria andRealNameFlagIn(List<Integer> values) {
             addCriterion("real_name_flag in", values, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagNotIn(List<Boolean> values) {
+        public Criteria andRealNameFlagNotIn(List<Integer> values) {
             addCriterion("real_name_flag not in", values, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagBetween(Boolean value1, Boolean value2) {
+        public Criteria andRealNameFlagBetween(Integer value1, Integer value2) {
             addCriterion("real_name_flag between", value1, value2, "realNameFlag");
             return (Criteria) this;
         }
 
-        public Criteria andRealNameFlagNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andRealNameFlagNotBetween(Integer value1, Integer value2) {
             addCriterion("real_name_flag not between", value1, value2, "realNameFlag");
             return (Criteria) this;
         }
@@ -1094,52 +1094,52 @@ public class EntInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagEqualTo(Boolean value) {
+        public Criteria andReviewFlagEqualTo(Integer value) {
             addCriterion("review_flag =", value, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagNotEqualTo(Boolean value) {
+        public Criteria andReviewFlagNotEqualTo(Integer value) {
             addCriterion("review_flag <>", value, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagGreaterThan(Boolean value) {
+        public Criteria andReviewFlagGreaterThan(Integer value) {
             addCriterion("review_flag >", value, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andReviewFlagGreaterThanOrEqualTo(Integer value) {
             addCriterion("review_flag >=", value, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagLessThan(Boolean value) {
+        public Criteria andReviewFlagLessThan(Integer value) {
             addCriterion("review_flag <", value, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagLessThanOrEqualTo(Boolean value) {
+        public Criteria andReviewFlagLessThanOrEqualTo(Integer value) {
             addCriterion("review_flag <=", value, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagIn(List<Boolean> values) {
+        public Criteria andReviewFlagIn(List<Integer> values) {
             addCriterion("review_flag in", values, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagNotIn(List<Boolean> values) {
+        public Criteria andReviewFlagNotIn(List<Integer> values) {
             addCriterion("review_flag not in", values, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagBetween(Boolean value1, Boolean value2) {
+        public Criteria andReviewFlagBetween(Integer value1, Integer value2) {
             addCriterion("review_flag between", value1, value2, "reviewFlag");
             return (Criteria) this;
         }
 
-        public Criteria andReviewFlagNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andReviewFlagNotBetween(Integer value1, Integer value2) {
             addCriterion("review_flag not between", value1, value2, "reviewFlag");
             return (Criteria) this;
         }
@@ -1284,73 +1284,73 @@ public class EntInfoExample {
             return (Criteria) this;
         }
 
-      public Criteria andAppIdIsNull() {
-        addCriterion("app_id is null");
+        public Criteria andAppIdIsNull() {
+            addCriterion("app_id is null");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdIsNotNull() {
-        addCriterion("app_id is not null");
+        public Criteria andAppIdIsNotNull() {
+            addCriterion("app_id is not null");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdEqualTo(String value) {
-        addCriterion("app_id =", value, "appId");
+        public Criteria andAppIdEqualTo(String value) {
+            addCriterion("app_id =", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdNotEqualTo(String value) {
-        addCriterion("app_id <>", value, "appId");
+        public Criteria andAppIdNotEqualTo(String value) {
+            addCriterion("app_id <>", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdGreaterThan(String value) {
-        addCriterion("app_id >", value, "appId");
+        public Criteria andAppIdGreaterThan(String value) {
+            addCriterion("app_id >", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdGreaterThanOrEqualTo(String value) {
-        addCriterion("app_id >=", value, "appId");
+        public Criteria andAppIdGreaterThanOrEqualTo(String value) {
+            addCriterion("app_id >=", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdLessThan(String value) {
-        addCriterion("app_id <", value, "appId");
+        public Criteria andAppIdLessThan(String value) {
+            addCriterion("app_id <", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdLessThanOrEqualTo(String value) {
-        addCriterion("app_id <=", value, "appId");
+        public Criteria andAppIdLessThanOrEqualTo(String value) {
+            addCriterion("app_id <=", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdLike(String value) {
-        addCriterion("app_id like", value, "appId");
+        public Criteria andAppIdLike(String value) {
+            addCriterion("app_id like", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdNotLike(String value) {
-        addCriterion("app_id not like", value, "appId");
+        public Criteria andAppIdNotLike(String value) {
+            addCriterion("app_id not like", value, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdIn(List<String> values) {
-        addCriterion("app_id in", values, "appId");
+        public Criteria andAppIdIn(List<String> values) {
+            addCriterion("app_id in", values, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdNotIn(List<String> values) {
-        addCriterion("app_id not in", values, "appId");
+        public Criteria andAppIdNotIn(List<String> values) {
+            addCriterion("app_id not in", values, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdBetween(String value1, String value2) {
-        addCriterion("app_id between", value1, value2, "appId");
+        public Criteria andAppIdBetween(String value1, String value2) {
+            addCriterion("app_id between", value1, value2, "appId");
             return (Criteria) this;
         }
 
-      public Criteria andAppIdNotBetween(String value1, String value2) {
-        addCriterion("app_id not between", value1, value2, "appId");
+        public Criteria andAppIdNotBetween(String value1, String value2) {
+            addCriterion("app_id not between", value1, value2, "appId");
             return (Criteria) this;
         }
 
@@ -1834,75 +1834,75 @@ public class EntInfoExample {
             return (Criteria) this;
         }
 
-      public Criteria andOperIsNull() {
-        addCriterion("oper is null");
-        return (Criteria) this;
-      }
+        public Criteria andOperIsNull() {
+            addCriterion("oper is null");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperIsNotNull() {
-        addCriterion("oper is not null");
-        return (Criteria) this;
-      }
+        public Criteria andOperIsNotNull() {
+            addCriterion("oper is not null");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperEqualTo(String value) {
-        addCriterion("oper =", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperEqualTo(String value) {
+            addCriterion("oper =", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperNotEqualTo(String value) {
-        addCriterion("oper <>", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperNotEqualTo(String value) {
+            addCriterion("oper <>", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperGreaterThan(String value) {
-        addCriterion("oper >", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperGreaterThan(String value) {
+            addCriterion("oper >", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperGreaterThanOrEqualTo(String value) {
-        addCriterion("oper >=", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperGreaterThanOrEqualTo(String value) {
+            addCriterion("oper >=", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperLessThan(String value) {
-        addCriterion("oper <", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperLessThan(String value) {
+            addCriterion("oper <", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperLessThanOrEqualTo(String value) {
-        addCriterion("oper <=", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperLessThanOrEqualTo(String value) {
+            addCriterion("oper <=", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperLike(String value) {
-        addCriterion("oper like", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperLike(String value) {
+            addCriterion("oper like", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperNotLike(String value) {
-        addCriterion("oper not like", value, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperNotLike(String value) {
+            addCriterion("oper not like", value, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperIn(List<String> values) {
-        addCriterion("oper in", values, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperIn(List<String> values) {
+            addCriterion("oper in", values, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperNotIn(List<String> values) {
-        addCriterion("oper not in", values, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperNotIn(List<String> values) {
+            addCriterion("oper not in", values, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperBetween(String value1, String value2) {
-        addCriterion("oper between", value1, value2, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperBetween(String value1, String value2) {
+            addCriterion("oper between", value1, value2, "oper");
+            return (Criteria) this;
+        }
 
-      public Criteria andOperNotBetween(String value1, String value2) {
-        addCriterion("oper not between", value1, value2, "oper");
-        return (Criteria) this;
-      }
+        public Criteria andOperNotBetween(String value1, String value2) {
+            addCriterion("oper not between", value1, value2, "oper");
+            return (Criteria) this;
+        }
 
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");

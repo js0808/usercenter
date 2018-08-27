@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.api.vo.request;
 
+import cn.org.bjca.footstone.usercenter.api.enmus.UserInfoStatusEnum;
 import lombok.Data;
 
 /**

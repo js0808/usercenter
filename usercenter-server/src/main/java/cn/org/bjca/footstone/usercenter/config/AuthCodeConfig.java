@@ -13,15 +13,17 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "authcode")
 public class AuthCodeConfig {
-    private String appId;
-    private String deviceId;
-    private String templateId;
-    private String signAlgo;
-    private String signKey;
-    private String codeUrl;
-    private String emailUrl;
-    private String validateUrl;
-    private String version;
-    private Integer expire;
-    private String fromName;
+
+  private String appId;
+  private String deviceId;
+  private String templateId;
+  private String signAlgo;
+  private String signKey;
+  private String codeUrl;
+  private String emailUrl;
+  private String emailBody;
+  private String validateUrl;
+  private String version;
+  private Integer expire;
+  private String fromName;
 }

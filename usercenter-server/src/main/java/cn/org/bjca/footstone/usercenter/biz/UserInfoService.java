@@ -6,8 +6,8 @@ import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.RESOURCE_NOT_EXIST;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.SQL_EXCEPTION;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_STATUS_ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.UserInfoStatusEnum.INVALID;
 import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.USER;
-import static cn.org.bjca.footstone.usercenter.api.vo.request.UserInfoStatusEnum.INVALID;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 

@@ -35,6 +35,7 @@ public enum ReturnCodeEnum {
   USER_TOKEN_WRONG(60604022, "用户TOKEN不正确"),
   ENT_INFO_NOT_ENOUGH(60604023, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空"),
   ENT_INFO_STATUS_ERROR(60604024, "企业信息状态异常"),
+  VALIDATE_ID_NOT_EXIT_ERROR(60604025, "验证标识错误"),
   PATCHCA_GENERATE_ERROR(60604040, "生成验证码异常"),
   PATCHCA_VALIDATE_ERROR(60604041, "验证码验证错误"),
   PATCHCA_EXPIRE_ERROR(60604042, "验证码过期");

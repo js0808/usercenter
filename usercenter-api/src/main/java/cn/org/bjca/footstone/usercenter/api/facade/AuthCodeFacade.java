@@ -2,6 +2,7 @@ package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeApplyRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EmailCodeApplyRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
 import io.swagger.annotations.Api;
@@ -25,5 +26,10 @@ public interface AuthCodeFacade {
   @RequestMapping(value = "/emailCodeApply", method = RequestMethod.POST)
   @ResponseBody
   ReturnResult emailCodeApply(EmailCodeApplyRequest request);
+
+  @ApiOperation(value = "证码验证", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "证码验证")
+  @RequestMapping(value = "/validate", method = RequestMethod.POST)
+  @ResponseBody
+  ReturnResult validate(AuthCodeValidateRequest request);
 
 }

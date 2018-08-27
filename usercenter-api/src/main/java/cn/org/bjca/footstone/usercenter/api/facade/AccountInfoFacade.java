@@ -1,7 +1,10 @@
 package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,4 +28,18 @@ public interface AccountInfoFacade {
   @ResponseBody
   ReturnResult resetPassword(ResetPasswordRequest request);
 
+  @ApiOperation(value = "更新账号状态", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "更新账号状态")
+  @RequestMapping(value = "/accountStatus", method = RequestMethod.POST)
+  @ResponseBody
+  ReturnResult accountStatus(AccountStatusUpdateRequest request);
+
+  @ApiOperation(value = "修改密码", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "修改密码")
+  @RequestMapping(value = "/modifyPassword", method = RequestMethod.POST)
+  @ResponseBody
+  ReturnResult modifyPassword(ModifyPasswordRequest request);
+
+  @ApiOperation(value = "帐号变更", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "帐号变更")
+  @RequestMapping(value = "/accountChange", method = RequestMethod.POST)
+  @ResponseBody
+  ReturnResult accountChange(AccountChangeRequest request);
 }

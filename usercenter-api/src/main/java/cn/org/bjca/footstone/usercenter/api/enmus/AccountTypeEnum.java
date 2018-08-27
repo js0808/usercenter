@@ -10,7 +10,7 @@ import java.util.HashSet;
  */
 public enum AccountTypeEnum {
 
-  MOBIE("MOBIE", "手机号"),
+  MOBILE("MOBILE", "手机号"),
   EMAIL("EMAIL", "邮箱");
 
   /**

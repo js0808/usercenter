@@ -22,19 +22,19 @@ public class EntInfo implements Serializable {
 
     private String legalName;
 
-  private String legalIdNum;
+    private String legalIdNum;
 
-    private Boolean realNameFlag;
+    private Integer realNameFlag;
 
     private String realNameType;
 
-    private Boolean reviewFlag;
+    private Integer reviewFlag;
 
     private String bizLicenseImageUrl;
 
     private String orgCodeImageUrl;
 
-  private String appId;
+    private String appId;
 
     private String status;
 
@@ -50,7 +50,7 @@ public class EntInfo implements Serializable {
 
     private Integer version;
 
-  private String oper;
+    private String oper;
 
     private Date createTime;
 
@@ -132,19 +132,19 @@ public class EntInfo implements Serializable {
         this.legalName = legalName == null ? null : legalName.trim();
     }
 
-  public String getLegalIdNum() {
-    return legalIdNum;
-  }
+    public String getLegalIdNum() {
+        return legalIdNum;
+    }
 
-  public void setLegalIdNum(String legalIdNum) {
-    this.legalIdNum = legalIdNum == null ? null : legalIdNum.trim();
-  }
+    public void setLegalIdNum(String legalIdNum) {
+        this.legalIdNum = legalIdNum == null ? null : legalIdNum.trim();
+    }
 
-    public Boolean getRealNameFlag() {
+    public Integer getRealNameFlag() {
         return realNameFlag;
     }
 
-    public void setRealNameFlag(Boolean realNameFlag) {
+    public void setRealNameFlag(Integer realNameFlag) {
         this.realNameFlag = realNameFlag;
     }
 
@@ -156,11 +156,11 @@ public class EntInfo implements Serializable {
         this.realNameType = realNameType == null ? null : realNameType.trim();
     }
 
-    public Boolean getReviewFlag() {
+    public Integer getReviewFlag() {
         return reviewFlag;
     }
 
-    public void setReviewFlag(Boolean reviewFlag) {
+    public void setReviewFlag(Integer reviewFlag) {
         this.reviewFlag = reviewFlag;
     }
 
@@ -180,12 +180,12 @@ public class EntInfo implements Serializable {
         this.orgCodeImageUrl = orgCodeImageUrl == null ? null : orgCodeImageUrl.trim();
     }
 
-  public String getAppId() {
-    return appId;
+    public String getAppId() {
+        return appId;
     }
 
-  public void setAppId(String appId) {
-    this.appId = appId == null ? null : appId.trim();
+    public void setAppId(String appId) {
+        this.appId = appId == null ? null : appId.trim();
     }
 
     public String getStatus() {
@@ -244,13 +244,13 @@ public class EntInfo implements Serializable {
         this.version = version;
     }
 
-  public String getOper() {
-    return oper;
-  }
+    public String getOper() {
+        return oper;
+    }
 
-  public void setOper(String oper) {
-    this.oper = oper == null ? null : oper.trim();
-  }
+    public void setOper(String oper) {
+        this.oper = oper == null ? null : oper.trim();
+    }
 
     public Date getCreateTime() {
         return createTime;
