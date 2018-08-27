@@ -95,7 +95,12 @@ public class UserInfoService {
 
     doVerify(verify, userInfo);
 
-    doUpdate(null, userInfo);
+//    doUpdate(null, userInfo);
+    int count = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+    if (count != 1) {
+      log.error("变更实名认证信息异常{}", userInfo);
+      throw new BaseException(SQL_EXCEPTION);
+    }
 
     return buildRsp(userInfo);
   }
