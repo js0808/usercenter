@@ -13,4 +13,8 @@ public interface Conts {
   BeanCopier ACCOUNT_INFO_TO_RESPONSE = BeanCopier
       .create(AccountInfo.class, AccountInfoResponse.class, false);
 
+  String CAPTCHA_REDIS_PREFIX = "CAPTCHA_";
+
+  int CAPTCHA_EXPIRE_MIN = 5;
+
 }

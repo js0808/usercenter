@@ -29,6 +29,12 @@
         <artifactId>httpclient</artifactId>
         <version>4.5</version>
       </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.bingoohuang/patchca -->
+        <dependency>
+            <groupId>com.github.bingoohuang</groupId>
+            <artifactId>patchca</artifactId>
+            <version>0.0.1</version>
+        </dependency>
     </dependencies>
 
     <profiles>
