@@ -61,7 +61,7 @@ public class LoginService {
 
   public Pair<BizResultVo, LoginResponse> loginWithPassword(LoginRequest loginRequest) {
     if (StringUtils.isBlank(loginRequest.getPassword()) && StringUtils
-        .isBlank(loginRequest.getAuthcode())) {
+        .isBlank(loginRequest.getAuthCode())) {
       throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR, "密码或验证码至少有一项必填");
     }
     String username = loginRequest.getUsername();
@@ -78,23 +78,33 @@ public class LoginService {
     }
     // 密码
     if (StringUtils.isNotBlank(loginRequest.getPassword())) {
-      BizResultVo bizResultVo = passwordValid(loginRequest, accountInfo);
+      Pair<BizResultVo, String> passwordValidResult = passwordValid(loginRequest, accountInfo);
+      BizResultVo bizResultVo = passwordValidResult.getKey();
       if (!bizResultVo.isSuccess()) {
-        return Pair.of(bizResultVo, null);
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setLockRemainingTimes(passwordValidResult.getValue());
+        return Pair.of(bizResultVo, loginResponse);
       }
     }
     // 验证码
-    if (StringUtils.isNotBlank(loginRequest.getAuthcode())) {
-      authCodeValid(loginRequest, accountInfo);
+    if (StringUtils.isNotBlank(loginRequest.getAuthCode())) {
+      Pair<BizResultVo, String> authCodeValidResult = authCodeValid(loginRequest, accountInfo);
+      BizResultVo bizResultVo = authCodeValidResult.getKey();
+      if (!bizResultVo.isSuccess()) {
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setLockRemainingTimes(authCodeValidResult.getValue());
+        return Pair.of(bizResultVo, loginResponse);
+      }
     }
     LoginResponse response = buildLoginResponse(loginRequest, accountInfo);
     return Pair.of(BizResultVo.of(true), response);
   }
 
   private LoginResponse buildLoginResponse(LoginRequest loginRequest, AccountInfo accountInfo) {
-    String account = accountInfo.getAccount();
+    String appId = loginRequest.getAppId();
     String channel = loginRequest.getChannel();
-    String tokenSrc = Joiner.on("_").join(account, channel, RDate.getNow().getTime());
+    String account = accountInfo.getAccount();
+    String tokenSrc = Joiner.on("_").join(account, appId, channel, RDate.getNow().getTime());
     String token = MessageDigestUtils.md5Hex(tokenSrc);
     int expire = loginRequest.getExpireMinutes() != 0 ? loginRequest.getExpireMinutes()
         : accountLoginConfig.getTokenExpireMinutes();
@@ -104,41 +114,53 @@ public class LoginService {
         .store(LoginTokenVo.of(account, token, expireDate.getTime(), expire, uid));
     val accountInfoResponse = new AccountInfoResponse();
     Conts.ACCOUNT_INFO_TO_RESPONSE.copy(accountInfo, accountInfoResponse, null);
-    val loginResponse = LoginResponse.of(uid, token, expireDate.getTime(), accountInfoResponse);
+    val loginResponse = LoginResponse.of(uid, token, expireDate.getTime(), accountInfoResponse, "");
     publisher
         .publishEvent(LoginEvent.of(true, accountInfo.getAccount(), loginRequest, accountInfo));
     return loginResponse;
   }
 
-  private BizResultVo passwordValid(LoginRequest loginRequest, AccountInfo accountInfo) {
+  private Pair<BizResultVo, String> passwordValid(LoginRequest loginRequest,
+      AccountInfo accountInfo) {
     // 密码不正确
     boolean matches = PwdUtil.verify(accountInfo.getPassword(), loginRequest.getPassword());
     if (matches) {
-      return BizResultVo.of(true);
+      return Pair.of(BizResultVo.of(true), "");
     }
     publisher
         .publishEvent(LoginEvent.of(false, accountInfo.getAccount(), loginRequest, accountInfo));
+    String remainingTimes;
     try {
-      accountAttemptsService.updateFailAttempts(loginRequest.getUsername());
+      remainingTimes = String
+          .valueOf(accountAttemptsService.updateFailAttempts(loginRequest.getUsername()));
     } catch (LockedException e) {
-      return BizResultVo.of(false, USER_IS_LOCKED);
+      return Pair.of(BizResultVo.of(false, USER_IS_LOCKED), "0");
     }
-    return BizResultVo.of(false, USER_OR_PWD_ERROR);
+    return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), remainingTimes);
 
   }
 
-  private void authCodeValid(LoginRequest loginRequest, AccountInfo accountInfo) {
+  private Pair<BizResultVo, String> authCodeValid(LoginRequest loginRequest,
+      AccountInfo accountInfo) {
     AuthCodeValidateRequest authCodeValidateRequest = new AuthCodeValidateRequest();
     try {
       authCodeValidateRequest.setUserName(loginRequest.getUsername());
-      authCodeValidateRequest.setAuthCode(loginRequest.getAuthcode());
+      authCodeValidateRequest.setAuthCode(loginRequest.getAuthCode());
       authCodeValidateRequest.setType(AuthCodeTypeEnum.LOGIN.value());
       authCodeService.validate(authCodeValidateRequest);
     } catch (Exception e) {
       publisher
           .publishEvent(LoginEvent.of(false, accountInfo.getAccount(), loginRequest, accountInfo));
-      throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
+      String remainingTimes;
+      try {
+        remainingTimes = String
+            .valueOf(accountAttemptsService.updateFailAttempts(loginRequest.getUsername()));
+      } catch (LockedException e1) {
+        return Pair.of(BizResultVo.of(false, USER_IS_LOCKED), "0");
+      }
+      return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), remainingTimes);
     }
+    return Pair.of(BizResultVo.of(true), "");
   }
 
   public BizResultVo logout(Long uid, String token) {

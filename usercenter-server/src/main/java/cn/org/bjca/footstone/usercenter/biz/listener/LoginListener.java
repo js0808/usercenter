@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz.listener;
 
+import cn.org.bjca.footstone.usercenter.api.vo.request.LoginRequest;
 import cn.org.bjca.footstone.usercenter.biz.AccountAttemptsService;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.LoginLogMapper;
@@ -35,9 +36,11 @@ public class LoginListener {
       accountAttemptsService.resetFailAttempts(loginEvent.getAccount());
     }
     LoginLog record = new LoginLog();
+    LoginRequest request = loginEvent.getRequest();
     record.setAccount(loginEvent.getAccount());
-    record.setClientInfo(loginEvent.getRequest().getClientInfo());
     record.setLoginResult(loginEvent.isLoginSuccess());
+    record.setAppId(request.getAppId());
+    record.setClientInfo(request.getClientInfo());
     AccountInfo accountInfo = loginEvent.getAccountInfo();
     if (accountInfo != null) {
       record.setUid(accountInfo.getUid());
