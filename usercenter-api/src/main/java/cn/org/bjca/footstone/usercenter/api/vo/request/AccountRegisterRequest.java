@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Data
-public class AccountRegisterRequest {
+public class AccountRegisterRequest extends BaseRequest {
 
   @NotBlank(message = "请输入正确的注册帐号")
   private String account;
