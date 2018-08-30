@@ -62,9 +62,7 @@ public class AuthCodeService {
     send.setTemplateId(authCodeConfig.getTemplateId());
     send.setTransId(String.valueOf(System.currentTimeMillis()));
     send.setSignAlgo(authCodeConfig.getSignAlgo());
-    String signStr = SignatureUtils
-        .signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
-    send.setSignature(signStr);
+
     ResponseEntity<ReturnResult<AuthCodeApplyResponse>> responseEntity = null;
     responseEntity = RestUtils.post(authCodeConfig.getCodeUrl(),
         new ParameterizedTypeReference<ReturnResult<AuthCodeApplyResponse>>() {
@@ -129,9 +127,7 @@ public class AuthCodeService {
       send.setTemplateId(authCodeConfig.getTemplateId());
       send.setVersion(authCodeConfig.getVersion());
       send.setAuthCode(request.getAuthCode());
-      String signStr = SignatureUtils
-          .signatureBean(send, SignatureUtils.SIGN_ALGORITHMS_HMAC, authCodeConfig.getSignKey());
-      send.setSignature(signStr);
+
       ResponseEntity<ReturnResult> responseEntity = null;
       responseEntity = post(authCodeConfig.getValidateUrl(), false, ReturnResult.class, send);
       log.info("validate post return:[{}]", JSONObject.toJSONString(responseEntity));
