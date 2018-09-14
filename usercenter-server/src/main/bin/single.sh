@@ -31,6 +31,7 @@ if [ ! -d "$LOG_PATH" ]; then
 fi
 
 JAVA_OPTS="${JAVA_OPTS} -Dlogpath.base=${LOG_PATH}"
+JAVA_OPTS="${JAVA_OPTS} ${EXTRA_OPTS}"
 
 SERVER_ACCESSABLE_IP=$SERVER_ACCESSABLE_IP
 if [ -z "$SERVER_ACCESSABLE_IP" ]; then

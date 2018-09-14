@@ -19,16 +19,16 @@
             <artifactId>usercenter-api</artifactId>
             <version>${api.version}</version>
         </dependency>
-      <dependency>
-        <groupId>cn.org.bjca.footstone.usercenter</groupId>
-        <artifactId>usercenter-dao</artifactId>
-        <version>${api.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpclient</artifactId>
-        <version>4.5</version>
-      </dependency>
+        <dependency>
+          <groupId>cn.org.bjca.footstone.usercenter</groupId>
+          <artifactId>usercenter-dao</artifactId>
+          <version>${api.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+          <version>4.5</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.github.bingoohuang/patchca -->
         <dependency>
             <groupId>com.github.bingoohuang</groupId>
