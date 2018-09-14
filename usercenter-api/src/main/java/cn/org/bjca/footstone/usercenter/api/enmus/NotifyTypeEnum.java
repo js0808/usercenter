@@ -7,7 +7,5 @@ package cn.org.bjca.footstone.usercenter.api.enmus;
  **/
 public enum NotifyTypeEnum {
   NEW,
-  UPDATE,
-  UPDATE_USER,
-  UPDATE_ENT
+  UPDATE
 }

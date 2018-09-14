@@ -8,7 +8,7 @@ import cn.org.bjca.footstone.usercenter.dao.model.AccountAttempts;
  **/
 public interface AccountAttemptsService {
 
-  void updateFailAttempts(String username);
+  int updateFailAttempts(String username);
 
   void resetFailAttempts(String username);
 

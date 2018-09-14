@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Data
-public class AccountChangeRequest {
+public class AccountChangeRequest extends BaseRequest{
 
   @NotBlank(message = "用户标识不能为空")
   @Length(max = 128)

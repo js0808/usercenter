@@ -362,12 +362,12 @@ public class EntInfoService {
     NotifyInfoDataVo notifyInfoDataVo = NotifyInfoDataVo.builder().uid(uid)
         .userType(UserTypeEnum.ENT.name()).build();
     NotifyInfoVo notifyInfoVo = NotifyInfoVo.builder().data(notifyInfoDataVo)
-        .type(NotifyTypeEnum.UPDATE_ENT.name()).timestamp(new Date()).build();
+        .type(NotifyTypeEnum.UPDATE.name()).timestamp(new Date()).build();
 
     NotifyInfo notifyInfo = new NotifyInfo();
     notifyInfo.setUid(uid);
     notifyInfo.setUserType(UserTypeEnum.ENT.name());
-    notifyInfo.setNotifyType(NotifyTypeEnum.UPDATE_ENT.name());
+    notifyInfo.setNotifyType(NotifyTypeEnum.UPDATE.name());
     notifyInfo.setNotifyMsg(JSONObject.toJSONString(notifyInfoVo));
     notifyInfoMapper.insertSelective(notifyInfo);
   }

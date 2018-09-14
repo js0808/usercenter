@@ -17,5 +17,6 @@ public class LoginResponse {
   private String token;
   private long expire;
   private AccountInfoResponse accountInfoResponse;
+  private String lockRemainingTimes;
 
 }

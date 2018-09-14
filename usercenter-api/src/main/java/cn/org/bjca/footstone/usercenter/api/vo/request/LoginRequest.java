@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.api.vo.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -11,13 +12,18 @@ import org.hibernate.validator.constraints.NotBlank;
 @Data
 public class LoginRequest {
 
+  @ApiModelProperty(value = "appId")
+  @NotBlank(message = "应用ID不能为空")
+  @Length(max = 64)
+  private String appId = null;
+
   @NotBlank(message = "用户名不能为空")
   @Length(max = 128)
   private String username;
 
   private String password;
 
-  private String authcode;
+  private String authCode;
 
   private int expireMinutes;
 

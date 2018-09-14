@@ -61,6 +61,7 @@ public class AccountRegisterService {
     info.setAccount(request.getAccount());
     info.setPassword(password);
     info.setVersion(1);
+    info.setAppId(request.getAppId());
     info.setCreateTime(new Date());
     info.setUpdateTime(new Date());
     accountInfoMapper.insertSelective(info);
