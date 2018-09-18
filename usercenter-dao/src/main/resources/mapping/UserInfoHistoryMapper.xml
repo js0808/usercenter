@@ -3,7 +3,7 @@
 <mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.UserInfoHistoryMapper">
   <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="realname_id" jdbcType="INTEGER" property="realnameId" />
     <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="id_type" jdbcType="VARCHAR" property="idType" />
@@ -88,10 +88,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, uid, head_img_url, name, id_type, id_num, mobile, email, real_name_flag, real_name_type, 
-    review_flag, bank_card_num, face_id_image_url, id_card_front_image_url, id_card_back_image_url, 
-    app_id, status, ext_field1, ext_field2, ext_field3, ext_field4, ext_config, version, 
-    create_time, update_time, oper
+    id, realname_id, head_img_url, name, id_type, id_num, mobile, email, real_name_flag, 
+    real_name_type, review_flag, bank_card_num, face_id_image_url, id_card_front_image_url, 
+    id_card_back_image_url, app_id, status, ext_field1, ext_field2, ext_field3, ext_field4, 
+    ext_config, version, create_time, update_time, oper
   </sql>
   <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistoryExample" resultMap="BaseResultMap">
     select
@@ -127,36 +127,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into user_info_history (uid, head_img_url, name, 
-      id_type, id_num, mobile, 
-      email, real_name_flag, real_name_type, 
-      review_flag, bank_card_num, face_id_image_url, 
-      id_card_front_image_url, id_card_back_image_url, 
+    insert into user_info_history (id, realname_id, head_img_url, 
+      name, id_type, id_num, 
+      mobile, email, real_name_flag, 
+      real_name_type, review_flag, bank_card_num, 
+      face_id_image_url, id_card_front_image_url, id_card_back_image_url, 
       app_id, status, ext_field1, 
       ext_field2, ext_field3, ext_field4, 
       ext_config, version, create_time, 
       update_time, oper)
-    values (#{uid,jdbcType=BIGINT}, #{headImgUrl,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{idType,jdbcType=VARCHAR}, #{idNum,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{realNameFlag,jdbcType=INTEGER}, #{realNameType,jdbcType=VARCHAR}, 
-      #{reviewFlag,jdbcType=BIT}, #{bankCardNum,jdbcType=VARCHAR}, #{faceIdImageUrl,jdbcType=VARCHAR}, 
-      #{idCardFrontImageUrl,jdbcType=VARCHAR}, #{idCardBackImageUrl,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{realnameId,jdbcType=INTEGER}, #{headImgUrl,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{idType,jdbcType=VARCHAR}, #{idNum,jdbcType=VARCHAR}, 
+      #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{realNameFlag,jdbcType=INTEGER}, 
+      #{realNameType,jdbcType=VARCHAR}, #{reviewFlag,jdbcType=BIT}, #{bankCardNum,jdbcType=VARCHAR}, 
+      #{faceIdImageUrl,jdbcType=VARCHAR}, #{idCardFrontImageUrl,jdbcType=VARCHAR}, #{idCardBackImageUrl,jdbcType=VARCHAR}, 
       #{appId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, 
       #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, 
       #{extConfig,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{oper,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into user_info_history
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="uid != null">
-        uid,
+      <if test="id != null">
+        id,
+      </if>
+      <if test="realnameId != null">
+        realname_id,
       </if>
       <if test="headImgUrl != null">
         head_img_url,
@@ -232,8 +229,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="uid != null">
-        #{uid,jdbcType=BIGINT},
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="realnameId != null">
+        #{realnameId,jdbcType=INTEGER},
       </if>
       <if test="headImgUrl != null">
         #{headImgUrl,jdbcType=VARCHAR},
@@ -321,8 +321,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=BIGINT},
+      <if test="record.realnameId != null">
+        realname_id = #{record.realnameId,jdbcType=INTEGER},
       </if>
       <if test="record.headImgUrl != null">
         head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
@@ -407,7 +407,7 @@
   <update id="updateByExample" parameterType="map">
     update user_info_history
     set id = #{record.id,jdbcType=INTEGER},
-      uid = #{record.uid,jdbcType=BIGINT},
+      realname_id = #{record.realnameId,jdbcType=INTEGER},
       head_img_url = #{record.headImgUrl,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       id_type = #{record.idType,jdbcType=VARCHAR},
@@ -439,8 +439,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory">
     update user_info_history
     <set>
-      <if test="uid != null">
-        uid = #{uid,jdbcType=BIGINT},
+      <if test="realnameId != null">
+        realname_id = #{realnameId,jdbcType=INTEGER},
       </if>
       <if test="headImgUrl != null">
         head_img_url = #{headImgUrl,jdbcType=VARCHAR},
@@ -519,7 +519,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.org.bjca.footstone.usercenter.dao.model.UserInfoHistory">
     update user_info_history
-    set uid = #{uid,jdbcType=BIGINT},
+    set realname_id = #{realnameId,jdbcType=INTEGER},
       head_img_url = #{headImgUrl,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
       id_type = #{idType,jdbcType=VARCHAR},
@@ -568,22 +568,22 @@
   </select>
   <insert id="batchInsert">
     <if test="items.get(0) != null">
-            insert into user_info_history  (uid, head_img_url, name, 
-        id_type, id_num, mobile, 
-        email, real_name_flag, real_name_type, 
-        review_flag, bank_card_num, face_id_image_url, 
-        id_card_front_image_url, id_card_back_image_url, 
+            insert into user_info_history  (id, realname_id, head_img_url, 
+        name, id_type, id_num, 
+        mobile, email, real_name_flag, 
+        real_name_type, review_flag, bank_card_num, 
+        face_id_image_url, id_card_front_image_url, id_card_back_image_url, 
         app_id, status, ext_field1, 
         ext_field2, ext_field3, ext_field4, 
         ext_config, version, create_time, 
         update_time, oper)
       values
       <foreach collection="items" item="item" index="index" separator=",">
-      (#{item.uid,jdbcType=BIGINT}, #{item.headImgUrl,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, 
-        #{item.idType,jdbcType=VARCHAR}, #{item.idNum,jdbcType=VARCHAR}, #{item.mobile,jdbcType=VARCHAR}, 
-        #{item.email,jdbcType=VARCHAR}, #{item.realNameFlag,jdbcType=INTEGER}, #{item.realNameType,jdbcType=VARCHAR}, 
-        #{item.reviewFlag,jdbcType=BIT}, #{item.bankCardNum,jdbcType=VARCHAR}, #{item.faceIdImageUrl,jdbcType=VARCHAR}, 
-        #{item.idCardFrontImageUrl,jdbcType=VARCHAR}, #{item.idCardBackImageUrl,jdbcType=VARCHAR}, 
+      (#{item.id,jdbcType=INTEGER}, #{item.realnameId,jdbcType=INTEGER}, #{item.headImgUrl,jdbcType=VARCHAR}, 
+        #{item.name,jdbcType=VARCHAR}, #{item.idType,jdbcType=VARCHAR}, #{item.idNum,jdbcType=VARCHAR}, 
+        #{item.mobile,jdbcType=VARCHAR}, #{item.email,jdbcType=VARCHAR}, #{item.realNameFlag,jdbcType=INTEGER}, 
+        #{item.realNameType,jdbcType=VARCHAR}, #{item.reviewFlag,jdbcType=BIT}, #{item.bankCardNum,jdbcType=VARCHAR}, 
+        #{item.faceIdImageUrl,jdbcType=VARCHAR}, #{item.idCardFrontImageUrl,jdbcType=VARCHAR}, #{item.idCardBackImageUrl,jdbcType=VARCHAR}, 
         #{item.appId,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR}, 
         #{item.extField2,jdbcType=VARCHAR}, #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR}, 
         #{item.extConfig,jdbcType=VARCHAR}, #{item.version,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 

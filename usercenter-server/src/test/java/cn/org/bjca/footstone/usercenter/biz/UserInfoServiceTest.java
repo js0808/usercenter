@@ -68,7 +68,7 @@ public class UserInfoServiceTest extends BaseTest {
 
   private UserInfo getUserInfoWithUid(Long uid) {
     UserInfoExample example = new UserInfoExample();
-    example.createCriteria().andUidEqualTo(uid);
+//    example.createCriteria().andUidEqualTo(uid);
     List<UserInfo> userInfos = userInfoMapper.selectByExample(example);
     return userInfos.isEmpty() ? null : userInfos.get(0);
   }

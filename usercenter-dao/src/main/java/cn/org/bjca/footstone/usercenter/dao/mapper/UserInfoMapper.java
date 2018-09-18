@@ -23,7 +23,8 @@ public interface UserInfoMapper {
 
     UserInfo selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") UserInfo record, @Param("example") UserInfoExample example);
+    int updateByExampleSelective(@Param("record") UserInfo record,
+        @Param("example") UserInfoExample example);
 
     int updateByExample(@Param("record") UserInfo record, @Param("example") UserInfoExample example);
 

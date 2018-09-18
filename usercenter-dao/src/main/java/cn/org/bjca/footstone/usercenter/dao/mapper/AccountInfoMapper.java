@@ -23,9 +23,11 @@ public interface AccountInfoMapper {
 
     AccountInfo selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") AccountInfo record, @Param("example") AccountInfoExample example);
+    int updateByExampleSelective(@Param("record") AccountInfo record,
+        @Param("example") AccountInfoExample example);
 
-    int updateByExample(@Param("record") AccountInfo record, @Param("example") AccountInfoExample example);
+    int updateByExample(@Param("record") AccountInfo record,
+        @Param("example") AccountInfoExample example);
 
     int updateByPrimaryKeySelective(AccountInfo record);
 

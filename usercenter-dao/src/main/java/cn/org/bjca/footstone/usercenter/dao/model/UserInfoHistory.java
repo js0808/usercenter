@@ -6,7 +6,7 @@ import java.util.Date;
 public class UserInfoHistory implements Serializable {
     private Integer id;
 
-    private Long uid;
+    private Integer realnameId;
 
     private String headImgUrl;
 
@@ -68,12 +68,12 @@ public class UserInfoHistory implements Serializable {
         this.id = id;
     }
 
-    public Long getUid() {
-        return uid;
+    public Integer getRealnameId() {
+        return realnameId;
     }
 
-    public void setUid(Long uid) {
-        this.uid = uid;
+    public void setRealnameId(Integer realnameId) {
+        this.realnameId = realnameId;
     }
 
     public String getHeadImgUrl() {

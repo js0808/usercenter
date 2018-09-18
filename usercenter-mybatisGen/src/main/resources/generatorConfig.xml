@@ -45,11 +45,14 @@
     <!--<table tableName="test.t_user_info" domainObjectName="User"></table>-->
     <!--<table tableName="%"/>-->
 
-    <table tableName="user_info">
-      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-    </table>
+    <!--<table tableName="ent_info">-->
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    <!--</table>-->
     <table tableName="user_info_history">
-      <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+    </table>
+    <table tableName="ent_info_history">
+      <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
     </table>
 
   </context>

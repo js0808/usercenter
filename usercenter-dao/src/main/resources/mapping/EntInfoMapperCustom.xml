@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapperCustom">
+  <resultMap id="BaseResultMap" type="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="head_img_url" jdbcType="VARCHAR" property="headImgUrl" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="biz_license" jdbcType="VARCHAR" property="bizLicense" />
+    <result column="social_credit_code" jdbcType="VARCHAR" property="socialCreditCode" />
+    <result column="legal_name" jdbcType="VARCHAR" property="legalName" />
+    <result column="legal_id_num" jdbcType="VARCHAR" property="legalIdNum" />
+    <result column="real_name_flag" jdbcType="INTEGER" property="realNameFlag" />
+    <result column="real_name_type" jdbcType="VARCHAR" property="realNameType" />
+    <result column="review_flag" jdbcType="INTEGER" property="reviewFlag" />
+    <result column="biz_license_image_url" jdbcType="VARCHAR" property="bizLicenseImageUrl" />
+    <result column="org_code_image_url" jdbcType="VARCHAR" property="orgCodeImageUrl" />
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="ext_field1" jdbcType="VARCHAR" property="extField1" />
+    <result column="ext_field2" jdbcType="VARCHAR" property="extField2" />
+    <result column="ext_field3" jdbcType="VARCHAR" property="extField3" />
+    <result column="ext_field4" jdbcType="VARCHAR" property="extField4" />
+    <result column="ext_config" jdbcType="VARCHAR" property="extConfig" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="oper" jdbcType="VARCHAR" property="oper" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+
+  <resultMap id="AccountJoin" type="cn.org.bjca.footstone.usercenter.dao.model.EntInfoAccountJoin" extends="BaseResultMap">
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    ei.id, ei.head_img_url, ei.name, ei.phone, ei.org_code, ei.biz_license, ei.social_credit_code, ei.legal_name,
+    ei.legal_id_num, ei.real_name_flag, ei.real_name_type, ei.review_flag, ei.biz_license_image_url,
+    ei.org_code_image_url, ei.app_id, ei.status, ei.ext_field1, ei.ext_field2, ei.ext_field3, ei.ext_field4,
+    ei.ext_config, ei.version, ei.oper, ei.create_time, ei.update_time
+  </sql>
+
+  <select id="selectByUid"  parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM account_info ai JOIN ent_info ei ON ai.realname_id = ei.id WHERE ai.uid = #{id,jdbcType=BIGINT} AND ai.user_type = 'ENT'
+  </select>
+
+  <select id="selectByAccount" parameterType="java.lang.String" resultMap="AccountJoin">
+    SELECT ai.uid,
+    <include refid="Base_Column_List"/>
+    FROM account_info ai JOIN ent_info ei ON ai.realname_id = ei.id WHERE ai.account = #{account,jdbcType=VARCHAR} AND ai.user_type = 'ENT'
+  </select>
+</mapper>

@@ -36,6 +36,7 @@ public class NameMobileVerify extends RealNameVerify {
     if (!IdcardUtil.isIdcard(getUserInfoVo().getIdNum())) {
       return Pair.of(false, "错误的身份证号码");
     }
+
     String mobile = getUserInfoVo().getMobile();
     if (Strings.isNullOrEmpty(mobile) || !Pattern.matches(PATTERN, mobile)) {
       return Pair.of(false, "错误的手机号码");
