@@ -43,7 +43,7 @@ public class OssTest {
     URIBuilder builder = new URIBuilder("http://localhost:10000/download");
     HashMap<String, String> params = Maps.newHashMap();
     params.put("appId", APP_ID);
-    params.put("deviceId", APP_SECRET);
+    params.put("deviceId", DEVICE_ID);
     params.put("version", APP_SECRET_VERSION);
     params.put("signAlgo", SignatureUtils.SIGN_ALGORITHMS_HMACSHA256);
     params.put("id", "a44987a3df85438a9b912586dc2b1dd2");
