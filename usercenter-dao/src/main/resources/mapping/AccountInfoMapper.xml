@@ -8,6 +8,7 @@
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="realname_id" jdbcType="INTEGER" property="realnameId" />
     <result column="user_type" jdbcType="VARCHAR" property="userType" />
     <result column="ext_field1" jdbcType="VARCHAR" property="extField1" />
     <result column="ext_field2" jdbcType="VARCHAR" property="extField2" />
@@ -17,8 +18,8 @@
     <result column="locked_expire_time" jdbcType="TIMESTAMP" property="lockedExpireTime" />
     <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
     <result column="version" jdbcType="INTEGER" property="version" />
-    <result column="app_id" jdbcType="VARCHAR" property="appId"/>
-    <result column="client_info" jdbcType="VARCHAR" property="clientInfo"/>
+    <result column="app_id" jdbcType="VARCHAR" property="appId" />
+    <result column="client_info" jdbcType="VARCHAR" property="clientInfo" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -81,9 +82,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, account_type, account, password, status, uid, user_type, ext_field1, ext_field2, 
-    ext_field3, ext_field4, is_locked, locked_expire_time, last_login_time, version, 
-    app_id, client_info, create_time, update_time
+    id, account_type, account, password, status, uid, realname_id, user_type, ext_field1, 
+    ext_field2, ext_field3, ext_field4, is_locked, locked_expire_time, last_login_time, 
+    version, app_id, client_info, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample" resultMap="BaseResultMap">
     select
@@ -121,18 +122,18 @@
   <insert id="insert" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
     insert into account_info (id, account_type, account, 
       password, status, uid, 
-      user_type, ext_field1, ext_field2, 
-      ext_field3, ext_field4, is_locked, 
-      locked_expire_time, last_login_time, version, 
-      app_id, client_info, create_time, 
-      update_time)
+      realname_id, user_type, ext_field1, 
+      ext_field2, ext_field3, ext_field4, 
+      is_locked, locked_expire_time, last_login_time, 
+      version, app_id, client_info, 
+      create_time, update_time)
     values (#{id,jdbcType=INTEGER}, #{accountType,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{uid,jdbcType=BIGINT}, 
-      #{userType,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, 
-      #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, #{isLocked,jdbcType=BIT}, 
-      #{lockedExpireTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{version,jdbcType=INTEGER}, 
-      #{appId,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{realnameId,jdbcType=INTEGER}, #{userType,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, 
+      #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, 
+      #{isLocked,jdbcType=BIT}, #{lockedExpireTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{version,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, #{clientInfo,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.AccountInfo">
     insert into account_info
@@ -154,6 +155,9 @@
       </if>
       <if test="uid != null">
         uid,
+      </if>
+      <if test="realnameId != null">
+        realname_id,
       </if>
       <if test="userType != null">
         user_type,
@@ -213,6 +217,9 @@
       </if>
       <if test="uid != null">
         #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="realnameId != null">
+        #{realnameId,jdbcType=INTEGER},
       </if>
       <if test="userType != null">
         #{userType,jdbcType=VARCHAR},
@@ -282,6 +289,9 @@
       <if test="record.uid != null">
         uid = #{record.uid,jdbcType=BIGINT},
       </if>
+      <if test="record.realnameId != null">
+        realname_id = #{record.realnameId,jdbcType=INTEGER},
+      </if>
       <if test="record.userType != null">
         user_type = #{record.userType,jdbcType=VARCHAR},
       </if>
@@ -337,6 +347,7 @@
       password = #{record.password,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       uid = #{record.uid,jdbcType=BIGINT},
+      realname_id = #{record.realnameId,jdbcType=INTEGER},
       user_type = #{record.userType,jdbcType=VARCHAR},
       ext_field1 = #{record.extField1,jdbcType=VARCHAR},
       ext_field2 = #{record.extField2,jdbcType=VARCHAR},
@@ -346,8 +357,8 @@
       locked_expire_time = #{record.lockedExpireTime,jdbcType=TIMESTAMP},
       last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       version = #{record.version,jdbcType=INTEGER},
-    app_id = #{record.appId,jdbcType=VARCHAR},
-    client_info = #{record.clientInfo,jdbcType=VARCHAR},
+      app_id = #{record.appId,jdbcType=VARCHAR},
+      client_info = #{record.clientInfo,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -371,6 +382,9 @@
       </if>
       <if test="uid != null">
         uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="realnameId != null">
+        realname_id = #{realnameId,jdbcType=INTEGER},
       </if>
       <if test="userType != null">
         user_type = #{userType,jdbcType=VARCHAR},
@@ -421,6 +435,7 @@
       password = #{password,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       uid = #{uid,jdbcType=BIGINT},
+      realname_id = #{realnameId,jdbcType=INTEGER},
       user_type = #{userType,jdbcType=VARCHAR},
       ext_field1 = #{extField1,jdbcType=VARCHAR},
       ext_field2 = #{extField2,jdbcType=VARCHAR},
@@ -460,21 +475,20 @@
     <if test="items.get(0) != null">
             insert into account_info  (id, account_type, account, 
         password, status, uid, 
-        user_type, ext_field1, ext_field2, 
-        ext_field3, ext_field4, is_locked, 
-        locked_expire_time, last_login_time, version,
-      app_id, client_info, create_time,
-      update_time)
+        realname_id, user_type, ext_field1, 
+        ext_field2, ext_field3, ext_field4, 
+        is_locked, locked_expire_time, last_login_time, 
+        version, app_id, client_info, 
+        create_time, update_time)
       values
       <foreach collection="items" item="item" index="index" separator=",">
       (#{item.id,jdbcType=INTEGER}, #{item.accountType,jdbcType=VARCHAR}, #{item.account,jdbcType=VARCHAR}, 
         #{item.password,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR}, #{item.uid,jdbcType=BIGINT}, 
-        #{item.userType,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR}, #{item.extField2,jdbcType=VARCHAR}, 
-        #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR}, #{item.isLocked,jdbcType=BIT}, 
-        #{item.lockedExpireTime,jdbcType=TIMESTAMP}, #{item.lastLoginTime,jdbcType=TIMESTAMP}, #{item.version,jdbcType=INTEGER},
-        #{item.appId,jdbcType=VARCHAR}, #{item.clientInfo,jdbcType=VARCHAR},
-        #{item.createTime,jdbcType=TIMESTAMP},
-        #{item.updateTime,jdbcType=TIMESTAMP})
+        #{item.realnameId,jdbcType=INTEGER}, #{item.userType,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR}, 
+        #{item.extField2,jdbcType=VARCHAR}, #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR}, 
+        #{item.isLocked,jdbcType=BIT}, #{item.lockedExpireTime,jdbcType=TIMESTAMP}, #{item.lastLoginTime,jdbcType=TIMESTAMP}, 
+        #{item.version,jdbcType=INTEGER}, #{item.appId,jdbcType=VARCHAR}, #{item.clientInfo,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
       </foreach>
     </if>
   </insert>

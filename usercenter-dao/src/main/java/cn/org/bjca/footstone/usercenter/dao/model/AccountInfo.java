@@ -16,6 +16,8 @@ public class AccountInfo implements Serializable {
 
     private Long uid;
 
+    private Integer realnameId;
+
     private String userType;
 
     private String extField1;
@@ -92,6 +94,14 @@ public class AccountInfo implements Serializable {
 
     public void setUid(Long uid) {
         this.uid = uid;
+    }
+
+    public Integer getRealnameId() {
+        return realnameId;
+    }
+
+    public void setRealnameId(Integer realnameId) {
+        this.realnameId = realnameId;
     }
 
     public String getUserType() {

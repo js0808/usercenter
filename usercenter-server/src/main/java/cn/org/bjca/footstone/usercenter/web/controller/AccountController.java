@@ -7,6 +7,7 @@ import cn.org.bjca.footstone.usercenter.api.facade.AccountInfoFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.biz.AccountRegisterService;
@@ -116,5 +117,11 @@ public class AccountController implements AccountInfoFacade {
       metrics.qps().rt().sr_incrTotal();
     }
     return ReturnResult.success("success");
+  }
+
+  @Override
+  public ReturnResult registerByCert(CertRegisterRequest request) {
+    registerService.registerByCert(request);
+    return null;
   }
 }

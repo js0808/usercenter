@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.api.vo.request;
 
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -41,5 +42,9 @@ public class EntInfoRequest extends EntInfoBaseRequest {
   @ApiModelProperty(value = "统一社会信用代码", required = true)
   @Length(max = 256)
   private String socialCreditCode = null;
+
+  @ApiModelProperty(value = "用户UID", required = true)
+  @NotNull
+  private Long uid;
 
 }

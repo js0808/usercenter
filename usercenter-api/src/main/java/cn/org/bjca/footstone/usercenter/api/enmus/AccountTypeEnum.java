@@ -11,7 +11,8 @@ import java.util.HashSet;
 public enum AccountTypeEnum {
 
   MOBILE("MOBILE", "手机号"),
-  EMAIL("EMAIL", "邮箱");
+  EMAIL("EMAIL", "邮箱"),
+  CERT("CERT", "证书");
 
   /**
    * The value.

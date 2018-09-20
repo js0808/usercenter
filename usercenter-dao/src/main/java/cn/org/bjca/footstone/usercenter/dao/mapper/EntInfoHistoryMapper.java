@@ -7,35 +7,34 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 public interface EntInfoHistoryMapper {
+    long countByExample(EntInfoHistoryExample example);
 
-  long countByExample(EntInfoHistoryExample example);
+    int deleteByExample(EntInfoHistoryExample example);
 
-  int deleteByExample(EntInfoHistoryExample example);
+    int deleteByPrimaryKey(Integer id);
 
-  int deleteByPrimaryKey(Integer id);
+    int insert(EntInfoHistory record);
 
-  int insert(EntInfoHistory record);
+    int insertSelective(EntInfoHistory record);
 
-  int insertSelective(EntInfoHistory record);
+    List<EntInfoHistory> selectByExampleWithRowbounds(EntInfoHistoryExample example,
+        RowBounds rowBounds);
 
-  List<EntInfoHistory> selectByExampleWithRowbounds(EntInfoHistoryExample example,
-      RowBounds rowBounds);
+    List<EntInfoHistory> selectByExample(EntInfoHistoryExample example);
 
-  List<EntInfoHistory> selectByExample(EntInfoHistoryExample example);
+    EntInfoHistory selectByPrimaryKey(Integer id);
 
-  EntInfoHistory selectByPrimaryKey(Integer id);
+    int updateByExampleSelective(@Param("record") EntInfoHistory record,
+        @Param("example") EntInfoHistoryExample example);
 
-  int updateByExampleSelective(@Param("record") EntInfoHistory record,
-      @Param("example") EntInfoHistoryExample example);
+    int updateByExample(@Param("record") EntInfoHistory record,
+        @Param("example") EntInfoHistoryExample example);
 
-  int updateByExample(@Param("record") EntInfoHistory record,
-      @Param("example") EntInfoHistoryExample example);
+    int updateByPrimaryKeySelective(EntInfoHistory record);
 
-  int updateByPrimaryKeySelective(EntInfoHistory record);
+    int updateByPrimaryKey(EntInfoHistory record);
 
-  int updateByPrimaryKey(EntInfoHistory record);
+    Long sumByExample(EntInfoHistoryExample example);
 
-  Long sumByExample(EntInfoHistoryExample example);
-
-  void batchInsert(@Param("items") List<EntInfoHistory> items);
+    void batchInsert(@Param("items") List<EntInfoHistory> items);
 }

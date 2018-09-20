@@ -86,11 +86,6 @@ public class EntInfoExample {
         return this;
     }
 
-    public EntInfoExample sumUid() {
-        this.sumCol="uid";
-        return this;
-    }
-
     public EntInfoExample sumHeadImgUrl() {
         this.sumCol="head_img_url";
         return this;
@@ -127,7 +122,7 @@ public class EntInfoExample {
     }
 
     public EntInfoExample sumLegalIdNum() {
-        this.sumCol = "legal_id_num";
+        this.sumCol="legal_id_num";
         return this;
     }
 
@@ -157,7 +152,7 @@ public class EntInfoExample {
     }
 
     public EntInfoExample sumAppId() {
-        this.sumCol = "app_id";
+        this.sumCol="app_id";
         return this;
     }
 
@@ -197,7 +192,7 @@ public class EntInfoExample {
     }
 
     public EntInfoExample sumOper() {
-        this.sumCol = "oper";
+        this.sumCol="oper";
         return this;
     }
 
@@ -331,66 +326,6 @@ public class EntInfoExample {
 
         public Criteria andIdNotBetween(Integer value1, Integer value2) {
             addCriterion("id not between", value1, value2, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidIsNull() {
-            addCriterion("uid is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidIsNotNull() {
-            addCriterion("uid is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidEqualTo(Long value) {
-            addCriterion("uid =", value, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidNotEqualTo(Long value) {
-            addCriterion("uid <>", value, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidGreaterThan(Long value) {
-            addCriterion("uid >", value, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidGreaterThanOrEqualTo(Long value) {
-            addCriterion("uid >=", value, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidLessThan(Long value) {
-            addCriterion("uid <", value, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidLessThanOrEqualTo(Long value) {
-            addCriterion("uid <=", value, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidIn(List<Long> values) {
-            addCriterion("uid in", values, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidNotIn(List<Long> values) {
-            addCriterion("uid not in", values, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidBetween(Long value1, Long value2) {
-            addCriterion("uid between", value1, value2, "uid");
-            return (Criteria) this;
-        }
-
-        public Criteria andUidNotBetween(Long value1, Long value2) {
-            addCriterion("uid not between", value1, value2, "uid");
             return (Criteria) this;
         }
 

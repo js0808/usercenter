@@ -1,8 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
-import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.RESOURCE_NOT_EXIST;
-import static cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum.ENT;
 import static java.util.Objects.isNull;
 
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
@@ -20,10 +18,12 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoHistoryMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapperCustom;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.EntInfoAccountJoin;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory;
 import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
@@ -39,7 +39,6 @@ import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -81,6 +80,12 @@ public class EntInfoService {
 
   @Autowired
   private EntInfoHistoryMapper entInfoHistoryMapper;
+
+  @Autowired
+  private EntInfoMapperCustom entInfoMapperCustom;
+
+  @Autowired
+  private AccountInfoService accountInfoService;
 
   /**
    * 修改企业信息并实名认证
@@ -135,7 +140,6 @@ public class EntInfoService {
     updateEntInfo.setId(entInfoOld.getId());
     updateEntInfo.setHeadImgUrl(entInfoBaseRequest.getHeadImgUrl());
     updateEntInfo.setPhone(entInfoBaseRequest.getPhone());
-    updateEntInfo.setUid(entInfoOld.getUid());
     updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
     int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     if (result != 1) {
@@ -169,6 +173,7 @@ public class EntInfoService {
     EntInfoHistory history = new EntInfoHistory();
     BeanCopy.beans(entInfoHistory, history).copy();
     history.setId(null);
+    history.setRealnameId(entInfoHistory.getId());
     entInfoHistoryMapper.insert(history);
   }
 
@@ -176,10 +181,7 @@ public class EntInfoService {
    * 通过企业UID查询企业信息
    */
   private EntInfo getEntInfoByUid(Long uid) {
-    EntInfoExample entInfoExample = new EntInfoExample();
-    entInfoExample.createCriteria().andUidEqualTo(uid);
-    List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
-    return entInfoList.isEmpty() ? null : entInfoList.get(0);
+    return entInfoMapperCustom.selectByUid(uid);
   }
 
 
@@ -248,9 +250,11 @@ public class EntInfoService {
     //保存ent info
     EntInfo entInfo = new EntInfo();
     BeanCopy.beans(entInfoRequest, entInfo).copy();
-    Long uid = SnowFlake.next();
-    entInfo.setUid(uid);
     entInfo.setRealNameFlag(1);
+
+    AccountInfo account = getAccount(entInfoRequest.getUid());
+    //更新Account表时需要
+
     try {
       entInfoMapper.insertSelective(entInfo);
     } catch (DuplicateKeyException e) {
@@ -260,8 +264,16 @@ public class EntInfoService {
     //更新账号表UID
 //    bindUidByAccount(entInfoRequest.getOper(),uid);
     EntInfoResponse response = new EntInfoResponse();
-    response.setUid(entInfo.getUid());
+    response.setUid(entInfoRequest.getUid());
     return response;
+  }
+
+  private AccountInfo getAccount(Long uid) {
+    AccountInfo account = accountInfoService.findAccountInfoByUid(uid);
+    if (isNull(account)) {
+      throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
+    }
+    return account;
   }
 
   private void bindUidByAccount(String account, Long uid) {
@@ -333,29 +345,21 @@ public class EntInfoService {
     if (Strings.isNullOrEmpty(account)) {
       return null;
     }
-    Long uid = getUidFromAccount(account);
-    if (isNull(uid)) {
-      throw new BaseException(ACCOUNT_NOT_EXIT_ERROR);
-    }
-    QueryEntInfoResponse info = getEntInfo(uid);
-    if (isNull(info)) {
+    QueryEntInfoResponse response = getUidFromAccount(account);
+    if (isNull(response)) {
       throw new BaseException(RESOURCE_NOT_EXIST);
     }
-    return info;
+    return response;
   }
 
-  private Long getUidFromAccount(String account) {
-    AccountInfoExample example = new AccountInfoExample();
-    example.createCriteria().andAccountEqualTo(account);
-    List<AccountInfo> accountInfos = accountInfoMapper.selectByExample(example);
-    if (accountInfos.isEmpty()) {
+  private QueryEntInfoResponse getUidFromAccount(String account) {
+    EntInfoAccountJoin join = entInfoMapperCustom.selectByAccount(account);
+    if (isNull(join)) {
       return null;
     }
-    AccountInfo accountInfo = accountInfos.get(0);
-    if (!Objects.equals(ENT.toString(), accountInfo.getUserType())) {
-      return null;
-    }
-    return accountInfo.getUid();
+    QueryEntInfoResponse resp = new QueryEntInfoResponse();
+    BeanCopy.beans(join, resp).copy();
+    return resp;
   }
 
   private void saveUpdateNotifyInfo(Long uid) {

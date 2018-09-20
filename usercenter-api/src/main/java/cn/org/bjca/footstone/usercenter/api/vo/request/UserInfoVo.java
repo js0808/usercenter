@@ -35,4 +35,6 @@ public class UserInfoVo {
 
   private String appId;
 
+  private Long uid;
+
 }

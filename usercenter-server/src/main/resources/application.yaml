@@ -99,3 +99,5 @@ account:
     attempts-duration-minutes: @attempts-duration-minutes@
     locked-expire-minutes: @locked-expire-minutes@
     token-expire-minutes: @token-expire-minutes@
+signService:
+  verifySign-url: @verifySign.url@

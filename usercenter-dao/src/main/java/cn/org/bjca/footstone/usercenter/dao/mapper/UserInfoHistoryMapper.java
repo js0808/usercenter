@@ -17,15 +17,18 @@ public interface UserInfoHistoryMapper {
 
     int insertSelective(UserInfoHistory record);
 
-    List<UserInfoHistory> selectByExampleWithRowbounds(UserInfoHistoryExample example, RowBounds rowBounds);
+    List<UserInfoHistory> selectByExampleWithRowbounds(UserInfoHistoryExample example,
+        RowBounds rowBounds);
 
     List<UserInfoHistory> selectByExample(UserInfoHistoryExample example);
 
     UserInfoHistory selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") UserInfoHistory record, @Param("example") UserInfoHistoryExample example);
+    int updateByExampleSelective(@Param("record") UserInfoHistory record,
+        @Param("example") UserInfoHistoryExample example);
 
-    int updateByExample(@Param("record") UserInfoHistory record, @Param("example") UserInfoHistoryExample example);
+    int updateByExample(@Param("record") UserInfoHistory record,
+        @Param("example") UserInfoHistoryExample example);
 
     int updateByPrimaryKeySelective(UserInfoHistory record);
 
