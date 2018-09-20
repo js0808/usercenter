@@ -37,6 +37,7 @@ public class SignatureUtils {
   public static final String SIGN_ALGORITHMS_SHA256RSA = "SHA256withRSA";
   public static final String SIGN_ALGORITHMS_MD5RSA = "MD5WithRSA";
   public static final String SIGN_ALGORITHMS_HMAC = "HmacSHA256";
+  public static final String SIGN_ALGORITHMS_HMACSHA256 = "HmacSHA256";
   //签名类型
   public static final String ALGORITHMS_RSA = "RSA";
   public static final String ENCODING_CHARSET_UTF8 = "UTF-8";
@@ -73,7 +74,7 @@ public class SignatureUtils {
       if (StringUtils.equals(signType, SIGN_ALGORITHMS_SHA256RSA)) {
         PrivateKey priKey = convertPrivateKey(privateKey);
         return sign(generateSignString(bean), priKey, SIGN_ALGORITHMS_SHA1RSA);
-      } else if (StringUtils.equals(signType, SIGN_ALGORITHMS_HMAC)) {
+      } else if (StringUtils.equals(signType, SIGN_ALGORITHMS_HMAC) || StringUtils.equals(signType, SIGN_ALGORITHMS_HMACSHA256)) {
         return HMAC(generateSignString(bean).getBytes(ENCODING_CHARSET_UTF8),
             privateKey.getBytes(ENCODING_CHARSET_UTF8), signType);
       } else {
@@ -423,9 +424,7 @@ public class SignatureUtils {
   }
 
   /**
-   * 校验对象的签名，传入签名忽略属性名,支持RAS签名和摘要算法签名
-   * 　当签名算法为MD5，SHA1时，使用摘要算法验签
-   * 当签名算法为SHA1RSA,MD5RSA时，使用RSA公钥验签，此时sign为Base64编码的签名数据
+   * 校验对象的签名，传入签名忽略属性名,支持RAS签名和摘要算法签名 　当签名算法为MD5，SHA1时，使用摘要算法验签 当签名算法为SHA1RSA,MD5RSA时，使用RSA公钥验签，此时sign为Base64编码的签名数据
    *
    * @param bean 签名的对象
    * @param sign 签名数据
