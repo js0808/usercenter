@@ -11,6 +11,8 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountCheckResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
@@ -239,5 +241,11 @@ public class AccountRegisterService {
       log.error("验证签名和证书通信异常,http状态码[{}],请求数据[{}]", response.getStatusCodeValue(), reqJson);
       throw new BaseException(ReturnCodeEnum.ID_SERVICE_CONN_ERROR);
     }
+  }
+
+  public AccountCheckResponse accountInfo(String account) {
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(account);
+    return (accountInfo == null) ? AccountCheckResponse.of(false, null)
+        : AccountCheckResponse.of(true, accountInfo.getAccount());
   }
 }

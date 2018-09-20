@@ -2,6 +2,7 @@ package cn.org.bjca.footstone.usercenter.api.facade;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
@@ -48,4 +49,9 @@ public interface AccountInfoFacade {
   @RequestMapping(value = "/register/cert", method = RequestMethod.POST)
   @ResponseBody
   ReturnResult registerByCert(CertRegisterRequest request);
+
+  @ApiOperation(value = "账号是否存才", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "账号是否存在")
+  @RequestMapping(value = "/checkAccount", method = RequestMethod.GET)
+  @ResponseBody
+  ReturnResult checkAccount(AccountInfoRequest accountInfoRequest);
 }

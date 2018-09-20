@@ -5,6 +5,7 @@ import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.facade.AccountInfoFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.AccountInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
@@ -123,5 +124,10 @@ public class AccountController implements AccountInfoFacade {
   public ReturnResult registerByCert(CertRegisterRequest request) {
     registerService.registerByCert(request);
     return null;
+  }
+
+  @Override
+  public ReturnResult checkAccount(AccountInfoRequest accountInfoRequest) {
+    return ReturnResult.success(registerService.accountInfo(accountInfoRequest.getAccount()));
   }
 }
