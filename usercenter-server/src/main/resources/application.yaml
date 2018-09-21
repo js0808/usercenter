@@ -104,6 +104,7 @@ account:
     token-expire-minutes: @token-expire-minutes@
 signService:
   verifySign-url: @verifySign.url@
+  parseCertUid-url: @parseCertUid.url@
 images:
   download-url: @bedrock-oss.download.url@
   upload-url: @bedrock-oss.upload.url@

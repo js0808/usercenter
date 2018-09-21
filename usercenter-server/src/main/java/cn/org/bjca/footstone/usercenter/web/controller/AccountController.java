@@ -8,9 +8,10 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.CertRegisterResponse;
 import cn.org.bjca.footstone.usercenter.biz.AccountRegisterService;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class AccountController implements AccountInfoFacade {
 
   @Override
   public ReturnResult register(@Validated @RequestBody AccountRegisterRequest request) {
-    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "帐号注册", "帐号注册交易");
+    MetricsClient metrics = MetricsClient.newInstance("对外服务", "帐号注册", "帐号注册交易");
     try {
       registerService.accountRegister(request);
       metrics.sr_incrSuccess();
@@ -50,7 +51,7 @@ public class AccountController implements AccountInfoFacade {
 
   @Override
   public ReturnResult resetPassword(@Validated @RequestBody ResetPasswordRequest request) {
-    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "密码重置", "密码重置交易");
+    MetricsClient metrics = MetricsClient.newInstance("对外服务", "密码重置", "密码重置交易");
     try {
       registerService.resetPassword(request);
       metrics.sr_incrSuccess();
@@ -68,7 +69,7 @@ public class AccountController implements AccountInfoFacade {
 
   @Override
   public ReturnResult accountStatus(@Validated @RequestBody AccountStatusUpdateRequest request) {
-    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "帐号状态", "帐号状态变更");
+    MetricsClient metrics = MetricsClient.newInstance("对外服务", "帐号状态", "帐号状态变更");
     try {
       registerService.accountStatus(request);
       metrics.sr_incrSuccess();
@@ -86,7 +87,7 @@ public class AccountController implements AccountInfoFacade {
 
   @Override
   public ReturnResult modifyPassword(@Validated @RequestBody ModifyPasswordRequest request) {
-    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "修改密码");
+    MetricsClient metrics = MetricsClient.newInstance("对外服务", "修改密码");
     try {
       registerService.modifyPassword(request);
       metrics.sr_incrSuccess();
@@ -104,7 +105,7 @@ public class AccountController implements AccountInfoFacade {
 
   @Override
   public ReturnResult accountChange(@Validated @RequestBody AccountChangeRequest request) {
-    MetricsClient metrics = MetricsClient.newInstance("用户中心服务器", "登录帐号变更");
+    MetricsClient metrics = MetricsClient.newInstance("对外服务", "登录帐号变更");
     try {
       registerService.accountChange(request);
       metrics.sr_incrSuccess();
@@ -121,9 +122,17 @@ public class AccountController implements AccountInfoFacade {
   }
 
   @Override
-  public ReturnResult registerByCert(CertRegisterRequest request) {
-    registerService.registerByCert(request);
-    return null;
+  public ReturnResult registerByCert(@Validated @RequestBody RegisterCertRequest request) {
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "证书注册");
+    try {
+      CertRegisterResponse response = registerService.registerByCert(request);
+      metricsClient.sr_incrSuccess();
+      return ReturnResult.success(response);
+    } catch (Exception e) {
+      throw e;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
   }
 
   @Override
