@@ -41,7 +41,7 @@ public class InteractionLogInterceptor {
             try {
                 rvt = joinPoint.proceed(joinPoint.getArgs());
 
-                resultStr = JSON.toJSONString(rvt);
+//                resultStr = JSON.toJSONString(rvt);
                 // 将结果输出到日志, 超出500字符进行截取
                 //  logger.info("[{}]结果:{}", startTime, StringUtils.substring(resultStr, 0, 500));
                 // 将耗时超过1秒的Restful API输出到日志

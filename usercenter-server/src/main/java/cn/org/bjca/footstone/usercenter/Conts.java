@@ -17,4 +17,6 @@ public interface Conts {
 
   int CAPTCHA_EXPIRE_MIN = 5;
 
+  String SAVED = "SAVED";
+
 }

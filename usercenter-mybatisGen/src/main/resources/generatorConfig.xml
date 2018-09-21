@@ -48,12 +48,14 @@
     <!--<table tableName="ent_info">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <table tableName="user_info_history">
+    <!--<table tableName="user_info_history">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    </table>
-    <table tableName="ent_info_history">
+    <!--</table>-->
+    <!--<table tableName="ent_info_history">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+    <!--</table>-->
+    <table tableName="images">
+      <generatedKey column="id" sqlStatement="MySql" identity="true" />
     </table>
-
   </context>
 </generatorConfiguration>

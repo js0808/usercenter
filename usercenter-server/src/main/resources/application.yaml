@@ -49,6 +49,9 @@ spring:
     max-pool-size: @spring.max-pool-size@
     queue-capacity: @spring.queue-capacity@
     keep-alive-seconds: @spring.keep-alive-seconds@
+  http:
+    multipart:
+      max-file-size: 3MB
 server:
   port: @server.port@
   connection-timeout: 40000
@@ -101,3 +104,6 @@ account:
     token-expire-minutes: @token-expire-minutes@
 signService:
   verifySign-url: @verifySign.url@
+images:
+  download-url: @bedrock-oss.download.url@
+  upload-url: @bedrock-oss.upload.url@

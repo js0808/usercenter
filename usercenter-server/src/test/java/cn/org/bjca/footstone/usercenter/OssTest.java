@@ -46,7 +46,7 @@ public class OssTest {
     params.put("deviceId", DEVICE_ID);
     params.put("version", APP_SECRET_VERSION);
     params.put("signAlgo", SignatureUtils.SIGN_ALGORITHMS_HMACSHA256);
-    params.put("id", "a44987a3df85438a9b912586dc2b1dd2");
+    params.put("id", "f32b60c187d94fce8d9b8285b97fc0e3");
     String signStr = SignatureUtils
         .signatureBean(params, SignatureUtils.SIGN_ALGORITHMS_HMACSHA256, APP_SECRET);
     params.put("signature", signStr);
