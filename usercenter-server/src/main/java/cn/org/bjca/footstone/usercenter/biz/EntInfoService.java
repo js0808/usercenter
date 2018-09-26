@@ -1,7 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
-import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.RESOURCE_NOT_EXIST;
 import static java.util.Objects.isNull;
 
 import cn.org.bjca.footstone.usercenter.api.enmus.NotifyTypeEnum;
@@ -23,16 +22,16 @@ import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoHistoryMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapperCustom;
-import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoVerifyRequestMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
+import cn.org.bjca.footstone.usercenter.dao.mapper.RealNameVerifyRequestMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoAccountJoin;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory;
-import cn.org.bjca.footstone.usercenter.dao.model.EntInfoVerifyRequest;
-import cn.org.bjca.footstone.usercenter.dao.model.EntInfoVerifyRequestExample;
 import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.RealNameVerifyRequest;
+import cn.org.bjca.footstone.usercenter.dao.model.RealNameVerifyRequestExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
@@ -82,7 +81,7 @@ public class EntInfoService {
   private EntRealNameVerify entRealNameVerify;
 
   @Autowired
-  private EntInfoVerifyRequestMapper entInfoVerifyReqMapper;
+  private RealNameVerifyRequestMapper verifyRequestMapper;
 
   /**
    * 修改企业信息并实名认证
@@ -279,7 +278,7 @@ public class EntInfoService {
     }
     QueryEntInfoResponse response = getUidFromAccount(account);
     if (isNull(response)) {
-      throw new BaseException(RESOURCE_NOT_EXIST);
+      throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
     }
     return response;
   }
@@ -315,18 +314,32 @@ public class EntInfoService {
     //检查账号
     AccountInfo account = getAccount(request.getUid());
     if (isNull(account)) {
-      throw new BaseException(ACCOUNT_NOT_EXIT_ERROR);
+      throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
+    }
+    //uid查询企业用户
+    EntInfo entInfo = getEntInfoByUid(request.getUid());
+    if (isNull(entInfo)) {
+      throw new BaseException(ReturnCodeEnum.USER_NOT_EXIST);
     }
     String transId = String.valueOf(SnowFlake.next());
-    EntInfoVerifyRequest verifyRequest = new EntInfoVerifyRequest();
+    RealNameVerifyRequest verifyRequest = new RealNameVerifyRequest();
     verifyRequest.setUid(account.getUid());
     //可能不存在
     verifyRequest.setRealNameId(account.getRealnameId());
     verifyRequest.setRealNameType(RealNameTypeEnum.ENT_PAY.value());
     //发起打款
     String idsTransId = entRealNameVerify.entPayVerify(transId, request);
+    //更新企业用户银行信息
+    EntInfo updateEntInfo = new EntInfo();
+    updateEntInfo.setId(entInfo.getId());
+    updateEntInfo.setBankAccount(request.getBankAccount());
+    updateEntInfo.setBankName(request.getBankName());
+    updateEntInfo.setBankAddressCode(request.getBankAddressCode());
+    updateEntInfo.setVersion(entInfo.getVersion() + 1);
+    entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
+    //添加验证记录
     verifyRequest.setIdsTransId(idsTransId);
-    entInfoVerifyReqMapper.insertSelective(verifyRequest);
+    verifyRequestMapper.insertSelective(verifyRequest);
     return EntPayVerifyResponse.builder().queryTransId(idsTransId).build();
   }
 
@@ -337,25 +350,41 @@ public class EntInfoService {
     //检查账号
     AccountInfo account = getAccount(request.getUid());
     if (isNull(account)) {
-      throw new BaseException(ACCOUNT_NOT_EXIT_ERROR);
+      throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
     }
     String transId = String.valueOf(SnowFlake.next());
     //发起打款
     Map<String, Object> resultMap = entRealNameVerify.entPayQuery(transId, request);
-    EntInfoVerifyRequest verifyRequest = new EntInfoVerifyRequest();
+    RealNameVerifyRequest verifyRequest = new RealNameVerifyRequest();
     Integer status = (Integer) resultMap.get("status");
     String message = (String) resultMap.get("message");
     verifyRequest.setStatus(String.valueOf(status));
     verifyRequest.setMessage(message);
 
-    EntInfoVerifyRequestExample example = new EntInfoVerifyRequestExample();
+    RealNameVerifyRequestExample example = new RealNameVerifyRequestExample();
     example.createCriteria().andUidEqualTo(account.getUid())
         .andIdsTransIdEqualTo(request.getQueryTransId());
     //更新
-    int rows = entInfoVerifyReqMapper.updateByExampleSelective(verifyRequest, example);
+    int rows = verifyRequestMapper.updateByExampleSelective(verifyRequest, example);
+    if (rows != 1) {
+      throw new BaseException(ReturnCodeEnum.REAL_NAME_VERIFY_REQ_NOT_EXIST);
+    }
     //返回
     if (status != IdServiceBaseRespVo.OK) {
       throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, message);
+    } else {
+      //uid查询企业用户
+      EntInfo entInfo = getEntInfoByUid(request.getUid());
+      if (isNull(entInfo)) {
+        throw new BaseException(ReturnCodeEnum.USER_NOT_EXIST);
+      }
+      //更新企业用户实名方式
+      EntInfo updateEntInfo = new EntInfo();
+      updateEntInfo.setId(entInfo.getId());
+      updateEntInfo
+          .setRealNameType(entInfo.getRealNameType() + "," + RealNameTypeEnum.ENT_PAY.value());
+      updateEntInfo.setVersion(entInfo.getVersion() + 1);
+      entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     }
   }
 }

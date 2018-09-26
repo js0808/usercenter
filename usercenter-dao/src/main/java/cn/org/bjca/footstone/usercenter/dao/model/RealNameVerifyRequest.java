@@ -3,7 +3,7 @@ package cn.org.bjca.footstone.usercenter.dao.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class EntInfoVerifyRequest implements Serializable {
+public class RealNameVerifyRequest implements Serializable {
 
   private Integer id;
 

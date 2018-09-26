@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EntInfoVerifyRequestExample {
+public class RealNameVerifyRequestExample {
 
   protected String orderByClause;
 
@@ -18,7 +18,7 @@ public class EntInfoVerifyRequestExample {
 
   private Integer limit;
 
-  public EntInfoVerifyRequestExample() {
+  public RealNameVerifyRequestExample() {
     oredCriteria = new ArrayList<Criteria>();
   }
 
@@ -82,62 +82,62 @@ public class EntInfoVerifyRequestExample {
     this.sumCol = sumCol;
   }
 
-  public EntInfoVerifyRequestExample sumId() {
+  public RealNameVerifyRequestExample sumId() {
     this.sumCol = "id";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumRealNameId() {
+  public RealNameVerifyRequestExample sumRealNameId() {
     this.sumCol = "real_name_id";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumUid() {
+  public RealNameVerifyRequestExample sumUid() {
     this.sumCol = "uid";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumIdsTransId() {
+  public RealNameVerifyRequestExample sumIdsTransId() {
     this.sumCol = "ids_trans_id";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumStatus() {
+  public RealNameVerifyRequestExample sumStatus() {
     this.sumCol = "status";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumMessage() {
+  public RealNameVerifyRequestExample sumMessage() {
     this.sumCol = "message";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumRealNameType() {
+  public RealNameVerifyRequestExample sumRealNameType() {
     this.sumCol = "real_name_type";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumExtField1() {
+  public RealNameVerifyRequestExample sumExtField1() {
     this.sumCol = "ext_field1";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumExtField2() {
+  public RealNameVerifyRequestExample sumExtField2() {
     this.sumCol = "ext_field2";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumVersion() {
+  public RealNameVerifyRequestExample sumVersion() {
     this.sumCol = "version";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumCreateTime() {
+  public RealNameVerifyRequestExample sumCreateTime() {
     this.sumCol = "create_time";
     return this;
   }
 
-  public EntInfoVerifyRequestExample sumUpdateTime() {
+  public RealNameVerifyRequestExample sumUpdateTime() {
     this.sumCol = "update_time";
     return this;
   }
@@ -158,7 +158,7 @@ public class EntInfoVerifyRequestExample {
     this.limit = limit;
   }
 
-  public EntInfoVerifyRequestExample page(int offset, int limit) {
+  public RealNameVerifyRequestExample page(int offset, int limit) {
     this.offset = offset;
     this.limit = limit;
     return this;

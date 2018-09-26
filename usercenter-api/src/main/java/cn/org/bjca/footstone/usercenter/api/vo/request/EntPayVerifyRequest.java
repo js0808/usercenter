@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @description:发起企业打款请求
@@ -14,22 +15,22 @@ import org.hibernate.validator.constraints.Length;
 public class EntPayVerifyRequest extends EntInfoBaseRequest {
 
   @ApiModelProperty(value = "账号", required = true)
-  @NotNull
+  @NotBlank
   @Length(max = 64)
   private String bankAccount = null;
 
   @ApiModelProperty(value = "账户名", required = true)
-  @NotNull
+  @NotBlank
   @Length(max = 128)
   private String accountName = null;
 
   @ApiModelProperty(value = "开户行", required = true)
-  @NotNull
+  @NotBlank
   @Length(max = 128)
   private String bankName = null;
 
   @ApiModelProperty(value = "开户行编码", required = true)
-  @NotNull
+  @NotBlank
   @Length(max = 64)
   private String bankAddressCode = null;
 

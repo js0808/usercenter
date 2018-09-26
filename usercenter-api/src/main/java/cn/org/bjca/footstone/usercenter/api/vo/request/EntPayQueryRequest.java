@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.api.vo.request;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * @description:发起企业打款请求
@@ -13,11 +14,11 @@ import lombok.Data;
 public class EntPayQueryRequest extends EntInfoBaseRequest {
 
   @ApiModelProperty(value = "查询ID", required = true)
-  @NotNull
+  @NotBlank
   private String queryTransId = null;
 
   @ApiModelProperty(value = "验证码", required = true)
-  @NotNull
+  @NotBlank
   private String verifyCode = null;
 
   @ApiModelProperty(value = "用户UID", required = true)

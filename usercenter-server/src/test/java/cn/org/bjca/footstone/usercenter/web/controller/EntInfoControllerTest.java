@@ -48,7 +48,7 @@ public class EntInfoControllerTest extends BaseTest {
     request.setAppId("111111");
     request.setDeviceId("bjca");
     request.setUid(82538652999340032L);
-    request.setQueryTransId("97287753502371840");
+    request.setQueryTransId("97344192765833216");
     request.setVerifyCode("123456");
     String responseString = mockMvc.perform(
         get("/entinfos/payVerify").content(JSON.toJSONString(request))
