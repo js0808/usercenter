@@ -4,13 +4,13 @@ import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.RestUtils;
+import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.GetCertUidReqVo;
 import cn.org.bjca.footstone.usercenter.vo.VerifySignReqVo;
 import cn.org.bjca.footstone.usercenter.vo.VerifySignRespVo;
 import com.alibaba.fastjson.JSONObject;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +36,7 @@ public class VerifySignCertService {
    */
   public void verifySignAndCert(String appId, String sign, String source, String userCert) {
     VerifySignReqVo verifySignReqVo = new VerifySignReqVo();
-    verifySignReqVo.setTransId(RandomStringUtils.randomNumeric(32));
+    verifySignReqVo.setTransId(String.valueOf(SnowFlake.next()));
     verifySignReqVo.setSignAlgIdentifier("SHA1withRSA");
     verifySignReqVo.setAppId(appId);
     verifySignReqVo.setSignValue(sign);
@@ -75,7 +75,7 @@ public class VerifySignCertService {
 
   public String getCertUid(String cert, String appId) {
     GetCertUidReqVo getCertUidReqVo = new GetCertUidReqVo();
-    getCertUidReqVo.setTransId(RandomStringUtils.randomNumeric(32));
+    getCertUidReqVo.setTransId(String.valueOf(SnowFlake.next()));
     getCertUidReqVo.setAppId(appId);
 //    getCertUidReqVo.setBase64Cert(cert);
     getCertUidReqVo.setBase64Cert(

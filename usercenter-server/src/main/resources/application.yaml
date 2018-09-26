@@ -91,7 +91,9 @@ authcode:
 idservice:
   user-name: @idservice.userName@
   password: @idservice.password@
-  check-enterprise: @idservice.check.ent@
+  ent-base: @idservice.ent.base@
+  ent-pay-verify: @idservice.ent.payVerify@
+  ent-pay-verify-query: @idservice.ent.payVerifyQuery@
 usercenter:
   realname-host: @realname.host@
   username: ${idservice.userName}

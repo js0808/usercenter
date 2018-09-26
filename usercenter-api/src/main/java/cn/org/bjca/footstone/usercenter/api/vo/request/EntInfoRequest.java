@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
- * @description:需实名企业信息
+ * @description:需实名企业信息,实名后创建企业用户
  * @author: ZHAOZHIWEI
  * @create: 2018/8/13
  **/
@@ -41,6 +41,7 @@ public class EntInfoRequest extends EntInfoBaseRequest {
 
   @ApiModelProperty(value = "统一社会信用代码", required = true)
   @Length(max = 256)
+  @NotBlank
   private String socialCreditCode = null;
 
   @ApiModelProperty(value = "用户UID", required = true)
