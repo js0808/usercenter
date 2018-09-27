@@ -72,7 +72,7 @@ public interface EntInfoFacade {
   public ReturnResult updateEntInfoSimple(@PathVariable Long uid,
       @RequestBody @Validated EntInfoBaseRequest entInfoBaseRequest);
 
-  @ApiOperation(value = "发起企业打款，打款附言为验证码", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "发起企业打款，打款附言为验证码")
+  @ApiOperation(value = "发起企业打款，打款附言为验证码", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "发起企业打款，打款附言为验证码")
   @ApiImplicitParams(value = {
       @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayRequest payload", required = true, paramType = "body", dataType = "EntPayRequest")
   })
