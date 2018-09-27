@@ -9,10 +9,12 @@ import cn.org.bjca.footstone.usercenter.Conts;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.LoginCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
 import cn.org.bjca.footstone.usercenter.biz.listener.LoginEvent;
+import cn.org.bjca.footstone.usercenter.biz.signverify.VerifySignCertService;
 import cn.org.bjca.footstone.usercenter.config.AccountLoginConfig;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
@@ -24,6 +26,7 @@ import cn.org.bjca.footstone.usercenter.vo.LoginTokenVo;
 import com.google.common.base.Joiner;
 import java.util.Calendar;
 import java.util.Date;
+import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
@@ -58,6 +61,9 @@ public class LoginService {
 
   @Autowired
   private ApplicationEventPublisher publisher;
+
+  @Autowired
+  private VerifySignCertService verifySignAndCert;
 
   public Pair<BizResultVo, LoginResponse> loginWithPassword(LoginRequest loginRequest) {
     if (StringUtils.isBlank(loginRequest.getPassword()) && StringUtils
@@ -183,4 +189,29 @@ public class LoginService {
     Conts.ACCOUNT_INFO_TO_RESPONSE.copy(accountInfo, response, null);
     return Pair.of(BizResultVo.of(true), response);
   }
+
+  public Pair<BizResultVo, LoginResponse> loginWithCert(LoginCertRequest request) {
+    //验证签名和证书
+    verifySignAndCert.verifySignAndCert(request.getAppId(), request.getSign(), request.getSource(),
+        request.getUserCert());
+    //获取证书唯一标识
+    String certId = verifySignAndCert.getCertUid(request.getUserCert(), request.getAppId());
+    log.debug("证书登录，证书唯一标识:{}", certId);
+    AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(certId);
+    // 账号不存在
+    if (accountInfo == null) {
+      return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), null);
+    }
+    // 账号被锁定
+    if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
+        .after(new Date())) {
+      return Pair.of(BizResultVo.of(false, USER_IS_LOCKED), null);
+    }
+    LoginRequest loginRequest = new LoginRequest();
+    BeanCopy.beans(request, loginRequest).copy();
+    LoginResponse response = buildLoginResponse(loginRequest, accountInfo);
+    return Pair.of(BizResultVo.of(true), response);
+  }
+
+
 }

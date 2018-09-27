@@ -32,6 +32,18 @@ public class EntInfo implements Serializable {
 
     private String orgCodeImageUrl;
 
+    private String legalIdFrontImageUrl;
+
+    private String legalIdBackImageUrl;
+
+    private String accountName;
+
+    private String bankAccount;
+
+    private String bankName;
+
+    private String bankAddressCode;
+
     private String appId;
 
     private String status;
@@ -168,6 +180,55 @@ public class EntInfo implements Serializable {
 
     public void setOrgCodeImageUrl(String orgCodeImageUrl) {
         this.orgCodeImageUrl = orgCodeImageUrl == null ? null : orgCodeImageUrl.trim();
+    }
+
+    public String getLegalIdFrontImageUrl() {
+        return legalIdFrontImageUrl;
+    }
+
+    public void setLegalIdFrontImageUrl(String legalIdFrontImageUrl) {
+        this.legalIdFrontImageUrl =
+            legalIdFrontImageUrl == null ? null : legalIdFrontImageUrl.trim();
+    }
+
+    public String getLegalIdBackImageUrl() {
+        return legalIdBackImageUrl;
+    }
+
+    public void setLegalIdBackImageUrl(String legalIdBackImageUrl) {
+        this.legalIdBackImageUrl = legalIdBackImageUrl == null ? null : legalIdBackImageUrl.trim();
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName == null ? null : accountName.trim();
+    }
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount == null ? null : bankAccount.trim();
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBankAddressCode() {
+        return bankAddressCode;
+    }
+
+    public void setBankAddressCode(String bankAddressCode) {
+        this.bankAddressCode = bankAddressCode == null ? null : bankAddressCode.trim();
     }
 
     public String getAppId() {

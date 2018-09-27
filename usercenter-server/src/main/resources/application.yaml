@@ -91,7 +91,9 @@ authcode:
 idservice:
   user-name: @idservice.userName@
   password: @idservice.password@
-  check-enterprise: @idservice.check.ent@
+  ent-base: @idservice.ent.base@
+  ent-pay-verify: @idservice.ent.payVerify@
+  ent-pay-verify-query: @idservice.ent.payVerifyQuery@
 usercenter:
   username: ${idservice.userName}
   password: ${idservice.password}
@@ -104,6 +106,7 @@ account:
     token-expire-minutes: @token-expire-minutes@
 signService:
   verifySign-url: @verifySign.url@
+  parseCertUid-url: @parseCertUid.url@
 images:
   download-url: @bedrock-oss.download.url@
   upload-url: @bedrock-oss.upload.url@

@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 public class IdServiceBaseRespVo {
 
-  public static final String OK = "000000";
-  private String resultCode = null;
-  private String resultMessage = null;
-  private String transactionId = null;
+  public static final int OK = 200;
+//  private String resultCode = null;
+//  private String resultMessage = null;
+//  private String transactionId = null;
 }
