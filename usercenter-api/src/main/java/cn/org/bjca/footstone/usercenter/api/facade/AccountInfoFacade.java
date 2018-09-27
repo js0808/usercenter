@@ -5,8 +5,8 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,10 +45,10 @@ public interface AccountInfoFacade {
   @ResponseBody
   ReturnResult accountChange(AccountChangeRequest request);
 
-  @ApiOperation(value = "证书注册", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "证书注册")
+  @ApiOperation(value = "使用证书注册", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "使用证书注册")
   @RequestMapping(value = "/register/cert", method = RequestMethod.POST)
   @ResponseBody
-  ReturnResult registerByCert(CertRegisterRequest request);
+  ReturnResult registerByCert(RegisterCertRequest request);
 
   @ApiOperation(value = "账号是否存才", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "账号是否存在")
   @RequestMapping(value = "/checkAccount", method = RequestMethod.GET)

@@ -2,24 +2,34 @@ package cn.org.bjca.footstone.usercenter.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Security;
+import java.security.Signature;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.security.*;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.*;
 
 /**
  * Description:签名工具类，可以对对象、二进制数据、字符串做签名
@@ -69,23 +79,20 @@ public class SignatureUtils {
    * @return Base64编码的签名数据
    */
   public static String signatureBean(Object bean, String signType,
-      String privateKey) throws Exception {
+      String privateKey) {
     try {
       if (StringUtils.equals(signType, SIGN_ALGORITHMS_SHA256RSA)) {
         PrivateKey priKey = convertPrivateKey(privateKey);
         return sign(generateSignString(bean), priKey, SIGN_ALGORITHMS_SHA1RSA);
-      } else if (StringUtils.equals(signType, SIGN_ALGORITHMS_HMAC) || StringUtils.equals(signType, SIGN_ALGORITHMS_HMACSHA256)) {
+      } else if (StringUtils.equals(signType, SIGN_ALGORITHMS_HMAC) || StringUtils
+          .equals(signType, SIGN_ALGORITHMS_HMACSHA256)) {
         return HMAC(generateSignString(bean).getBytes(ENCODING_CHARSET_UTF8),
             privateKey.getBytes(ENCODING_CHARSET_UTF8), signType);
       } else {
-        throw new Exception("不支持的签名类型参数");
+        throw new RuntimeException("不支持的签名类型参数");
       }
-    } catch (NoSuchAlgorithmException ex) {
-      throw new Exception("不支持的签名算法:" + ex.getMessage());
-    } catch (InvalidKeySpecException ike) {
-      throw new Exception("密钥数据不正确:" + ike.getMessage());
-    } catch (Exception ex) {
-      throw new Exception("签名失败:" + ex.getMessage());
+    } catch (Throwable ex) {
+      throw new RuntimeException("签名异常!:" + ex.getMessage());
     }
   }
 

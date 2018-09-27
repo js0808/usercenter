@@ -75,6 +75,12 @@
         <env>aliyun-proc</env>
       </properties>
     </profile>
+    <profile>
+      <id>tencent-sit</id>
+      <properties>
+        <env>tencent-sit</env>
+      </properties>
+    </profile>
   </profiles>
 
   <build>

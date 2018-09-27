@@ -7,6 +7,8 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.EntInfoService;
@@ -115,13 +117,40 @@ public class EntInfoController implements EntInfoFacade {
 
 
   @Override
-  public ReturnResult query(EntInfoQueryRequest request) {
+  public ReturnResult query(@RequestBody @Validated EntInfoQueryRequest request) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "通过Account查询企业信息");
     try {
       ReturnResult result = ReturnResult.success(entInfoService.queryByAccount(request));
       metricsClient.sr_incrSuccess();
       return result;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
+  }
+
+  @Override
+  public ReturnResult entPay(@RequestBody @Validated EntPayRequest payRequest) {
+    //埋点
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "发起企业打款");
+    try {
+      ReturnResult result = ReturnResult.success(entInfoService.entPayVerify(payRequest));
+      metricsClient.sr_incrSuccess();
+      return result;
+    } finally {
+      metricsClient.qps().rt().sr_incrTotal();
+    }
+  }
+
+  @Override
+  public ReturnResult entPayVerify(
+      @RequestBody @Validated EntPayQueryRequest payQueryRequest) {
+    //埋点
+    MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "查询验证企业打款");
+    try {
+      entInfoService.entPayQuery(payQueryRequest);
+      metricsClient.sr_incrSuccess();
+      return ReturnResult.success("成功");
     } finally {
       metricsClient.qps().rt().sr_incrTotal();
     }

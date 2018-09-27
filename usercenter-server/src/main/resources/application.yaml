@@ -49,6 +49,9 @@ spring:
     max-pool-size: @spring.max-pool-size@
     queue-capacity: @spring.queue-capacity@
     keep-alive-seconds: @spring.keep-alive-seconds@
+  http:
+    multipart:
+      max-file-size: 3MB
 server:
   port: @server.port@
   connection-timeout: 40000
@@ -88,11 +91,13 @@ authcode:
 idservice:
   user-name: @idservice.userName@
   password: @idservice.password@
-  check-enterprise: @idservice.check.ent@
+  ent-base: @idservice.ent.base@
+  ent-pay-verify: @idservice.ent.payVerify@
+  ent-pay-verify-query: @idservice.ent.payVerifyQuery@
 usercenter:
-  realname-host: @realname.host@
   username: ${idservice.userName}
   password: ${idservice.password}
+  bank4: @bank4.url@
 account:
   login:
     max-attempts: @max-attempts@
@@ -101,3 +106,7 @@ account:
     token-expire-minutes: @token-expire-minutes@
 signService:
   verifySign-url: @verifySign.url@
+  parseCertUid-url: @parseCertUid.url@
+images:
+  download-url: @bedrock-oss.download.url@
+  upload-url: @bedrock-oss.upload.url@

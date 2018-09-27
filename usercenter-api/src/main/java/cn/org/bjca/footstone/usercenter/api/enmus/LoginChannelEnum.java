@@ -8,11 +8,11 @@ import java.util.HashSet;
  **/
 public enum LoginChannelEnum {
 
-  WEB("0", "WEB"),
-  WAP("1", "WAP"),
-  ANDROID("2", "Android安卓"),
-  IOS("3", "IOS苹果"),
-  OTHER("99", "其他");
+  WEB("WEB", "WEB"),
+  WAP("WAP", "WAP"),
+  ANDROID("ANDROID", "Android安卓"),
+  IOS("IOS", "IOS苹果"),
+  OTHER("OTHER", "其他");
 
   /**
    * The value.

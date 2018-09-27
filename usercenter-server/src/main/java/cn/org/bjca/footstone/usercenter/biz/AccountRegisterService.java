@@ -1,6 +1,5 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
-import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.AccountTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
@@ -8,33 +7,22 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AccountChangeRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.CertRegisterRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountCheckResponse;
-import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.CertRegisterResponse;
+import cn.org.bjca.footstone.usercenter.biz.signverify.VerifySignCertService;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
-import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
-import cn.org.bjca.footstone.usercenter.util.Base64;
 import cn.org.bjca.footstone.usercenter.util.PwdUtil;
-import cn.org.bjca.footstone.usercenter.util.RestUtils;
-import cn.org.bjca.footstone.usercenter.vo.VerifySignReqVo;
-import cn.org.bjca.footstone.usercenter.vo.VerifySignRespVo;
-import com.alibaba.fastjson.JSONObject;
-import java.io.UnsupportedEncodingException;
+import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import java.util.Date;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.stereotype.Service;
 
@@ -53,9 +41,8 @@ public class AccountRegisterService {
   private StringRedisTemplate stringRedisTemplate;
   @Autowired
   private AccountAttemptsService accountAttemptsService;
-
-  @Value("${signService.verifySign-url}")
-  private String verifySignUrl = null;
+  @Autowired
+  private VerifySignCertService verifySignAndCert;
 
   public void accountRegister(AccountRegisterRequest request) throws Exception {
     /**检查帐号是否存在**/
@@ -180,67 +167,29 @@ public class AccountRegisterService {
     return accountInfo;
   }
 
-  public void registerByCert(CertRegisterRequest certRegisterRequest) {
+  /**
+   * 证书注册
+   */
+  public CertRegisterResponse registerByCert(RegisterCertRequest req) {
     //验证签名和证书
-    verifySignAndCert(certRegisterRequest);
+    verifySignAndCert.verifySignAndCert(req.getAppId(), req.getSign(), req.getSource(),
+        req.getUserCert());
     //获取证书唯一标识
-    String certId = RandomStringUtils.randomNumeric(10);
-    //检查帐号是否存在
+    String certId = verifySignAndCert.getCertUid(req.getUserCert(), req.getAppId());
+    //检查证书是否注册过
     AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(certId);
     if (accountInfo != null) {
-      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_EXIT_ERROR);
+      throw new BjcaBizException(ReturnCodeEnum.CERT_EXIST_ERROR);
     }
     //保存证书账号
     AccountInfo info = new AccountInfo();
     info.setAccountType(AccountTypeEnum.CERT.value());
     info.setAccount(certId);
-    info.setVersion(1);
-    info.setAppId(certRegisterRequest.getAppId());
-    info.setCreateTime(new Date());
-    info.setUpdateTime(new Date());
+    info.setAppId(req.getAppId());
+    Long uid = SnowFlake.next();
+    info.setUid(uid);
     accountInfoMapper.insertSelective(info);
-  }
-
-  public void verifySignAndCert(CertRegisterRequest certRegisterRequest) {
-    VerifySignReqVo verifySignReqVo = new VerifySignReqVo();
-    verifySignReqVo.setAppId("APP_CFFC7069B75241DBBEF84737F452FE2B");
-    verifySignReqVo.setSignValue(certRegisterRequest.getSign());
-    try {
-      verifySignReqVo.setOriData(Base64.encode(certRegisterRequest.getData().getBytes("UTF-8")));
-    } catch (UnsupportedEncodingException e) {
-      log.error("原文转换错误", e);
-      throw new BaseException(ReturnCodeEnum.REQ_PARAM_ERR);
-    }
-    verifySignReqVo.setBase64Cert(certRegisterRequest.getUserCert());
-
-    //埋点
-    MetricsClient metricsClient = MetricsClient.newInstance("依赖第三方服务", "基础签名服务", "验证签名和证书");
-    ResponseEntity<Map<String, String>> response = null;
-    String reqJson = JSONObject.toJSONString(verifySignReqVo);
-    try {
-      response = RestUtils
-          .post(verifySignUrl, new ParameterizedTypeReference<Map<String, String>>() {
-          }, verifySignReqVo);
-    } catch (Exception e) {
-      log.error("验证签名和证书通信异常,请求报文[{}]", reqJson, e);
-      throw new BaseException(ReturnCodeEnum.SIGN_SERVICE_CONN_ERROR);
-    } finally {
-      metricsClient.qps().rt().sr_incrTotal();
-    }
-    if (response.getStatusCode() == HttpStatus.OK) {
-      int status = Integer.parseInt(response.getBody().get("status"));
-      String message = response.getBody().get("message");
-      if (status == VerifySignRespVo.RESPONSE_OK) {
-        log.info("验证签名和证书成功,请求报文[{}]", reqJson);
-        metricsClient.sr_incrSuccess();
-      } else {
-        log.error("验证签名和证书时错误，请求报文[{}],响应报文[{}]", reqJson, JSONObject.toJSON(response));
-        throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, message);
-      }
-    } else {
-      log.error("验证签名和证书通信异常,http状态码[{}],请求数据[{}]", response.getStatusCodeValue(), reqJson);
-      throw new BaseException(ReturnCodeEnum.ID_SERVICE_CONN_ERROR);
-    }
+    return CertRegisterResponse.builder().uid(uid).account(certId).build();
   }
 
   public AccountCheckResponse accountInfo(String account) {

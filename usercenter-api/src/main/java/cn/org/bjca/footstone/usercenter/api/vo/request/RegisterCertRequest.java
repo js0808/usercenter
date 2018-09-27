@@ -4,7 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Data
-public class CertRegisterRequest extends BaseRequest {
+public class RegisterCertRequest extends BaseRequest {
 
   @NotBlank(message = "用户证书")
   private String userCert;
@@ -13,5 +13,5 @@ public class CertRegisterRequest extends BaseRequest {
   private String sign;
 
   @NotBlank(message = "原文")
-  private String data;
+  private String source;
 }

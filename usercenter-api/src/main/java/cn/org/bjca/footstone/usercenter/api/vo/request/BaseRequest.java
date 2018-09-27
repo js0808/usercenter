@@ -12,4 +12,8 @@ public class BaseRequest {
   @NotBlank
   @Length(max = 64)
   private String appId;
+
+  @ApiModelProperty(value = "subAppId")
+  @Length(max = 64)
+  private String subAppId;
 }

@@ -18,6 +18,10 @@ public class EntInfoBaseRequest {
   @Length(max = 64)
   private String appId = null;
 
+  @ApiModelProperty(value = "deviceId")
+  @Length(max = 64)
+  private String deviceId = null;
+
   @ApiModelProperty(value = "企业头像地址")
   @Length(max = 256)
   private String headImgUrl = null;
@@ -26,9 +30,16 @@ public class EntInfoBaseRequest {
   @Length(max = 64)
   private String phone = null;
 
-
   @ApiModelProperty(value = "操作者账号")
   @Length(max = 128)
   private String oper = null;
+
+  @ApiModelProperty(value = "法人身份证正面地址")
+  @Length(max = 256)
+  private String legalIdFrontImageUrl = null;
+
+  @ApiModelProperty(value = "法人身份证反面地址")
+  @Length(max = 256)
+  private String legalIdBackImageUrl = null;
 
 }

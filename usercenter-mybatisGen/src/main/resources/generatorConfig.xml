@@ -43,17 +43,19 @@
     </javaClientGenerator>
 
     <!--<table tableName="test.t_user_info" domainObjectName="User"></table>-->
-    <!--<table tableName="%"/>-->
+    <table tableName="real_name_verify_request"/>
 
     <!--<table tableName="ent_info">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
     <!--</table>-->
-    <table tableName="user_info_history">
+    <!--<table tableName="user_info_history">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
-    </table>
-    <table tableName="ent_info_history">
+    <!--</table>-->
+    <!--<table tableName="ent_info_history">-->
       <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
-    </table>
-
+    <!--</table>-->
+    <!--<table tableName="images">-->
+    <!--<generatedKey column="id" sqlStatement="MySql" identity="true" />-->
+    <!--</table>-->
   </context>
 </generatorConfiguration>
