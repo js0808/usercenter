@@ -134,7 +134,6 @@ public class EntRealNameVerify {
 
   public Map<String, Object> entPayQuery(String transId, EntPayQueryRequest request) {
     IdServiceEntPayQueryReqVo payQueryReqVo = new IdServiceEntPayQueryReqVo();
-    payQueryReqVo.setDeviceId(request.getDeviceId());
     payQueryReqVo.setUserTransId(transId);
     payQueryReqVo.setQueryTransId(request.getQueryTransId());
     payQueryReqVo.setVerifyCode(request.getVerifyCode());

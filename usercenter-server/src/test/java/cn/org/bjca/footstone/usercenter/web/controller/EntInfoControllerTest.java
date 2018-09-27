@@ -46,7 +46,6 @@ public class EntInfoControllerTest extends BaseTest {
   public void payVerifyQuery() throws Exception {
     EntPayQueryRequest request = new EntPayQueryRequest();
     request.setAppId("111111");
-    request.setDeviceId("bjca");
     request.setUid(82538652999340032L);
     request.setQueryTransId("97650829753921536");
     request.setVerifyCode("123456");

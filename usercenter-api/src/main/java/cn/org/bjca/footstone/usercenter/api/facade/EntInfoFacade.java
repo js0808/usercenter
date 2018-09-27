@@ -74,16 +74,13 @@ public interface EntInfoFacade {
 
   @ApiOperation(value = "发起企业打款，打款附言为验证码", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "发起企业打款，打款附言为验证码")
   @ApiImplicitParams(value = {
-      @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayRequest payload", required = true, paramType = "body", dataType = "EntPayRequest")
+      @ApiImplicitParam(name = "entPayRequest", value = "EntPayRequest payload", required = true, paramType = "body", dataType = "EntPayRequest")
   })
-  @RequestMapping(value = "/payVerify", method = RequestMethod.POST)
-  public ReturnResult entPayVerify(@RequestBody @Validated EntPayRequest payVerifyRequest);
+  @RequestMapping(value = "/pay", method = RequestMethod.POST)
+  public ReturnResult entPay(@RequestBody @Validated EntPayRequest payRequest);
 
-  @ApiOperation(value = "使用附言验证码验证企业打款", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "使用附言验证码验证企业打款")
-  @ApiImplicitParams(value = {
-      @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayRequest payload", required = true, paramType = "body", dataType = "EntPayRequest")
-  })
+  @ApiOperation(value = "使用附言验证码验证企业打款", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "使用附言验证码验证企业打款")
   @RequestMapping(value = "/payVerify", method = RequestMethod.GET)
-  public ReturnResult entPayVerifyQuery(@RequestBody @Validated EntPayQueryRequest payQueryRequest);
+  public ReturnResult entPayVerify(@RequestBody @Validated EntPayQueryRequest payQueryRequest);
 
 }

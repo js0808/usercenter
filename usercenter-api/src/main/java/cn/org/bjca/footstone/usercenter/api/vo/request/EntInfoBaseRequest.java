@@ -19,7 +19,6 @@ public class EntInfoBaseRequest {
   private String appId = null;
 
   @ApiModelProperty(value = "deviceId")
-  @NotBlank
   @Length(max = 64)
   private String deviceId = null;
 

@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.api.vo.request;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -11,7 +12,12 @@ import org.hibernate.validator.constraints.NotBlank;
  * @create: 2018/8/13
  **/
 @Data
-public class EntPayQueryRequest extends EntInfoBaseRequest {
+public class EntPayQueryRequest {
+
+  @ApiModelProperty(value = "appId")
+  @NotBlank
+  @Length(max = 64)
+  private String appId = null;
 
   @ApiModelProperty(value = "查询ID", required = true)
   @NotBlank

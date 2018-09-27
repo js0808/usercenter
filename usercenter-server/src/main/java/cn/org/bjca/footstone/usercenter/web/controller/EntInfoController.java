@@ -130,11 +130,11 @@ public class EntInfoController implements EntInfoFacade {
   }
 
   @Override
-  public ReturnResult entPayVerify(@RequestBody @Validated EntPayRequest payVerifyRequest) {
+  public ReturnResult entPay(@RequestBody @Validated EntPayRequest payRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "发起企业打款");
     try {
-      ReturnResult result = ReturnResult.success(entInfoService.entPayVerify(payVerifyRequest));
+      ReturnResult result = ReturnResult.success(entInfoService.entPayVerify(payRequest));
       metricsClient.sr_incrSuccess();
       return result;
     } finally {
@@ -143,7 +143,7 @@ public class EntInfoController implements EntInfoFacade {
   }
 
   @Override
-  public ReturnResult entPayVerifyQuery(
+  public ReturnResult entPayVerify(
       @RequestBody @Validated EntPayQueryRequest payQueryRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "查询验证企业打款");
