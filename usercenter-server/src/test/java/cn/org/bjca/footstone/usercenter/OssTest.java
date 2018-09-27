@@ -113,9 +113,10 @@ public class OssTest {
     }
 
     File f = new File("/Users/lvyong/Documents/FastDFS.pdf");
+    FileInputStream stream = new FileInputStream(f);
     builder.addBinaryBody(
         "file",
-        new FileInputStream(f),
+        stream,
         ContentType.APPLICATION_OCTET_STREAM,
         f.getName()
     );
