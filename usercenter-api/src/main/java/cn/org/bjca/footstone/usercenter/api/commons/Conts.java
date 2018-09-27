@@ -8,7 +8,7 @@ public interface Conts {
 
   int SC_OK = 200;
 
-  String REALNAME_RESULT_SUCCESS = "000000";
+  int REALNAME_RESULT_SUCCESS = 200;
 
   String REALNAME_RESULT_SAME = "一致";
 

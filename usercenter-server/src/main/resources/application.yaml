@@ -93,9 +93,9 @@ idservice:
   password: @idservice.password@
   check-enterprise: @idservice.check.ent@
 usercenter:
-  realname-host: @realname.host@
   username: ${idservice.userName}
   password: ${idservice.password}
+  bank4: @bank4.url@
 account:
   login:
     max-attempts: @max-attempts@

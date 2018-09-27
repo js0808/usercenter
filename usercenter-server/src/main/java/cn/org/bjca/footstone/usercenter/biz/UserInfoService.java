@@ -217,6 +217,7 @@ public class UserInfoService {
       metricsClient.sr_incrSuccess();
     } catch (Exception e) {
       log.error("实名验证失败", e);
+      throw e;
     } finally {
       metricsClient.qps().rt().sr_incrTotal();
     }

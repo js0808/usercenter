@@ -1,15 +1,12 @@
 package cn.org.bjca.footstone.usercenter.biz.realname.impl;
 
-import static cn.org.bjca.footstone.usercenter.api.commons.Conts.REALNAME_RESULT_SAME;
-import static cn.org.bjca.footstone.usercenter.api.commons.Conts.REALNAME_RESULT_SUCCESS;
-
 import cn.org.bjca.footstone.usercenter.biz.realname.RealNameVerify;
 import cn.org.bjca.footstone.usercenter.util.IdcardUtil;
 import com.google.common.base.Strings;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,7 +24,9 @@ import org.springframework.stereotype.Component;
 public class BankCard4Verify extends RealNameVerify {
 
   private static final String PATTERN = "^\\d{11}$";
-  static String path = "/idservice/bankcard/checkBankcardFour";
+  @Value("${usercenter.bank4}")
+  private String url;
+
 
   @Override
   public Pair<Boolean, String> checkRequest() {
@@ -62,19 +61,8 @@ public class BankCard4Verify extends RealNameVerify {
 
   @Override
   protected String getUrl() {
-    return host + path;
+    return url;
   }
 
-  @Override
-  protected Pair<Boolean, String> judgeSuccess(Map<String, String> result) {
-    Pair<Boolean, String> judge = super.judgeSuccess(result);
-    if (!judge.getKey()) {
-      return judge;
-    }
-    if (Objects.equals(result.get("accountNoResultMsg"), REALNAME_RESULT_SAME) &&
-        Objects.equals(result.get("accountNoResult"), REALNAME_RESULT_SUCCESS)) {
-      return judge;
-    }
-    return Pair.of(false, "验证结果:" + result.get("accountNoResultMsg"));
-  }
+
 }
