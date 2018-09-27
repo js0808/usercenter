@@ -18,6 +18,7 @@
     <result column="org_code_image_url" jdbcType="VARCHAR" property="orgCodeImageUrl" />
     <result column="legal_id_front_image_url" jdbcType="VARCHAR" property="legalIdFrontImageUrl"/>
     <result column="legal_id_back_image_url" jdbcType="VARCHAR" property="legalIdBackImageUrl"/>
+    <result column="account_name" jdbcType="VARCHAR" property="accountName"/>
     <result column="bank_account" jdbcType="VARCHAR" property="bankAccount"/>
     <result column="bank_name" jdbcType="VARCHAR" property="bankName"/>
     <result column="bank_address_code" jdbcType="VARCHAR" property="bankAddressCode"/>
@@ -94,9 +95,9 @@
   <sql id="Base_Column_List">
     id, head_img_url, name, phone, org_code, biz_license, social_credit_code, legal_name, 
     legal_id_num, real_name_flag, real_name_type, review_flag, biz_license_image_url, 
-    org_code_image_url, legal_id_front_image_url, legal_id_back_image_url, bank_account, 
-    bank_name, bank_address_code, app_id, status, ext_field1, ext_field2, ext_field3, 
-    ext_field4, ext_config, version, oper, create_time, update_time
+    org_code_image_url, legal_id_front_image_url, legal_id_back_image_url, account_name, 
+    bank_account, bank_name, bank_address_code, app_id, status, ext_field1, ext_field2, 
+    ext_field3, ext_field4, ext_config, version, oper, create_time, update_time
   </sql>
   <select id="selectByExample" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample" resultMap="BaseResultMap">
     select
@@ -137,27 +138,28 @@
     </selectKey>
     insert into ent_info (head_img_url, name, phone, 
       org_code, biz_license, social_credit_code, 
-      legal_name, legal_id_num, real_name_flag, 
-      real_name_type, review_flag, biz_license_image_url,
+      legal_name, legal_id_num, real_name_flag,
+    real_name_type, review_flag, biz_license_image_url,
     org_code_image_url, legal_id_front_image_url,
-    legal_id_back_image_url, bank_account, bank_name,
-    bank_address_code, app_id, status,
-      ext_field1, ext_field2, ext_field3, 
-      ext_field4, ext_config, version, 
-      oper, create_time, update_time
-      )
+    legal_id_back_image_url, account_name, bank_account,
+    bank_name, bank_address_code, app_id,
+    status, ext_field1, ext_field2,
+    ext_field3, ext_field4, ext_config,
+    version, oper, create_time,
+    update_time)
     values (#{headImgUrl,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{orgCode,jdbcType=VARCHAR}, #{bizLicense,jdbcType=VARCHAR}, #{socialCreditCode,jdbcType=VARCHAR}, 
-      #{legalName,jdbcType=VARCHAR}, #{legalIdNum,jdbcType=VARCHAR}, #{realNameFlag,jdbcType=INTEGER}, 
-      #{realNameType,jdbcType=VARCHAR}, #{reviewFlag,jdbcType=INTEGER}, #{bizLicenseImageUrl,jdbcType=VARCHAR},
+      #{legalName,jdbcType=VARCHAR}, #{legalIdNum,jdbcType=VARCHAR}, #{realNameFlag,jdbcType=INTEGER},
+    #{realNameType,jdbcType=VARCHAR}, #{reviewFlag,jdbcType=INTEGER},
+    #{bizLicenseImageUrl,jdbcType=VARCHAR},
     #{orgCodeImageUrl,jdbcType=VARCHAR}, #{legalIdFrontImageUrl,jdbcType=VARCHAR},
-    #{legalIdBackImageUrl,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR},
-    #{bankName,jdbcType=VARCHAR},
-    #{bankAddressCode,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
-      #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR}, #{extField3,jdbcType=VARCHAR}, 
-      #{extField4,jdbcType=VARCHAR}, #{extConfig,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
-      #{oper,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+    #{legalIdBackImageUrl,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR},
+    #{bankAccount,jdbcType=VARCHAR},
+    #{bankName,jdbcType=VARCHAR}, #{bankAddressCode,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR},
+    #{status,jdbcType=VARCHAR}, #{extField1,jdbcType=VARCHAR}, #{extField2,jdbcType=VARCHAR},
+    #{extField3,jdbcType=VARCHAR}, #{extField4,jdbcType=VARCHAR}, #{extConfig,jdbcType=VARCHAR},
+    #{version,jdbcType=INTEGER}, #{oper,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+    #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.org.bjca.footstone.usercenter.dao.model.EntInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -209,6 +211,9 @@
       </if>
       <if test="legalIdBackImageUrl != null">
         legal_id_back_image_url,
+      </if>
+      <if test="accountName != null">
+        account_name,
       </if>
       <if test="bankAccount != null">
         bank_account,
@@ -298,6 +303,9 @@
       </if>
       <if test="legalIdBackImageUrl != null">
         #{legalIdBackImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        #{accountName,jdbcType=VARCHAR},
       </if>
       <if test="bankAccount != null">
         #{bankAccount,jdbcType=VARCHAR},
@@ -400,6 +408,9 @@
       <if test="record.legalIdBackImageUrl != null">
         legal_id_back_image_url = #{record.legalIdBackImageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.accountName != null">
+        account_name = #{record.accountName,jdbcType=VARCHAR},
+      </if>
       <if test="record.bankAccount != null">
         bank_account = #{record.bankAccount,jdbcType=VARCHAR},
       </if>
@@ -468,6 +479,7 @@
       org_code_image_url = #{record.orgCodeImageUrl,jdbcType=VARCHAR},
     legal_id_front_image_url = #{record.legalIdFrontImageUrl,jdbcType=VARCHAR},
     legal_id_back_image_url = #{record.legalIdBackImageUrl,jdbcType=VARCHAR},
+    account_name = #{record.accountName,jdbcType=VARCHAR},
     bank_account = #{record.bankAccount,jdbcType=VARCHAR},
     bank_name = #{record.bankName,jdbcType=VARCHAR},
     bank_address_code = #{record.bankAddressCode,jdbcType=VARCHAR},
@@ -534,6 +546,9 @@
       <if test="legalIdBackImageUrl != null">
         legal_id_back_image_url = #{legalIdBackImageUrl,jdbcType=VARCHAR},
       </if>
+      <if test="accountName != null">
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
       <if test="bankAccount != null">
         bank_account = #{bankAccount,jdbcType=VARCHAR},
       </if>
@@ -596,6 +611,7 @@
       org_code_image_url = #{orgCodeImageUrl,jdbcType=VARCHAR},
       legal_id_front_image_url = #{legalIdFrontImageUrl,jdbcType=VARCHAR},
       legal_id_back_image_url = #{legalIdBackImageUrl,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
       bank_account = #{bankAccount,jdbcType=VARCHAR},
       bank_name = #{bankName,jdbcType=VARCHAR},
       bank_address_code = #{bankAddressCode,jdbcType=VARCHAR},
@@ -636,30 +652,34 @@
     <if test="items.get(0) != null">
             insert into ent_info  (head_img_url, name, phone, 
         org_code, biz_license, social_credit_code, 
-        legal_name, legal_id_num, real_name_flag, 
-        real_name_type, review_flag, biz_license_image_url,
+        legal_name, legal_id_num, real_name_flag,
+      real_name_type, review_flag, biz_license_image_url,
       org_code_image_url, legal_id_front_image_url,
-      legal_id_back_image_url, bank_account, bank_name,
-      bank_address_code, app_id, status,
-        ext_field1, ext_field2, ext_field3, 
-        ext_field4, ext_config, version, 
-        oper, create_time, update_time
-        )
+      legal_id_back_image_url, account_name, bank_account,
+      bank_name, bank_address_code, app_id,
+      status, ext_field1, ext_field2,
+      ext_field3, ext_field4, ext_config,
+      version, oper, create_time,
+      update_time)
       values
       <foreach collection="items" item="item" index="index" separator=",">
       (#{item.headImgUrl,jdbcType=VARCHAR}, #{item.name,jdbcType=VARCHAR}, #{item.phone,jdbcType=VARCHAR}, 
         #{item.orgCode,jdbcType=VARCHAR}, #{item.bizLicense,jdbcType=VARCHAR}, #{item.socialCreditCode,jdbcType=VARCHAR}, 
-        #{item.legalName,jdbcType=VARCHAR}, #{item.legalIdNum,jdbcType=VARCHAR}, #{item.realNameFlag,jdbcType=INTEGER}, 
-        #{item.realNameType,jdbcType=VARCHAR}, #{item.reviewFlag,jdbcType=INTEGER}, #{item.bizLicenseImageUrl,jdbcType=VARCHAR},
+        #{item.legalName,jdbcType=VARCHAR}, #{item.legalIdNum,jdbcType=VARCHAR}, #{item.realNameFlag,jdbcType=INTEGER},
+        #{item.realNameType,jdbcType=VARCHAR}, #{item.reviewFlag,jdbcType=INTEGER},
+        #{item.bizLicenseImageUrl,jdbcType=VARCHAR},
         #{item.orgCodeImageUrl,jdbcType=VARCHAR}, #{item.legalIdFrontImageUrl,jdbcType=VARCHAR},
-        #{item.legalIdBackImageUrl,jdbcType=VARCHAR}, #{item.bankAccount,jdbcType=VARCHAR},
-        #{item.bankName,jdbcType=VARCHAR},
-        #{item.bankAddressCode,jdbcType=VARCHAR}, #{item.appId,jdbcType=VARCHAR},
-        #{item.status,jdbcType=VARCHAR},
-        #{item.extField1,jdbcType=VARCHAR}, #{item.extField2,jdbcType=VARCHAR}, #{item.extField3,jdbcType=VARCHAR}, 
-        #{item.extField4,jdbcType=VARCHAR}, #{item.extConfig,jdbcType=VARCHAR}, #{item.version,jdbcType=INTEGER}, 
-        #{item.oper,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}
-        )
+        #{item.legalIdBackImageUrl,jdbcType=VARCHAR}, #{item.accountName,jdbcType=VARCHAR},
+        #{item.bankAccount,jdbcType=VARCHAR},
+        #{item.bankName,jdbcType=VARCHAR}, #{item.bankAddressCode,jdbcType=VARCHAR},
+        #{item.appId,jdbcType=VARCHAR},
+        #{item.status,jdbcType=VARCHAR}, #{item.extField1,jdbcType=VARCHAR},
+        #{item.extField2,jdbcType=VARCHAR},
+        #{item.extField3,jdbcType=VARCHAR}, #{item.extField4,jdbcType=VARCHAR},
+        #{item.extConfig,jdbcType=VARCHAR},
+        #{item.version,jdbcType=INTEGER}, #{item.oper,jdbcType=VARCHAR},
+        #{item.createTime,jdbcType=TIMESTAMP},
+        #{item.updateTime,jdbcType=TIMESTAMP})
       </foreach>
     </if>
   </insert>

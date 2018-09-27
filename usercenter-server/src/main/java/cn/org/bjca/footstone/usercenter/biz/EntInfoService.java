@@ -13,8 +13,8 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayVerifyRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayVerifyResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.realname.EntRealNameVerify;
@@ -22,16 +22,16 @@ import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoHistoryMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapperCustom;
+import cn.org.bjca.footstone.usercenter.dao.mapper.EntPayVerifyRequestMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
-import cn.org.bjca.footstone.usercenter.dao.mapper.RealNameVerifyRequestMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoAccountJoin;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoHistory;
+import cn.org.bjca.footstone.usercenter.dao.model.EntPayVerifyRequest;
+import cn.org.bjca.footstone.usercenter.dao.model.EntPayVerifyRequestExample;
 import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
-import cn.org.bjca.footstone.usercenter.dao.model.RealNameVerifyRequest;
-import cn.org.bjca.footstone.usercenter.dao.model.RealNameVerifyRequestExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
@@ -49,6 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @description:企业信息管理
@@ -81,7 +82,7 @@ public class EntInfoService {
   private EntRealNameVerify entRealNameVerify;
 
   @Autowired
-  private RealNameVerifyRequestMapper verifyRequestMapper;
+  private EntPayVerifyRequestMapper verifyRequestMapper;
 
   /**
    * 修改企业信息并实名认证
@@ -310,7 +311,7 @@ public class EntInfoService {
   /**
    * 发起打款认证
    */
-  public EntPayVerifyResponse entPayVerify(EntPayVerifyRequest request) {
+  public EntPayResponse entPayVerify(EntPayRequest request) {
     //检查账号
     AccountInfo account = getAccount(request.getUid());
     if (isNull(account)) {
@@ -322,25 +323,20 @@ public class EntInfoService {
       throw new BaseException(ReturnCodeEnum.USER_NOT_EXIST);
     }
     String transId = String.valueOf(SnowFlake.next());
-    RealNameVerifyRequest verifyRequest = new RealNameVerifyRequest();
+    EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
     verifyRequest.setUid(account.getUid());
     //可能不存在
     verifyRequest.setRealNameId(account.getRealnameId());
-    verifyRequest.setRealNameType(RealNameTypeEnum.ENT_PAY.value());
+    verifyRequest.setAccountName(request.getAccountName());
+    verifyRequest.setBankAccount(request.getBankAccount());
+    verifyRequest.setBankName(request.getBankName());
+    verifyRequest.setBankAddressCode(request.getBankAddressCode());
     //发起打款
     String idsTransId = entRealNameVerify.entPayVerify(transId, request);
-    //更新企业用户银行信息
-    EntInfo updateEntInfo = new EntInfo();
-    updateEntInfo.setId(entInfo.getId());
-    updateEntInfo.setBankAccount(request.getBankAccount());
-    updateEntInfo.setBankName(request.getBankName());
-    updateEntInfo.setBankAddressCode(request.getBankAddressCode());
-    updateEntInfo.setVersion(entInfo.getVersion() + 1);
-    entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     //添加验证记录
     verifyRequest.setIdsTransId(idsTransId);
     verifyRequestMapper.insertSelective(verifyRequest);
-    return EntPayVerifyResponse.builder().queryTransId(idsTransId).build();
+    return EntPayResponse.builder().queryTransId(idsTransId).build();
   }
 
   /**
@@ -352,39 +348,48 @@ public class EntInfoService {
     if (isNull(account)) {
       throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
     }
-    String transId = String.valueOf(SnowFlake.next());
-    //发起打款
-    Map<String, Object> resultMap = entRealNameVerify.entPayQuery(transId, request);
-    RealNameVerifyRequest verifyRequest = new RealNameVerifyRequest();
-    Integer status = (Integer) resultMap.get("status");
-    String message = (String) resultMap.get("message");
-    verifyRequest.setStatus(String.valueOf(status));
-    verifyRequest.setMessage(message);
-
-    RealNameVerifyRequestExample example = new RealNameVerifyRequestExample();
+    //查询待验证
+    EntPayVerifyRequestExample example = new EntPayVerifyRequestExample();
     example.createCriteria().andUidEqualTo(account.getUid())
         .andIdsTransIdEqualTo(request.getQueryTransId());
-    //更新
-    int rows = verifyRequestMapper.updateByExampleSelective(verifyRequest, example);
-    if (rows != 1) {
+    List<EntPayVerifyRequest> oldPayReqs = verifyRequestMapper.selectByExample(example);
+    if (CollectionUtils.isEmpty(oldPayReqs)) {
       throw new BaseException(ReturnCodeEnum.REAL_NAME_VERIFY_REQ_NOT_EXIST);
-    }
-    //返回
-    if (status != IdServiceBaseRespVo.OK) {
-      throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, message);
     } else {
-      //uid查询企业用户
-      EntInfo entInfo = getEntInfoByUid(request.getUid());
-      if (isNull(entInfo)) {
-        throw new BaseException(ReturnCodeEnum.USER_NOT_EXIST);
+      String transId = String.valueOf(SnowFlake.next());
+      //查询验证码是否正确
+      Map<String, Object> resultMap = entRealNameVerify.entPayQuery(transId, request);
+      EntPayVerifyRequest oldPayReq = oldPayReqs.get(0);
+      EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
+      Integer status = (Integer) resultMap.get("status");
+      String message = (String) resultMap.get("message");
+      verifyRequest.setStatus(String.valueOf(status));
+      verifyRequest.setMessage(message);
+      verifyRequest.setId(oldPayReq.getId());
+      //更新
+      verifyRequestMapper.updateByPrimaryKeySelective(verifyRequest);
+
+      //返回
+      if (status != IdServiceBaseRespVo.OK) {
+        throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, message);
+      } else {
+        //uid查询企业用户
+        EntInfo entInfo = getEntInfoByUid(request.getUid());
+        if (isNull(entInfo)) {
+          throw new BaseException(ReturnCodeEnum.USER_NOT_EXIST);
+        }
+        //更新企业用户实名信息
+        EntInfo updateEntInfo = new EntInfo();
+        updateEntInfo.setId(entInfo.getId());
+        updateEntInfo
+            .setRealNameType(entInfo.getRealNameType() + "," + RealNameTypeEnum.ENT_PAY.value());
+        updateEntInfo.setAccountName(oldPayReq.getAccountName());
+        updateEntInfo.setBankAccount(oldPayReq.getBankAccount());
+        updateEntInfo.setBankName(oldPayReq.getBankName());
+        updateEntInfo.setBankAddressCode(oldPayReq.getBankAddressCode());
+        updateEntInfo.setVersion(entInfo.getVersion() + 1);
+        entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
       }
-      //更新企业用户实名方式
-      EntInfo updateEntInfo = new EntInfo();
-      updateEntInfo.setId(entInfo.getId());
-      updateEntInfo
-          .setRealNameType(entInfo.getRealNameType() + "," + RealNameTypeEnum.ENT_PAY.value());
-      updateEntInfo.setVersion(entInfo.getVersion() + 1);
-      entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     }
   }
 }

@@ -32,15 +32,17 @@ public class EntInfo implements Serializable {
 
     private String orgCodeImageUrl;
 
-  private String legalIdFrontImageUrl;
+    private String legalIdFrontImageUrl;
 
-  private String legalIdBackImageUrl;
+    private String legalIdBackImageUrl;
 
-  private String bankAccount;
+    private String accountName;
 
-  private String bankName;
+    private String bankAccount;
 
-  private String bankAddressCode;
+    private String bankName;
+
+    private String bankAddressCode;
 
     private String appId;
 
@@ -180,45 +182,54 @@ public class EntInfo implements Serializable {
         this.orgCodeImageUrl = orgCodeImageUrl == null ? null : orgCodeImageUrl.trim();
     }
 
-  public String getLegalIdFrontImageUrl() {
-    return legalIdFrontImageUrl;
-  }
+    public String getLegalIdFrontImageUrl() {
+        return legalIdFrontImageUrl;
+    }
 
-  public void setLegalIdFrontImageUrl(String legalIdFrontImageUrl) {
-    this.legalIdFrontImageUrl = legalIdFrontImageUrl == null ? null : legalIdFrontImageUrl.trim();
-  }
+    public void setLegalIdFrontImageUrl(String legalIdFrontImageUrl) {
+        this.legalIdFrontImageUrl =
+            legalIdFrontImageUrl == null ? null : legalIdFrontImageUrl.trim();
+    }
 
-  public String getLegalIdBackImageUrl() {
-    return legalIdBackImageUrl;
-  }
+    public String getLegalIdBackImageUrl() {
+        return legalIdBackImageUrl;
+    }
 
-  public void setLegalIdBackImageUrl(String legalIdBackImageUrl) {
-    this.legalIdBackImageUrl = legalIdBackImageUrl == null ? null : legalIdBackImageUrl.trim();
-  }
+    public void setLegalIdBackImageUrl(String legalIdBackImageUrl) {
+        this.legalIdBackImageUrl = legalIdBackImageUrl == null ? null : legalIdBackImageUrl.trim();
+    }
 
-  public String getBankAccount() {
-    return bankAccount;
-  }
+    public String getAccountName() {
+        return accountName;
+    }
 
-  public void setBankAccount(String bankAccount) {
-    this.bankAccount = bankAccount == null ? null : bankAccount.trim();
-  }
+    public void setAccountName(String accountName) {
+        this.accountName = accountName == null ? null : accountName.trim();
+    }
 
-  public String getBankName() {
-    return bankName;
-  }
+    public String getBankAccount() {
+        return bankAccount;
+    }
 
-  public void setBankName(String bankName) {
-    this.bankName = bankName == null ? null : bankName.trim();
-  }
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount == null ? null : bankAccount.trim();
+    }
 
-  public String getBankAddressCode() {
-    return bankAddressCode;
-  }
+    public String getBankName() {
+        return bankName;
+    }
 
-  public void setBankAddressCode(String bankAddressCode) {
-    this.bankAddressCode = bankAddressCode == null ? null : bankAddressCode.trim();
-  }
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getBankAddressCode() {
+        return bankAddressCode;
+    }
+
+    public void setBankAddressCode(String bankAddressCode) {
+        this.bankAddressCode = bankAddressCode == null ? null : bankAddressCode.trim();
+    }
 
     public String getAppId() {
         return appId;

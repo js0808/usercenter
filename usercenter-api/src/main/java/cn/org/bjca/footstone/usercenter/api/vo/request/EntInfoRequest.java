@@ -28,7 +28,7 @@ public class EntInfoRequest extends EntInfoBaseRequest {
 
   @ApiModelProperty(value = "企业名称", required = true)
   @NotBlank
-  @Length(max = 256)
+  @Length(max = 255)
   private String name = null;
 
   @ApiModelProperty(value = "组织机构代码", required = true)

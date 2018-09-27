@@ -4,7 +4,7 @@ import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayVerifyRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
@@ -87,7 +87,7 @@ public class EntRealNameVerify {
   /**
    * 发起企业打款认证
    */
-  public String entPayVerify(String transId, EntPayVerifyRequest request) {
+  public String entPayVerify(String transId, EntPayRequest request) {
     IdServiceEntPayReqVo payReqVo = new IdServiceEntPayReqVo();
     payReqVo.setDeviceId(request.getDeviceId());
     payReqVo.setAccount(request.getBankAccount());

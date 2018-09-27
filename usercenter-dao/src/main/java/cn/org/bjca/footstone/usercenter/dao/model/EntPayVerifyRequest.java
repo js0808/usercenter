@@ -3,7 +3,7 @@ package cn.org.bjca.footstone.usercenter.dao.model;
 import java.io.Serializable;
 import java.util.Date;
 
-public class RealNameVerifyRequest implements Serializable {
+public class EntPayVerifyRequest implements Serializable {
 
   private Integer id;
 
@@ -11,13 +11,19 @@ public class RealNameVerifyRequest implements Serializable {
 
   private Long uid;
 
+  private String accountName;
+
+  private String bankAccount;
+
+  private String bankName;
+
+  private String bankAddressCode;
+
   private String idsTransId;
 
   private String status;
 
   private String message;
-
-  private String realNameType;
 
   private String extField1;
 
@@ -57,6 +63,38 @@ public class RealNameVerifyRequest implements Serializable {
     this.uid = uid;
   }
 
+  public String getAccountName() {
+    return accountName;
+  }
+
+  public void setAccountName(String accountName) {
+    this.accountName = accountName == null ? null : accountName.trim();
+  }
+
+  public String getBankAccount() {
+    return bankAccount;
+  }
+
+  public void setBankAccount(String bankAccount) {
+    this.bankAccount = bankAccount == null ? null : bankAccount.trim();
+  }
+
+  public String getBankName() {
+    return bankName;
+  }
+
+  public void setBankName(String bankName) {
+    this.bankName = bankName == null ? null : bankName.trim();
+  }
+
+  public String getBankAddressCode() {
+    return bankAddressCode;
+  }
+
+  public void setBankAddressCode(String bankAddressCode) {
+    this.bankAddressCode = bankAddressCode == null ? null : bankAddressCode.trim();
+  }
+
   public String getIdsTransId() {
     return idsTransId;
   }
@@ -79,14 +117,6 @@ public class RealNameVerifyRequest implements Serializable {
 
   public void setMessage(String message) {
     this.message = message == null ? null : message.trim();
-  }
-
-  public String getRealNameType() {
-    return realNameType;
-  }
-
-  public void setRealNameType(String realNameType) {
-    this.realNameType = realNameType == null ? null : realNameType.trim();
   }
 
   public String getExtField1() {

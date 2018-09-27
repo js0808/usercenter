@@ -11,7 +11,7 @@ import lombok.Data;
  **/
 @Data
 @Builder
-public class EntPayVerifyResponse {
+public class EntPayResponse {
 
   @ApiModelProperty(value = "企业打款认证查询ID")
   private String queryTransId = null;

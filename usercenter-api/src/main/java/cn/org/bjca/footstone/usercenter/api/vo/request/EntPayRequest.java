@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @create: 2018/8/13
  **/
 @Data
-public class EntPayVerifyRequest extends EntInfoBaseRequest {
+public class EntPayRequest extends EntInfoBaseRequest {
 
   @ApiModelProperty(value = "账号", required = true)
   @NotBlank
@@ -21,7 +21,7 @@ public class EntPayVerifyRequest extends EntInfoBaseRequest {
 
   @ApiModelProperty(value = "账户名", required = true)
   @NotBlank
-  @Length(max = 128)
+  @Length(max = 255)
   private String accountName = null;
 
   @ApiModelProperty(value = "开户行", required = true)

@@ -6,7 +6,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayVerifyRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -74,14 +74,14 @@ public interface EntInfoFacade {
 
   @ApiOperation(value = "发起企业打款，打款附言为验证码", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "发起企业打款，打款附言为验证码")
   @ApiImplicitParams(value = {
-      @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayVerifyRequest payload", required = true, paramType = "body", dataType = "EntPayVerifyRequest")
+      @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayRequest payload", required = true, paramType = "body", dataType = "EntPayRequest")
   })
   @RequestMapping(value = "/payVerify", method = RequestMethod.POST)
-  public ReturnResult entPayVerify(@RequestBody @Validated EntPayVerifyRequest payVerifyRequest);
+  public ReturnResult entPayVerify(@RequestBody @Validated EntPayRequest payVerifyRequest);
 
   @ApiOperation(value = "使用附言验证码验证企业打款", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "使用附言验证码验证企业打款")
   @ApiImplicitParams(value = {
-      @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayVerifyRequest payload", required = true, paramType = "body", dataType = "EntPayVerifyRequest")
+      @ApiImplicitParam(name = "entPayVerifyRequest", value = "EntPayRequest payload", required = true, paramType = "body", dataType = "EntPayRequest")
   })
   @RequestMapping(value = "/payVerify", method = RequestMethod.GET)
   public ReturnResult entPayVerifyQuery(@RequestBody @Validated EntPayQueryRequest payQueryRequest);

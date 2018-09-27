@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class RealNameVerifyRequestExample {
+public class EntPayVerifyRequestExample {
 
   protected String orderByClause;
 
@@ -18,7 +18,7 @@ public class RealNameVerifyRequestExample {
 
   private Integer limit;
 
-  public RealNameVerifyRequestExample() {
+  public EntPayVerifyRequestExample() {
     oredCriteria = new ArrayList<Criteria>();
   }
 
@@ -82,62 +82,77 @@ public class RealNameVerifyRequestExample {
     this.sumCol = sumCol;
   }
 
-  public RealNameVerifyRequestExample sumId() {
+  public EntPayVerifyRequestExample sumId() {
     this.sumCol = "id";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumRealNameId() {
+  public EntPayVerifyRequestExample sumRealNameId() {
     this.sumCol = "real_name_id";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumUid() {
+  public EntPayVerifyRequestExample sumUid() {
     this.sumCol = "uid";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumIdsTransId() {
+  public EntPayVerifyRequestExample sumAccountName() {
+    this.sumCol = "account_name";
+    return this;
+  }
+
+  public EntPayVerifyRequestExample sumBankAccount() {
+    this.sumCol = "bank_account";
+    return this;
+  }
+
+  public EntPayVerifyRequestExample sumBankName() {
+    this.sumCol = "bank_name";
+    return this;
+  }
+
+  public EntPayVerifyRequestExample sumBankAddressCode() {
+    this.sumCol = "bank_address_code";
+    return this;
+  }
+
+  public EntPayVerifyRequestExample sumIdsTransId() {
     this.sumCol = "ids_trans_id";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumStatus() {
+  public EntPayVerifyRequestExample sumStatus() {
     this.sumCol = "status";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumMessage() {
+  public EntPayVerifyRequestExample sumMessage() {
     this.sumCol = "message";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumRealNameType() {
-    this.sumCol = "real_name_type";
-    return this;
-  }
-
-  public RealNameVerifyRequestExample sumExtField1() {
+  public EntPayVerifyRequestExample sumExtField1() {
     this.sumCol = "ext_field1";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumExtField2() {
+  public EntPayVerifyRequestExample sumExtField2() {
     this.sumCol = "ext_field2";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumVersion() {
+  public EntPayVerifyRequestExample sumVersion() {
     this.sumCol = "version";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumCreateTime() {
+  public EntPayVerifyRequestExample sumCreateTime() {
     this.sumCol = "create_time";
     return this;
   }
 
-  public RealNameVerifyRequestExample sumUpdateTime() {
+  public EntPayVerifyRequestExample sumUpdateTime() {
     this.sumCol = "update_time";
     return this;
   }
@@ -158,7 +173,7 @@ public class RealNameVerifyRequestExample {
     this.limit = limit;
   }
 
-  public RealNameVerifyRequestExample page(int offset, int limit) {
+  public EntPayVerifyRequestExample page(int offset, int limit) {
     this.offset = offset;
     this.limit = limit;
     return this;
@@ -386,6 +401,286 @@ public class RealNameVerifyRequestExample {
       return (Criteria) this;
     }
 
+    public Criteria andAccountNameIsNull() {
+      addCriterion("account_name is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameIsNotNull() {
+      addCriterion("account_name is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameEqualTo(String value) {
+      addCriterion("account_name =", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameNotEqualTo(String value) {
+      addCriterion("account_name <>", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameGreaterThan(String value) {
+      addCriterion("account_name >", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameGreaterThanOrEqualTo(String value) {
+      addCriterion("account_name >=", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameLessThan(String value) {
+      addCriterion("account_name <", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameLessThanOrEqualTo(String value) {
+      addCriterion("account_name <=", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameLike(String value) {
+      addCriterion("account_name like", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameNotLike(String value) {
+      addCriterion("account_name not like", value, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameIn(List<String> values) {
+      addCriterion("account_name in", values, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameNotIn(List<String> values) {
+      addCriterion("account_name not in", values, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameBetween(String value1, String value2) {
+      addCriterion("account_name between", value1, value2, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andAccountNameNotBetween(String value1, String value2) {
+      addCriterion("account_name not between", value1, value2, "accountName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountIsNull() {
+      addCriterion("bank_account is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountIsNotNull() {
+      addCriterion("bank_account is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountEqualTo(String value) {
+      addCriterion("bank_account =", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountNotEqualTo(String value) {
+      addCriterion("bank_account <>", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountGreaterThan(String value) {
+      addCriterion("bank_account >", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountGreaterThanOrEqualTo(String value) {
+      addCriterion("bank_account >=", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountLessThan(String value) {
+      addCriterion("bank_account <", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountLessThanOrEqualTo(String value) {
+      addCriterion("bank_account <=", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountLike(String value) {
+      addCriterion("bank_account like", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountNotLike(String value) {
+      addCriterion("bank_account not like", value, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountIn(List<String> values) {
+      addCriterion("bank_account in", values, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountNotIn(List<String> values) {
+      addCriterion("bank_account not in", values, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountBetween(String value1, String value2) {
+      addCriterion("bank_account between", value1, value2, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAccountNotBetween(String value1, String value2) {
+      addCriterion("bank_account not between", value1, value2, "bankAccount");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameIsNull() {
+      addCriterion("bank_name is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameIsNotNull() {
+      addCriterion("bank_name is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameEqualTo(String value) {
+      addCriterion("bank_name =", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameNotEqualTo(String value) {
+      addCriterion("bank_name <>", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameGreaterThan(String value) {
+      addCriterion("bank_name >", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameGreaterThanOrEqualTo(String value) {
+      addCriterion("bank_name >=", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameLessThan(String value) {
+      addCriterion("bank_name <", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameLessThanOrEqualTo(String value) {
+      addCriterion("bank_name <=", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameLike(String value) {
+      addCriterion("bank_name like", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameNotLike(String value) {
+      addCriterion("bank_name not like", value, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameIn(List<String> values) {
+      addCriterion("bank_name in", values, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameNotIn(List<String> values) {
+      addCriterion("bank_name not in", values, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameBetween(String value1, String value2) {
+      addCriterion("bank_name between", value1, value2, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankNameNotBetween(String value1, String value2) {
+      addCriterion("bank_name not between", value1, value2, "bankName");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeIsNull() {
+      addCriterion("bank_address_code is null");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeIsNotNull() {
+      addCriterion("bank_address_code is not null");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeEqualTo(String value) {
+      addCriterion("bank_address_code =", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeNotEqualTo(String value) {
+      addCriterion("bank_address_code <>", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeGreaterThan(String value) {
+      addCriterion("bank_address_code >", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeGreaterThanOrEqualTo(String value) {
+      addCriterion("bank_address_code >=", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeLessThan(String value) {
+      addCriterion("bank_address_code <", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeLessThanOrEqualTo(String value) {
+      addCriterion("bank_address_code <=", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeLike(String value) {
+      addCriterion("bank_address_code like", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeNotLike(String value) {
+      addCriterion("bank_address_code not like", value, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeIn(List<String> values) {
+      addCriterion("bank_address_code in", values, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeNotIn(List<String> values) {
+      addCriterion("bank_address_code not in", values, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeBetween(String value1, String value2) {
+      addCriterion("bank_address_code between", value1, value2, "bankAddressCode");
+      return (Criteria) this;
+    }
+
+    public Criteria andBankAddressCodeNotBetween(String value1, String value2) {
+      addCriterion("bank_address_code not between", value1, value2, "bankAddressCode");
+      return (Criteria) this;
+    }
+
     public Criteria andIdsTransIdIsNull() {
       addCriterion("ids_trans_id is null");
       return (Criteria) this;
@@ -593,76 +888,6 @@ public class RealNameVerifyRequestExample {
 
     public Criteria andMessageNotBetween(String value1, String value2) {
       addCriterion("message not between", value1, value2, "message");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeIsNull() {
-      addCriterion("real_name_type is null");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeIsNotNull() {
-      addCriterion("real_name_type is not null");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeEqualTo(String value) {
-      addCriterion("real_name_type =", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeNotEqualTo(String value) {
-      addCriterion("real_name_type <>", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeGreaterThan(String value) {
-      addCriterion("real_name_type >", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeGreaterThanOrEqualTo(String value) {
-      addCriterion("real_name_type >=", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeLessThan(String value) {
-      addCriterion("real_name_type <", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeLessThanOrEqualTo(String value) {
-      addCriterion("real_name_type <=", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeLike(String value) {
-      addCriterion("real_name_type like", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeNotLike(String value) {
-      addCriterion("real_name_type not like", value, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeIn(List<String> values) {
-      addCriterion("real_name_type in", values, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeNotIn(List<String> values) {
-      addCriterion("real_name_type not in", values, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeBetween(String value1, String value2) {
-      addCriterion("real_name_type between", value1, value2, "realNameType");
-      return (Criteria) this;
-    }
-
-    public Criteria andRealNameTypeNotBetween(String value1, String value2) {
-      addCriterion("real_name_type not between", value1, value2, "realNameType");
       return (Criteria) this;
     }
 

@@ -8,7 +8,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayVerifyRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.EntInfoService;
@@ -130,7 +130,7 @@ public class EntInfoController implements EntInfoFacade {
   }
 
   @Override
-  public ReturnResult entPayVerify(@RequestBody @Validated EntPayVerifyRequest payVerifyRequest) {
+  public ReturnResult entPayVerify(@RequestBody @Validated EntPayRequest payVerifyRequest) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "发起企业打款");
     try {

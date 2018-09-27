@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import cn.org.bjca.footstone.usercenter.BaseTest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayVerifyRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class EntInfoControllerTest extends BaseTest {
 
   @Test
   public void payVerify() throws Exception {
-    EntPayVerifyRequest request = new EntPayVerifyRequest();
+    EntPayRequest request = new EntPayRequest();
     request.setAppId("111111");
     request.setDeviceId("bjca");
     request.setUid(82538652999340032L);
@@ -48,7 +48,7 @@ public class EntInfoControllerTest extends BaseTest {
     request.setAppId("111111");
     request.setDeviceId("bjca");
     request.setUid(82538652999340032L);
-    request.setQueryTransId("97344192765833216");
+    request.setQueryTransId("97650829753921536");
     request.setVerifyCode("123456");
     String responseString = mockMvc.perform(
         get("/entinfos/payVerify").content(JSON.toJSONString(request))
