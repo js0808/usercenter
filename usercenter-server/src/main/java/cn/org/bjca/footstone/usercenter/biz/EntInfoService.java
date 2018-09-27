@@ -99,7 +99,7 @@ public class EntInfoService {
 
     //判断状态
     checkStatus(entInfoOld);
-//    checkRealName(entInfoRequest);
+    entRealNameVerify.checkEntBaseInfo(entInfoRequest);
     //update ent info
     EntInfo updateEntInfo = new EntInfo();
     BeanCopy.beans(entInfoRequest, updateEntInfo).copy();
