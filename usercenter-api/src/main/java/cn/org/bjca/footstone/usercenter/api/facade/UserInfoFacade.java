@@ -50,7 +50,7 @@ public interface UserInfoFacade {
       @RequestBody UserInfoStatusVo userInfoStatusVo);
 
   @ApiOperation(value = "根据Account查询用户信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "根据Account查询用户信息")
-  @RequestMapping(value = "/", method = RequestMethod.GET)
+  @RequestMapping(value = "", method = RequestMethod.GET)
   @ResponseBody
   ReturnResult<QueryUserInfoResponse> getUserByAccount(UserInfoQueryVo queryVo);
 }
