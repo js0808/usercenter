@@ -106,7 +106,7 @@ public class AuthCodeService {
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("develop-id", authCodeConfig.getDevelopId());
-    headers.add("develop-key ", authCodeConfig.getDevelopKey());
+    headers.add("develop-key", authCodeConfig.getDevelopKey());
     HttpEntity<MailCodeReqVo> entity = new HttpEntity<>(send, headers);
 
     ResponseEntity<ReturnResult> responseEntity = restTemplate
