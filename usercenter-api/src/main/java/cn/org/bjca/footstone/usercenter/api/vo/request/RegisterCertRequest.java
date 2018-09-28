@@ -14,4 +14,7 @@ public class RegisterCertRequest extends BaseRequest {
 
   @NotBlank(message = "原文")
   private String source;
+
+  @NotBlank(message = "签名算法标识符")
+  private String signAlgIdentifier;
 }

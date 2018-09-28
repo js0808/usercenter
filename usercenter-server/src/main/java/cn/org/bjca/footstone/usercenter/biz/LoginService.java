@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.CERT_NOT_REGISTE;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_IS_LOCKED;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_OR_PWD_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_TOKEN_WRONG;
@@ -193,14 +194,14 @@ public class LoginService {
   public Pair<BizResultVo, LoginResponse> loginWithCert(LoginCertRequest request) {
     //验证签名和证书
     verifySignAndCert.verifySignAndCert(request.getAppId(), request.getSign(), request.getSource(),
-        request.getUserCert());
+        request.getUserCert(), request.getSignAlgIdentifier());
     //获取证书唯一标识
     String certId = verifySignAndCert.getCertUid(request.getUserCert(), request.getAppId());
     log.debug("证书登录，证书唯一标识:{}", certId);
     AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(certId);
     // 账号不存在
     if (accountInfo == null) {
-      return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), null);
+      return Pair.of(BizResultVo.of(false, CERT_NOT_REGISTE), null);
     }
     // 账号被锁定
     if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()

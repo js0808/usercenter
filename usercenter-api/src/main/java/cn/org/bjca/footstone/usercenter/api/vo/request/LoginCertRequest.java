@@ -23,6 +23,9 @@ public class LoginCertRequest {
   @NotBlank(message = "登录签名")
   private String sign;
 
+  @NotBlank(message = "签名算法标识符")
+  private String signAlgIdentifier;
+
   @NotBlank(message = "签名原文")
   private String source;
 
