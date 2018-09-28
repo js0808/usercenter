@@ -202,8 +202,7 @@ public class EntInfoService {
   }
 
   private void checkRealNameParam(String realNameType) {
-    if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.value()) ||
-        !StringUtils.equals(realNameType, RealNameTypeEnum.ENT_PAY.value())) {
+    if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.value())) {
       throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
   }
