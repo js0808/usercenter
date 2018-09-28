@@ -268,6 +268,7 @@ public class EntInfoService {
     AccountInfo accountInfo = new AccountInfo();
     accountInfo.setId(account.getId());
     accountInfo.setRealnameId(entInfo.getId());
+    accountInfo.setUserType(UserTypeEnum.ENT.name());
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 
