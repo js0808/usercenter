@@ -8,6 +8,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateReques
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountRegisterResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
@@ -23,7 +24,7 @@ public interface AccountInfoFacade {
   @ApiOperation(value = "帐号注册", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "帐号注册")
   @RequestMapping(value = "/register", method = RequestMethod.POST)
   @ResponseBody
-  ReturnResult register(AccountRegisterRequest request);
+  ReturnResult<AccountRegisterResponse> register(AccountRegisterRequest request);
 
   @ApiOperation(value = "密码重置", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "密码重置")
   @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)

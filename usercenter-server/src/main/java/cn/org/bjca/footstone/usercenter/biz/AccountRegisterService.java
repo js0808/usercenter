@@ -11,6 +11,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountCheckResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountRegisterResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.CertRegisterResponse;
 import cn.org.bjca.footstone.usercenter.biz.signverify.VerifySignCertService;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
@@ -44,7 +45,7 @@ public class AccountRegisterService {
   @Autowired
   private VerifySignCertService verifySignAndCert;
 
-  public void accountRegister(AccountRegisterRequest request) throws Exception {
+  public AccountRegisterResponse accountRegister(AccountRegisterRequest request) throws Exception {
     /**检查帐号是否存在**/
     AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(request.getAccount());
     if (accountInfo != null) {
@@ -65,6 +66,8 @@ public class AccountRegisterService {
     } else {
       info.setAccountType(AccountTypeEnum.MOBILE.value());
     }
+    Long uid = SnowFlake.next();
+    info.setUid(uid);
     info.setAccount(request.getAccount());
     info.setPassword(password);
     info.setVersion(1);
@@ -72,6 +75,9 @@ public class AccountRegisterService {
     info.setCreateTime(new Date());
     info.setUpdateTime(new Date());
     accountInfoMapper.insertSelective(info);
+    AccountRegisterResponse response = new AccountRegisterResponse();
+    response.setUid(uid);
+    return response;
   }
 
   public void resetPassword(ResetPasswordRequest request) throws Exception {

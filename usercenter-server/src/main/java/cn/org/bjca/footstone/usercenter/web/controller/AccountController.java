@@ -11,6 +11,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.AccountStatusUpdateReques
 import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountRegisterResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.CertRegisterResponse;
 import cn.org.bjca.footstone.usercenter.biz.AccountRegisterService;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
@@ -32,10 +33,11 @@ public class AccountController implements AccountInfoFacade {
   private AccountRegisterService registerService;
 
   @Override
-  public ReturnResult register(@Validated @RequestBody AccountRegisterRequest request) {
+  public ReturnResult<AccountRegisterResponse> register(@Validated @RequestBody AccountRegisterRequest request) {
     MetricsClient metrics = MetricsClient.newInstance("对外服务", "帐号注册", "帐号注册交易");
+    AccountRegisterResponse registerResponse = new AccountRegisterResponse();
     try {
-      registerService.accountRegister(request);
+      registerResponse = registerService.accountRegister(request);
       metrics.sr_incrSuccess();
     } catch (BjcaBizException ex) {
       log.error("accountRegister 异常信息", ex);
@@ -46,7 +48,7 @@ public class AccountController implements AccountInfoFacade {
     } finally {
       metrics.qps().rt().sr_incrTotal();
     }
-    return ReturnResult.success("success");
+    return ReturnResult.success(registerResponse);
   }
 
   @Override
