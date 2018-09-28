@@ -26,4 +26,6 @@ public class AuthCodeConfig {
   private String version;
   private Integer expire;
   private String fromName;
+  private String developId;
+  private String developKey;
 }
