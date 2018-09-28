@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class EntInfoRequest extends EntInfoBaseRequest {
   @ApiModelProperty(value = "法人姓名")
   @Length(max = 256)
+  @NotBlank
   private String legalName = null;
 
   @ApiModelProperty(value = "法人身份证号码")

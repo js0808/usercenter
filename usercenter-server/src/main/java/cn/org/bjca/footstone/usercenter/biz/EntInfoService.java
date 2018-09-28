@@ -133,6 +133,7 @@ public class EntInfoService {
     updateEntInfo.setId(entInfoOld.getId());
     updateEntInfo.setHeadImgUrl(entInfoBaseRequest.getHeadImgUrl());
     updateEntInfo.setPhone(entInfoBaseRequest.getPhone());
+    updateEntInfo.setOper(entInfoBaseRequest.getOper());
     updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
     int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     if (result != 1) {
@@ -151,8 +152,9 @@ public class EntInfoService {
 
     //update ent info
     EntInfo updateEntInfo = new EntInfo();
-    BeanCopy.beans(entInfoOld, updateEntInfo).copy();
+    updateEntInfo.setId(entInfoOld.getId());
     updateEntInfo.setStatus(entInfoStatusRequest.getStatus().toString());
+    updateEntInfo.setOper(entInfoStatusRequest.getOper());
     updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
     int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
     if (result != 1) {

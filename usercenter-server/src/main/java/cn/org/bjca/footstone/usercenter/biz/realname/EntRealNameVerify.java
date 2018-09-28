@@ -41,7 +41,6 @@ public class EntRealNameVerify {
 
   public void checkEntBaseInfo(EntInfoRequest entInfoRequest) {
     IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
-    idServiceCheckEntReqVo.setDeviceId(entInfoRequest.getDeviceId());
     idServiceCheckEntReqVo.setEnterpriseName(entInfoRequest.getName());
     idServiceCheckEntReqVo.setLeagalPerson(entInfoRequest.getLegalName());
     idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoRequest.getBizLicense());
@@ -89,7 +88,6 @@ public class EntRealNameVerify {
    */
   public String entPayVerify(String transId, EntPayRequest request) {
     IdServiceEntPayReqVo payReqVo = new IdServiceEntPayReqVo();
-    payReqVo.setDeviceId(request.getDeviceId());
     payReqVo.setAccount(request.getBankAccount());
     payReqVo.setAccountName(request.getAccountName());
     payReqVo.setAccountBank(request.getBankName());
