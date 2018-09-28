@@ -19,4 +19,6 @@ public interface Conts {
 
   String SAVED = "SAVED";
 
+  String USER_TYPE = "USER";
+
 }

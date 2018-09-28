@@ -112,8 +112,12 @@ public class ImagesService {
       images.setName(encode.toFile().getName());
 
       HttpPost uploadFile = createRequest(encode);
+      log.info("开始上传图片服务 {}", uploadFile);
+
       CloseableHttpResponse response = httpClient.execute(uploadFile);
       String res = EntityUtils.toString(response.getEntity());
+      log.info("oss 返回 {} ", res);
+
       ReturnResult returnResult = JSON.parseObject(res, ReturnResult.class);
       if (returnResult.getStatus() != SC_OK) {
         throw new BaseException(IMAGES_UPLOAD_REMOTE_ERROR);
