@@ -1,6 +1,5 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
-import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
 import static java.util.Objects.isNull;
 
 import cn.org.bjca.footstone.usercenter.api.enmus.NotifyTypeEnum;
@@ -90,10 +89,7 @@ public class EntInfoService {
   @Transactional(rollbackFor = Exception.class)
   public void updateEntInfo(Long uid, EntInfoRequest entInfoRequest) {
     //目前只支持:ent_base,企业基本信息认证
-    String realNameType = entInfoRequest.getRealNameType();
-    if (!StringUtils.equals(realNameType, RealNameTypeEnum.ENT_BASE.value())) {
-      throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
-    }
+    checkRealNameParam(entInfoRequest.getRealNameType());
     //get entinfo by uid
     EntInfo entInfoOld = checkExist(uid);
 
@@ -233,9 +229,12 @@ public class EntInfoService {
    */
   public EntInfoResponse addEntInfo(EntInfoRequest entInfoRequest) {
     checkRealNameParam(entInfoRequest.getRealNameType());
+    if (isNull(entInfoRequest.getUid())) {
+      throw new BaseException(ReturnCodeEnum.UID_NULL_ERROR);
+    }
     AccountInfo account = getAccount(entInfoRequest.getUid());
     if (isNull(account)) {
-      throw new BaseException(ACCOUNT_NOT_EXIT_ERROR);
+      throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
     }
     //调用身份核实-企业信息认证
     entRealNameVerify.checkEntBaseInfo(entInfoRequest);
