@@ -117,7 +117,7 @@ public class EntInfoController implements EntInfoFacade {
 
 
   @Override
-  public ReturnResult query(@RequestBody @Validated EntInfoQueryRequest request) {
+  public ReturnResult query(EntInfoQueryRequest request) {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "通过Account查询企业信息");
     try {
