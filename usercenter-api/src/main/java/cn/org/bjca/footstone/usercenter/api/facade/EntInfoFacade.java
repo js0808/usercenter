@@ -79,8 +79,8 @@ public interface EntInfoFacade {
   @RequestMapping(value = "/pay", method = RequestMethod.POST)
   public ReturnResult entPay(@RequestBody @Validated EntPayRequest payRequest);
 
-  @ApiOperation(value = "使用附言验证码验证企业打款", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "使用附言验证码验证企业打款")
-  @RequestMapping(value = "/payVerify", method = RequestMethod.GET)
+  @ApiOperation(value = "使用附言验证码验证企业打款", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "使用附言验证码验证企业打款")
+  @RequestMapping(value = "/payVerify", method = RequestMethod.POST)
   public ReturnResult entPayVerify(@RequestBody @Validated EntPayQueryRequest payQueryRequest);
 
 }

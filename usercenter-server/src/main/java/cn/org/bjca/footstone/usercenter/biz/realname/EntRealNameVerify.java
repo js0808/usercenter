@@ -92,6 +92,8 @@ public class EntRealNameVerify {
     payReqVo.setAccountName(request.getAccountName());
     payReqVo.setAccountBank(request.getBankName());
     payReqVo.setAccountAddressCode(request.getBankAddressCode());
+    //TODO 将来要去掉
+    payReqVo.setDeviceId("bjca");
     payReqVo.setUserTransId(transId);
     String reqJson = JSONObject.toJSONString(payReqVo);
 
@@ -135,6 +137,8 @@ public class EntRealNameVerify {
     payQueryReqVo.setUserTransId(transId);
     payQueryReqVo.setQueryTransId(request.getQueryTransId());
     payQueryReqVo.setVerifyCode(request.getVerifyCode());
+    //TODO 将来要去掉
+    payQueryReqVo.setDeviceId("bjca");
     String reqJson = JSONObject.toJSONString(payQueryReqVo);
 
     //埋点
