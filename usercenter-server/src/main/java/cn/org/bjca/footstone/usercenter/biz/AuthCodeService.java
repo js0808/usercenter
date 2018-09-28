@@ -23,6 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.web.client.RestTemplate;
 
 import static cn.org.bjca.footstone.usercenter.util.RestUtils.isOk;
 import static cn.org.bjca.footstone.usercenter.util.RestUtils.post;
@@ -48,6 +51,9 @@ public class AuthCodeService {
 
   @Autowired
   private StringRedisTemplate stringRedisTemplate;
+
+  @Autowired
+  private RestTemplate restTemplate;
 
   public AuthCodeApplyResponse codeApply(AuthCodeApplyRequest request) throws Exception {
 
@@ -97,9 +103,17 @@ public class AuthCodeService {
     String sendMsg = String
         .format(authCodeConfig.getEmailBody(), request.getEmail(), emailCode, typeEnum.getDesc());
     send.setPlainText(sendMsg);
-    ResponseEntity<ReturnResult> responseEntity = null;
-    responseEntity = post(authCodeConfig.getEmailUrl(), false, ReturnResult.class, send);
-    log.info("emailCodeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("develop-id", authCodeConfig.getDevelopId());
+    headers.add("develop-key ", authCodeConfig.getDevelopKey());
+    HttpEntity<MailCodeReqVo> entity = new HttpEntity<>(send, headers);
+
+    ResponseEntity<ReturnResult> responseEntity = restTemplate
+        .postForEntity(authCodeConfig.getEmailUrl(), entity, ReturnResult.class);
+    log.info("send mail http result is {}, body is {}", responseEntity.getStatusCodeValue(),
+        responseEntity.getBody());
+
     if (isOk(responseEntity)) {
       ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
       if (returnResult.getStatus() != 200) {
