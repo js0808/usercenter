@@ -3,6 +3,7 @@ package cn.org.bjca.footstone.usercenter.api.facade;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.LogouRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
 import io.swagger.annotations.Api;
@@ -35,7 +36,7 @@ public interface LoginFacade {
   @ApiOperation(value = "退出", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "DELETE", notes = "用户退出")
   @RequestMapping(value = "/tokens", method = RequestMethod.DELETE)
   @ResponseBody
-  ReturnResult<Void> logout(Long uid, String token);
+  ReturnResult<Void> logout(LogouRequest request);
 
   @ApiOperation(value = "查询用户信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "查询用户信息")
   @RequestMapping(value = "/tokens", method = RequestMethod.GET)
