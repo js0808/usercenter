@@ -20,6 +20,9 @@ public class LoginCertRequest {
   @NotBlank(message = "用户证书")
   private String userCert;
 
+  //验证证书服务使用certPolicyId验证证书，需要业务服务和证书服务提前确认这个值
+  private String certPolicyId;
+
   @NotBlank(message = "登录签名")
   private String sign;
 

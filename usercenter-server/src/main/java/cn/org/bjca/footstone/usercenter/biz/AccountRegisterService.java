@@ -179,7 +179,7 @@ public class AccountRegisterService {
   public CertRegisterResponse registerByCert(RegisterCertRequest req) {
     //验证签名和证书
     verifySignAndCert.verifySignAndCert(req.getAppId(), req.getSign(), req.getSource(),
-        req.getUserCert(), req.getSignAlgIdentifier());
+        req.getUserCert(), req.getSignAlgIdentifier(), req.getCertPolicyId());
     //获取证书唯一标识
     String certId = verifySignAndCert.getCertUid(req.getUserCert(), req.getAppId());
     //检查证书是否注册过

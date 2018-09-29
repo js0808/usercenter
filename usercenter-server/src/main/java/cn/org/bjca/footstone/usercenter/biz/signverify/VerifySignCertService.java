@@ -35,7 +35,7 @@ public class VerifySignCertService {
    * 验证签名和证书
    */
   public void verifySignAndCert(String appId, String sign, String source, String userCert,
-      String signAlgIdentifier) {
+      String signAlgIdentifier, String certPolicyId) {
     VerifySignReqVo verifySignReqVo = new VerifySignReqVo();
     verifySignReqVo.setTransId(String.valueOf(SnowFlake.next()));
     verifySignReqVo.setSignAlgIdentifier(signAlgIdentifier);
@@ -44,8 +44,7 @@ public class VerifySignCertService {
     verifySignReqVo.setOriData(source);
     verifySignReqVo.setBase64Cert(userCert);
     verifySignReqVo.setVerifyCert("true");
-    //TODO 由业务系统确定
-    verifySignReqVo.setVerifyCertPolicyId("TestCloudSign");
+    verifySignReqVo.setVerifyCertPolicyId(certPolicyId);
 
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("依赖第三方服务", "基础签名服务", "验证签名和证书");

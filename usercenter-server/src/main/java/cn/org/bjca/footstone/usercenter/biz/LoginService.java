@@ -194,7 +194,7 @@ public class LoginService {
   public Pair<BizResultVo, LoginResponse> loginWithCert(LoginCertRequest request) {
     //验证签名和证书
     verifySignAndCert.verifySignAndCert(request.getAppId(), request.getSign(), request.getSource(),
-        request.getUserCert(), request.getSignAlgIdentifier());
+        request.getUserCert(), request.getSignAlgIdentifier(), request.getCertPolicyId());
     //获取证书唯一标识
     String certId = verifySignAndCert.getCertUid(request.getUserCert(), request.getAppId());
     log.debug("证书登录，证书唯一标识:{}", certId);
