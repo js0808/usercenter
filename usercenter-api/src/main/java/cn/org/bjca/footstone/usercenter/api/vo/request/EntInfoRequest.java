@@ -44,7 +44,7 @@ public class EntInfoRequest extends EntInfoBaseRequest {
   @NotBlank
   private String socialCreditCode = null;
 
-  @ApiModelProperty(value = "用户UID", required = true)
-  private Long uid;
+//  @ApiModelProperty(value = "用户UID", required = true)
+//  private Long uid;
 
 }

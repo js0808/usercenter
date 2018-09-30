@@ -3,11 +3,9 @@ package cn.org.bjca.footstone.usercenter.api.facade;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoBaseRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,24 +30,6 @@ public interface EntInfoFacade {
   @ApiOperation(value = "用UID查询企业信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "用UID查询企业信息")
   @RequestMapping(value = "/{uid}", method = RequestMethod.GET)
   public ReturnResult getEntInfoByUid(@PathVariable Long uid);
-
-
-  @ApiOperation(value = "修改企业信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "修改企业信息(实名认证)")
-  @ApiImplicitParams(value = {
-      @ApiImplicitParam(name = "entInfoRequest", value = "EntInfoRequest payload", required = true, paramType = "body", dataType = "EntInfoRequest")
-  })
-  @RequestMapping(value = "/{uid}", method = RequestMethod.PUT)
-  public ReturnResult updateEntInfo(@PathVariable Long uid,
-      @RequestBody @Validated EntInfoRequest entInfoRequest);
-
-  @ApiOperation(value = "添加企业信息(实名认证)", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "POST", notes = "添加企业信息(实名认证)")
-  @ApiImplicitParams(value = {
-      @ApiImplicitParam(name = "entInfoRequest", value = "EntInfoRequest payload", required = true, paramType = "body", dataType = "EntInfoRequest")
-  })
-
-  @RequestMapping(value = "", method = RequestMethod.POST)
-  public ReturnResult<EntInfoResponse> addEntInfo(
-      @RequestBody @Validated EntInfoRequest entInfoRequest);
 
   @ApiOperation(value = "修改企业状态", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "PUT", notes = "修改企业状态")
   @ApiImplicitParams(value = {

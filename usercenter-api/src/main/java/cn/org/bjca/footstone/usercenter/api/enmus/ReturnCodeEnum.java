@@ -49,7 +49,8 @@ public enum ReturnCodeEnum {
   IMAGES_DOWNLOAD_REMOTE_ERROR(60604050, "下载文件异常"),
   REAL_NAME_VERIFY_REQ_NOT_EXIST(60604051, "身份核实请求不存在"),
   USER_NOT_EXIST(60604052, "用户不存在"),
-  CERT_NOT_REGISTE(60604053, "证书未注册");
+  CERT_NOT_REGISTE(60604053, "证书未注册"),
+  ALREADY_REAL_NAME_CHECKED(60604054, "证书未注册");
 
   /**
    * The value.
