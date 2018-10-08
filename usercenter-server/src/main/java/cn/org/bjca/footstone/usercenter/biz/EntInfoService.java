@@ -225,7 +225,24 @@ public class EntInfoService {
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 
-  public QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
+
+  public QueryEntInfoResponse queryEntInfo(EntInfoQueryRequest request) {
+    if (StringUtils.isNotBlank(request.getAccount())) {
+      return queryByAccount(request);
+    } else if (StringUtils.isNotBlank(request.getName())) {
+      EntInfo entInfo = getEntInfoByRealName(request.getName());
+      if (isNull(entInfo)) {
+        throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
+      }
+      QueryEntInfoResponse resp = new QueryEntInfoResponse();
+      BeanCopy.beans(entInfo, resp).copy();
+      return resp;
+    } else {
+      return null;
+    }
+  }
+
+  private QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
     String account = request.getAccount();
     if (Strings.isNullOrEmpty(account)) {
       return null;

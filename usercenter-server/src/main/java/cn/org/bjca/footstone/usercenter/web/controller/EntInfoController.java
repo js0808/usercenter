@@ -85,7 +85,7 @@ public class EntInfoController implements EntInfoFacade {
     //埋点
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "通过Account查询企业信息");
     try {
-      ReturnResult result = ReturnResult.success(entInfoService.queryByAccount(request));
+      ReturnResult result = ReturnResult.success(entInfoService.queryEntInfo(request));
       metricsClient.sr_incrSuccess();
       return result;
     } finally {
