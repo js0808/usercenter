@@ -25,6 +25,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -68,11 +69,15 @@ public class AuthCodeService {
     send.setTemplateId(authCodeConfig.getTemplateId());
     send.setTransId(String.valueOf(System.currentTimeMillis()));
     send.setSignAlgo(authCodeConfig.getSignAlgo());
-
-    ResponseEntity<ReturnResult<AuthCodeApplyResponse>> responseEntity = null;
-    responseEntity = RestUtils.post(authCodeConfig.getCodeUrl(),
-        new ParameterizedTypeReference<ReturnResult<AuthCodeApplyResponse>>() {
-        }, send);
+    //添加白名单认证
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("develop-id", authCodeConfig.getDevelopId());
+    headers.add("develop-key", authCodeConfig.getDevelopKey());
+    HttpEntity<AuthorCodeReqVo> entity = new HttpEntity<>(send, headers);
+    ResponseEntity<ReturnResult<AuthCodeApplyResponse>> responseEntity = restTemplate
+        .exchange(authCodeConfig.getCodeUrl(), HttpMethod.POST, entity,
+            new ParameterizedTypeReference<ReturnResult<AuthCodeApplyResponse>>() {
+            });
     log.info("codeApply post return:[{}]", JSONObject.toJSONString(responseEntity));
     if (isOk(responseEntity)) {
       ReturnResult<AuthCodeApplyResponse> returnResult = responseEntity.getBody();
@@ -142,8 +147,14 @@ public class AuthCodeService {
       send.setVersion(authCodeConfig.getVersion());
       send.setAuthCode(request.getAuthCode());
 
-      ResponseEntity<ReturnResult> responseEntity = null;
-      responseEntity = post(authCodeConfig.getValidateUrl(), false, ReturnResult.class, send);
+      //添加白名单认证
+      HttpHeaders headers = new HttpHeaders();
+      headers.add("develop-id", authCodeConfig.getDevelopId());
+      headers.add("develop-key", authCodeConfig.getDevelopKey());
+      HttpEntity<CodeValidateReqVo> entity = new HttpEntity<>(send, headers);
+      ResponseEntity<ReturnResult> responseEntity = restTemplate.postForEntity(
+          authCodeConfig.getValidateUrl(), entity, ReturnResult.class
+      );
       log.info("validate post return:[{}]", JSONObject.toJSONString(responseEntity));
       if (isOk(responseEntity)) {
         ReturnResult returnResult = responseEntity.getBody();
