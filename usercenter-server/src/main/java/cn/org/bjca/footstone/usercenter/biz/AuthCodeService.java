@@ -108,6 +108,10 @@ public class AuthCodeService {
     String sendMsg = String
         .format(authCodeConfig.getEmailBody(), request.getEmail(), emailCode, typeEnum.getDesc());
     send.setPlainText(sendMsg);
+    send.setTrace_id(String.valueOf(System.currentTimeMillis()));
+    send.setThird_trace_id(String.valueOf(System.currentTimeMillis()));
+    send.setAppId(authCodeConfig.getAppId());
+    send.setDeviceId(authCodeConfig.getDeviceId());
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("develop-id", authCodeConfig.getDevelopId());
