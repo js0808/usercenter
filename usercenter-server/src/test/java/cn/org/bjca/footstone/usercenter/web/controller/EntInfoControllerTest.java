@@ -25,7 +25,7 @@ public class EntInfoControllerTest extends BaseTest {
     EntPayRequest request = new EntPayRequest();
     request.setAppId("111111");
     request.setUid(82538652999340032L);
-    request.setAccountName("陈勇");
+    request.setName("陈勇");
     request.setBankAccount("6214680029714530");
     request.setBankAddressCode("BJBJ");
     request.setBankName("北京银行");

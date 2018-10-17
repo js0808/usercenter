@@ -140,7 +140,7 @@ public class AccountRegisterService {
     }
     /**检查验证标示是否存在**/
     String key =
-        authCodeService.getValidate_key() + request.getType() + "_" + request.getOldAccount();
+        authCodeService.getValidateKey() + request.getType() + "_" + request.getOldAccount();
     String validateId = stringRedisTemplate.opsForValue().get(key);
     if (StringUtils.isEmpty(validateId)) {
       throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);

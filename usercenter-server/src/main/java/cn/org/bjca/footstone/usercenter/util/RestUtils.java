@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class RestUtils {
 
-  private static final RestTemplate rest = ApplicationContextHolder.get()
+  private static final RestTemplate REST = ApplicationContextHolder.get()
       .getBean(RestTemplate.class);
 
   public static <T> ResponseEntity<T> get(String url, Class<T> type) {
@@ -29,12 +29,12 @@ public class RestUtils {
   public static <T> ResponseEntity<T> get(String url, boolean useCookie,
       ParameterizedTypeReference<T> type) {
     HttpEntity entity = createEntity(useCookie, null);
-    return rest.exchange(url, HttpMethod.GET, entity, type);
+    return REST.exchange(url, HttpMethod.GET, entity, type);
   }
 
   public static <T> ResponseEntity<T> get(String url, boolean useCookie, Class<T> type) {
     HttpEntity entity = createEntity(useCookie, null);
-    return rest.exchange(url, HttpMethod.GET, entity, type);
+    return REST.exchange(url, HttpMethod.GET, entity, type);
   }
 
   public static <T> ResponseEntity<T> post(String url, Class<T> type, Object body) {
@@ -50,13 +50,13 @@ public class RestUtils {
       ParameterizedTypeReference<T> type,
       Object body) {
     HttpEntity entity = createEntity(useCookie, body);
-    return rest.exchange(url, HttpMethod.POST, entity, type);
+    return REST.exchange(url, HttpMethod.POST, entity, type);
   }
 
   public static <T> ResponseEntity<T> post(String url, boolean useCookie, Class<T> type,
       Object body) {
     HttpEntity entity = createEntity(useCookie, body);
-    return rest.exchange(url, HttpMethod.POST, entity, type);
+    return REST.exchange(url, HttpMethod.POST, entity, type);
   }
 
   public static <T> ResponseEntity<T> put(String url, Class<T> type, Object body) {
@@ -71,14 +71,14 @@ public class RestUtils {
   public static <T> ResponseEntity<T> put(String url, boolean useCookie, Class<T> type,
       Object body) {
     HttpEntity entity = createEntity(useCookie, body);
-    return rest.exchange(url, HttpMethod.PUT, entity, type);
+    return REST.exchange(url, HttpMethod.PUT, entity, type);
   }
 
   public static <T> ResponseEntity<T> put(String url, boolean useCookie,
       ParameterizedTypeReference<T> type,
       Object body) {
     HttpEntity entity = createEntity(useCookie, body);
-    return rest.exchange(url, HttpMethod.PUT, entity, type);
+    return REST.exchange(url, HttpMethod.PUT, entity, type);
   }
 
   public static <T> ResponseEntity<T> delete(String url, Class<T> type, Object body) {
@@ -93,14 +93,14 @@ public class RestUtils {
   public static <T> ResponseEntity<T> delete(String url, boolean useCookie, Class<T> type,
       Object body) {
     HttpEntity entity = createEntity(useCookie, body);
-    return rest.exchange(url, HttpMethod.DELETE, entity, type);
+    return REST.exchange(url, HttpMethod.DELETE, entity, type);
   }
 
   public static <T> ResponseEntity<T> delete(String url, boolean useCookie,
       ParameterizedTypeReference<T> type,
       Object body) {
     HttpEntity entity = createEntity(useCookie, body);
-    return rest.exchange(url, HttpMethod.DELETE, entity, type);
+    return REST.exchange(url, HttpMethod.DELETE, entity, type);
   }
 
   private static HttpEntity createEntity(boolean useCookie, Object body) {
@@ -113,6 +113,6 @@ public class RestUtils {
   }
 
   public static byte[] downLoad(String url) {
-    return rest.getForObject(url, byte[].class);
+    return REST.getForObject(url, byte[].class);
   }
 }
