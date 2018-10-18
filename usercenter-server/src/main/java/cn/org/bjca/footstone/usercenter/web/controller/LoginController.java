@@ -34,7 +34,7 @@ public class LoginController implements LoginFacade {
     if (result.getLeft().isSuccess()) {
       return ReturnResult.success(result.getRight());
     }
-    return ReturnResult.error(result.getLeft().getCode());
+    return ReturnResult.error(result.getLeft().getCode(), result.getRight());
   }
 
   @Override

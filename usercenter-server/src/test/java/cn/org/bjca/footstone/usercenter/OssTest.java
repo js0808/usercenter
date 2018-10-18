@@ -94,6 +94,66 @@ public class OssTest {
     System.out.println("File Download Completed!!!");
   }
 
+
+  @Test
+  public void download2() throws Exception {
+    CloseableHttpClient client = HttpClients.createDefault();
+    URIBuilder builder = new URIBuilder("http://beta.isignet.cn:10019/download");
+    HashMap<String, String> params = Maps.newHashMap();
+    params.put("appId", "APP_493DB260D7DD4BFEA01CAF17FFC99550");
+    params.put("token", "751dda2aa865408fbe4c5410f901ecdc");
+    params.put("deviceId", "DEV_57AEEEA417B6484FACD2CC29AEA1B938");
+    params.put("id", "4d2c92dc620146bab0967bce54cb5ec0");
+    String signStr = SignatureUtils
+        .signatureBean(params, SignatureUtils.SIGN_ALGORITHMS_HMACSHA256, APP_SECRET);
+    params.put("signature", signStr);
+    for (Entry<String, String> entry : params.entrySet()) {
+      builder.setParameter(entry.getKey(), entry.getValue());
+    }
+    HttpGet request = new HttpGet(builder.build());
+    request.setHeader("__bedrock_oauth", "5342d488431b0128acbfa42151ee4a20");
+
+    HttpResponse response = client.execute(request);
+    HttpEntity entity = response.getEntity();
+
+    int responseCode = response.getStatusLine().getStatusCode();
+
+    // 返回状态码非200证明下载失败
+    if (responseCode != HttpStatus.SC_OK) {
+      //eg: {"status":10904007,"message":"资源状态异常"} 文件已经过期或被删除
+      //eg: {"status":10904005,"message":"验证请求签名错误"} 签名不对
+      System.out.println("[ERROR]:" + EntityUtils.toString(entity));
+      return;
+    }
+
+    System.out.println("Request Url: " + request.getURI());
+    System.out.println("Response Code: " + responseCode);
+
+    InputStream is = null;
+    FileOutputStream fos = null;
+    try {
+      is = entity.getContent();
+      String filePath = "/tmp/4d2c92dc620146bab0967bce54cb5ec0.pdf";
+      fos = new FileOutputStream(new File(filePath));
+      int inByte;
+      while ((inByte = is.read()) != -1) {
+        fos.write(inByte);
+      }
+    } finally {
+      if (is != null) {
+        is.close();
+      }
+      if (fos != null) {
+        fos.close();
+      }
+      if (client != null) {
+        client.close();
+      }
+    }
+    System.out.println("File Download Completed!!!");
+  }
+
+
   @Test
   public void upload() throws Exception {
     CloseableHttpClient httpClient = HttpClients.createDefault();
