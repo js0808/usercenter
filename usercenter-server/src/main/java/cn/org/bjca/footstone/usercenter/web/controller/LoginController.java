@@ -4,6 +4,7 @@ import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.LoginFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginRequest;
+import cn.org.bjca.footstone.usercenter.api.vo.request.LogouRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
 import cn.org.bjca.footstone.usercenter.biz.LoginService;
@@ -47,8 +48,8 @@ public class LoginController implements LoginFacade {
   }
 
   @Override
-  public ReturnResult<Void> logout(@RequestParam Long uid, @RequestParam String token) {
-    loginService.logout(uid, token);
+  public ReturnResult<Void> logout(@Validated @RequestBody LogouRequest request) {
+    loginService.logout(request.getUid(), request.getToken());
     return ReturnResult.success("OK");
   }
 

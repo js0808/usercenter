@@ -1,6 +1,5 @@
 package cn.org.bjca.footstone.usercenter.web.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -25,14 +24,12 @@ public class EntInfoControllerTest extends BaseTest {
   public void payVerify() throws Exception {
     EntPayRequest request = new EntPayRequest();
     request.setAppId("111111");
-    request.setDeviceId("bjca");
     request.setUid(82538652999340032L);
-    request.setAccountName("陈勇");
     request.setBankAccount("6214680029714530");
     request.setBankAddressCode("BJBJ");
     request.setBankName("北京银行");
     String responseString = mockMvc.perform(
-        post("/entinfos/payVerify").content(JSON.toJSONString(request))
+        post("/entinfos/pay").content(JSON.toJSONString(request))
             .contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk())
         .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -50,7 +47,7 @@ public class EntInfoControllerTest extends BaseTest {
     request.setQueryTransId("97650829753921536");
     request.setVerifyCode("123456");
     String responseString = mockMvc.perform(
-        get("/entinfos/payVerify").content(JSON.toJSONString(request))
+        post("/entinfos/payVerify").content(JSON.toJSONString(request))
             .contentType(MediaType.APPLICATION_JSON)
     ).andExpect(status().isOk())
         .andExpect(content().contentType("application/json;charset=UTF-8"))

@@ -2,7 +2,6 @@ package cn.org.bjca.footstone.usercenter.biz.realname;
 
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
@@ -39,9 +38,8 @@ public class EntRealNameVerify {
   @Value("${idservice.ent-pay-verify-query}")
   private String entPayVerifyQueryUrl = null;
 
-  public void checkEntBaseInfo(EntInfoRequest entInfoRequest) {
+  public void checkEntBaseInfo(EntPayRequest entInfoRequest) {
     IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
-    idServiceCheckEntReqVo.setDeviceId(entInfoRequest.getDeviceId());
     idServiceCheckEntReqVo.setEnterpriseName(entInfoRequest.getName());
     idServiceCheckEntReqVo.setLeagalPerson(entInfoRequest.getLegalName());
     idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoRequest.getBizLicense());
@@ -89,9 +87,8 @@ public class EntRealNameVerify {
    */
   public String entPayVerify(String transId, EntPayRequest request) {
     IdServiceEntPayReqVo payReqVo = new IdServiceEntPayReqVo();
-    payReqVo.setDeviceId(request.getDeviceId());
     payReqVo.setAccount(request.getBankAccount());
-    payReqVo.setAccountName(request.getAccountName());
+    payReqVo.setAccountName(request.getName());
     payReqVo.setAccountBank(request.getBankName());
     payReqVo.setAccountAddressCode(request.getBankAddressCode());
     payReqVo.setUserTransId(transId);

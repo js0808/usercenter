@@ -17,4 +17,6 @@ public class VerifySignReqVo {
   private String signValue = null;
   private String base64Cert = null;
   private String verifyCert = null;
+  private String verifyCertPolicyId = null;
+
 }

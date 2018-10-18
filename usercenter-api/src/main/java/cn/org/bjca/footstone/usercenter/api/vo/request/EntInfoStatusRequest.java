@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.api.vo.request;
 
 import cn.org.bjca.footstone.usercenter.api.enmus.UserInfoStatusEnum;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -11,5 +12,7 @@ import lombok.Data;
 @Data
 public class EntInfoStatusRequest {
 
+  @NotNull
   private UserInfoStatusEnum status;
+  private String oper;
 }

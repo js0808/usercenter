@@ -15,7 +15,6 @@ import org.hibernate.validator.constraints.NotBlank;
 public class EntPayQueryRequest {
 
   @ApiModelProperty(value = "appId")
-  @NotBlank
   @Length(max = 64)
   private String appId = null;
 

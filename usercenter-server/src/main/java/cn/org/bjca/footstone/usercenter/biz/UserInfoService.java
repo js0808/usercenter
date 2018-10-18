@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import static cn.org.bjca.footstone.usercenter.Conts.USER_TYPE;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_NOT_EXIST;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.REALNAME_PARAM_ERROR;
@@ -120,6 +121,7 @@ public class UserInfoService {
       AccountInfo info = new AccountInfo();
       info.setId(account.getId());
       info.setRealnameId(userInfo.getId());
+      info.setUserType(USER_TYPE);
       count = accountInfoMapper.updateByPrimaryKeySelective(info);
       doTerminal(count);
 
