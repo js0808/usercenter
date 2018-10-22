@@ -95,6 +95,10 @@ public class ReturnResult<T> implements Serializable {
     return build(returnCodeEnum.value(), returnCodeEnum.getDesc(), null);
   }
 
+  public static <T> ReturnResult error(ReturnCodeEnum returnCodeEnum, T data) {
+    return build(returnCodeEnum.value(), returnCodeEnum.getDesc(), data);
+  }
+
   /**
    * 构建一个结果的对象
    */

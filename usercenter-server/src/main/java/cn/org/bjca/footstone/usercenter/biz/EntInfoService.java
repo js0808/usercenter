@@ -12,8 +12,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntInfoStatusRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
-import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayResponse;
-import cn.org.bjca.footstone.usercenter.api.vo.response.EntInfoResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.EntPayResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.QueryEntInfoResponse;
 import cn.org.bjca.footstone.usercenter.biz.realname.EntRealNameVerify;
 import cn.org.bjca.footstone.usercenter.dao.mapper.AccountInfoMapper;
@@ -135,7 +134,7 @@ public class EntInfoService {
     BeanCopy.beans(entInfoHistory, history).copy();
     history.setId(null);
     history.setRealnameId(entInfoHistory.getId());
-    entInfoHistoryMapper.insert(history);
+    entInfoHistoryMapper.insertSelective(history);
   }
 
   /**
@@ -226,7 +225,24 @@ public class EntInfoService {
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 
-  public QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
+
+  public QueryEntInfoResponse queryEntInfo(EntInfoQueryRequest request) {
+    if (StringUtils.isNotBlank(request.getAccount())) {
+      return queryByAccount(request);
+    } else if (StringUtils.isNotBlank(request.getName())) {
+      EntInfo entInfo = getEntInfoByRealName(request.getName());
+      if (isNull(entInfo)) {
+        throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
+      }
+      QueryEntInfoResponse resp = new QueryEntInfoResponse();
+      BeanCopy.beans(entInfo, resp).copy();
+      return resp;
+    } else {
+      return null;
+    }
+  }
+
+  private QueryEntInfoResponse queryByAccount(EntInfoQueryRequest request) {
     String account = request.getAccount();
     if (Strings.isNullOrEmpty(account)) {
       return null;
@@ -296,9 +312,6 @@ public class EntInfoService {
       //调用身份核实-企业信息认证
       entRealNameVerify.checkEntBaseInfo(request);
       String idsTransId = processEntPay(newEntInfo.getId(), request);
-
-      EntInfoResponse response = new EntInfoResponse();
-      response.setUid(request.getUid());
       return EntPayResponse.builder().queryTransId(idsTransId).build();
     } else {
       //保存历史
@@ -312,8 +325,6 @@ public class EntInfoService {
       //调用身份核实-企业信息认证
       entRealNameVerify.checkEntBaseInfo(request);
       String idsTransId = processEntPay(entInfo.getId(), request);
-      EntInfoResponse response = new EntInfoResponse();
-      response.setUid(request.getUid());
       return EntPayResponse.builder().queryTransId(idsTransId).build();
     }
   }

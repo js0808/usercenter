@@ -1,4 +1,4 @@
-package cn.org.bjca.footstone.usercenter.api.vo.request;
+package cn.org.bjca.footstone.usercenter.api.vo.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
