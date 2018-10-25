@@ -4,9 +4,11 @@ import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ACCOUNT_
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.CERT_NOT_REGISTE;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_IS_LOCKED;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_OR_PWD_ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_STATUS_WRONG;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_TOKEN_WRONG;
 
 import cn.org.bjca.footstone.usercenter.Conts;
+import cn.org.bjca.footstone.usercenter.api.enmus.AccountStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AuthCodeValidateRequest;
@@ -77,6 +79,9 @@ public class LoginService {
     // 账号不存在
     if (accountInfo == null) {
       return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), null);
+    }
+    if (!AccountStatusEnum.NORMAL.equals(accountInfo.getStatus())) {
+      return Pair.of(BizResultVo.of(false, USER_STATUS_WRONG), null);
     }
     // 账号被锁定
     if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
