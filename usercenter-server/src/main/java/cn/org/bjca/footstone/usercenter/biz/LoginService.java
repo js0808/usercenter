@@ -80,7 +80,7 @@ public class LoginService {
     if (accountInfo == null) {
       return Pair.of(BizResultVo.of(false, USER_OR_PWD_ERROR), null);
     }
-    if (!AccountStatusEnum.NORMAL.equals(accountInfo.getStatus())) {
+    if (!AccountStatusEnum.NORMAL.value().equals(accountInfo.getStatus())) {
       return Pair.of(BizResultVo.of(false, USER_STATUS_WRONG), null);
     }
     // 账号被锁定
