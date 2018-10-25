@@ -148,6 +148,7 @@ public class AccountRegisterService {
     if (!StringUtils.equals(request.getValidateId(), validateId)) {
       throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
     }
+    stringRedisTemplate.delete(key);
     AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
     validateRequest.setAuthCode(request.getAuthCode());
     validateRequest.setUserName(request.getAccount());
