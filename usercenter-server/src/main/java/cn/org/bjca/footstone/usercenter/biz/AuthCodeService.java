@@ -178,6 +178,7 @@ public class AuthCodeService {
       if (!StringUtils.equals(redisValue, request.getAuthCode())) {
         throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
       }
+      stringRedisTemplate.delete(key);
     }
     AuthCodeValidateResponse response = new AuthCodeValidateResponse();
     if (StringUtils.equals(AuthCodeTypeEnum.CHANGE.value(), request.getType())) {
