@@ -103,7 +103,7 @@ public class AccountRegisterService {
   public void accountStatus(AccountStatusUpdateRequest request) throws Exception {
     AccountInfo accountInfo = accountExit(request.getAccount());
     /**变更帐号状态**/
-    accountInfo.setAccount(request.getStatus());
+    accountInfo.setStatus(request.getStatus());
     accountInfo.setUpdateTime(new Date());
     accountInfo.setVersion(accountInfo.getVersion() + 1);
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
