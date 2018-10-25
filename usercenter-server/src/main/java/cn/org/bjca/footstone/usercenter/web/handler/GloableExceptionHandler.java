@@ -5,11 +5,16 @@ import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -17,17 +22,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author LvYong
