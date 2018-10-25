@@ -58,7 +58,7 @@ public enum LoginChannelEnum {
   static {
     hashSet = new HashSet<String>();
     hashSet.clear();
-    for (AuthCodeTypeEnum codeTypeEnum : AuthCodeTypeEnum.values()) {
+    for (LoginChannelEnum codeTypeEnum : LoginChannelEnum.values()) {
       hashSet.add(codeTypeEnum.value());
     }
   }

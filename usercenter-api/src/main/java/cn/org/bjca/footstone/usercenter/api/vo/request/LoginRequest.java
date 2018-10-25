@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.api.vo.request;
 
+import cn.org.bjca.footstone.usercenter.api.valid.LoginChannel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -29,6 +30,6 @@ public class LoginRequest {
 
   private String clientInfo;
 
-  @NotBlank(message = "登录渠道不能为空")
+  @LoginChannel
   private String channel;
 }
