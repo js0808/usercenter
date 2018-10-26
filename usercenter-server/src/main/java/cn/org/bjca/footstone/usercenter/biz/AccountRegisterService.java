@@ -110,6 +110,9 @@ public class AccountRegisterService {
   }
 
   public void modifyPassword(ModifyPasswordRequest request) throws Exception {
+    if (StringUtils.equals(request.getNewPassword(), request.getOldPassword())) {
+      throw new BjcaBizException(ReturnCodeEnum.OLD_NEW_PWD_EQUALS_ERROR);
+    }
     AccountInfo accountInfo = accountExit(request.getAccount());
     if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
         .after(new Date())) {
