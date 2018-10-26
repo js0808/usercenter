@@ -8,6 +8,9 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,5 +44,7 @@ public interface LoginFacade {
   @ApiOperation(value = "查询用户信息", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "查询用户信息")
   @RequestMapping(value = "/tokens", method = RequestMethod.GET)
   @ResponseBody
-  ReturnResult<AccountInfoResponse> tokenInfo(Long uid, String token);
+  ReturnResult<AccountInfoResponse> tokenInfo(
+      @Validated @NotNull(message = "uid 必须是数字且不能为空") Long uid,
+      @NotBlank(message = "token 不能为空") String token);
 }

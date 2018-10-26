@@ -21,12 +21,12 @@ import org.apache.commons.lang3.tuple.Pair;
 @Slf4j
 public abstract class CaptchaGenerator {
 
-  private static final DefaultCaptchaService service = new DefaultCaptchaService();
+  private static final DefaultCaptchaService SERVICE = new DefaultCaptchaService();
 
   public static Pair<String, String> generate() {
     ByteArrayOutputStream b = new ByteArrayOutputStream();
     try {
-      String patchca = EncoderHelper.getChallangeAndWriteImage(service, "png", b);
+      String patchca = EncoderHelper.getChallangeAndWriteImage(SERVICE, "png", b);
       return Pair.of(patchca, Base64.encode(b.toByteArray()));
     } catch (IOException e) {
       log.error("生成验证码异常!");

@@ -53,8 +53,6 @@ public class QueryEntInfoResponse {
 
   private String extField4;
 
-  private String extConfig;
-
   private Integer version;
 
   private String oper;

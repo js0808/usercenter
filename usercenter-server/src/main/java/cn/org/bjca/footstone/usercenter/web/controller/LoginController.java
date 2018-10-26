@@ -9,7 +9,10 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.LoginResponse;
 import cn.org.bjca.footstone.usercenter.biz.LoginService;
 import cn.org.bjca.footstone.usercenter.vo.BizResultVo;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.tuple.Pair;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +38,7 @@ public class LoginController implements LoginFacade {
     if (result.getLeft().isSuccess()) {
       return ReturnResult.success(result.getRight());
     }
-    return ReturnResult.error(result.getLeft().getCode());
+    return ReturnResult.error(result.getLeft().getCode(), result.getRight());
   }
 
   @Override
@@ -55,7 +58,7 @@ public class LoginController implements LoginFacade {
 
   @Override
   public ReturnResult<AccountInfoResponse> tokenInfo(@RequestParam Long uid,
-      @RequestParam String token) {
+     @RequestParam String token) {
     Pair<BizResultVo, AccountInfoResponse> result = loginService.tokenInfo(uid, token);
     if (result.getLeft().isSuccess()) {
       return ReturnResult.success(result.getRight());

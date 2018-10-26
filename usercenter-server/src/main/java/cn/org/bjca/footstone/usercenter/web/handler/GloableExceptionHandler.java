@@ -5,11 +5,19 @@ import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -17,17 +25,11 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * @author LvYong
@@ -74,11 +76,39 @@ public class GloableExceptionHandler {
     return resultVo;
   }
 
+  @ExceptionHandler({ConstraintViolationException.class})
+  @ResponseBody
+  public ReturnResult processValidationError(HttpServletResponse response,
+      ConstraintViolationException exception) {
+    ReturnResult resultVo = new ReturnResult(ReturnCodeEnum.REQ_PARAM_ERR.value());
+    resultVo.setMessage(ReturnCodeEnum.REQ_PARAM_ERR.getDesc());
+    resultVo.setData(ImmutableMap.of(ERR_CODE, ReturnCodeEnum.REQ_PARAM_ERR.value(), ERR_MSG,
+        JSON.toJSONString(exception.getConstraintViolations()
+            .stream()
+            .map(ConstraintViolation::getMessage)
+            .collect(Collectors.toList()))));
+    return resultVo;
+  }
+
   @ExceptionHandler({MissingServletRequestParameterException.class})
   @ResponseBody
   public ReturnResult processValidationError(HttpServletResponse response,
       MissingServletRequestParameterException ex) {
     Map<String, String> fieldErrors = ImmutableMap.of(ex.getParameterName(), ex.getMessage());
+
+    ReturnResult resultVo = new ReturnResult(ReturnCodeEnum.REQ_PARAM_ERR.value());
+    resultVo.setMessage(ReturnCodeEnum.REQ_PARAM_ERR.getDesc());
+    resultVo.setData(ImmutableMap.of(ERR_CODE, ReturnCodeEnum.REQ_PARAM_ERR.value(), ERR_MSG,
+        JSON.toJSONString(fieldErrors)));
+    return resultVo;
+  }
+
+  @ExceptionHandler({MethodArgumentTypeMismatchException.class})
+  @ResponseBody
+  public ReturnResult processValidationError(HttpServletResponse response,
+      MethodArgumentTypeMismatchException ex) {
+    Map<String, String> fieldErrors = ImmutableMap
+        .of(ex.getName(), "请输入正确的类型" + ex.getParameter().getParameterType().getSimpleName());
 
     ReturnResult resultVo = new ReturnResult(ReturnCodeEnum.REQ_PARAM_ERR.value());
     resultVo.setMessage(ReturnCodeEnum.REQ_PARAM_ERR.getDesc());

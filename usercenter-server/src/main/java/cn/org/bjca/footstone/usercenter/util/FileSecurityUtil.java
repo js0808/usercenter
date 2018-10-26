@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class FileSecurityUtil {
 
-  //    private static final byte[] security = "iwantflyawaygod!".getBytes();
-  private static final int security = 0x99;
+  //    private static final byte[] SECURITY = "iwantflyawaygod!".getBytes();
+  private static final int SECURITY = 0x99;
 
   private static final int SIZE = 1024;
 
@@ -30,8 +30,8 @@ public abstract class FileSecurityUtil {
       for (int read = inputStream.read(buffer, 0, SIZE); read > -1;
           read = inputStream.read(buffer, 0, SIZE)) {
         for (int i = 0; i < read; i++) {
-//          security[i & (security.length - 1)]
-          buffer[i] = (byte) (buffer[i] ^ security);
+//          SECURITY[i & (SECURITY.length - 1)]
+          buffer[i] = (byte) (buffer[i] ^ SECURITY);
         }
         aFile.write(buffer, 0, read);
       }

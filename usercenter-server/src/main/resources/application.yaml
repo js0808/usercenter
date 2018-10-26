@@ -82,7 +82,7 @@ authcode:
   sign-key: @authcode.signKey@
   codeUrl: @authcode.codeUrl@
   emailUrl: @authcode.emailUrl@
-  emailBody: "亲爱的%s用户您好,\n验证码：%s5分钟内输入有效,请输入验证码完成%s,勿将验证码告诉其他人."
+  emailBody: "亲爱的%s用户您好,\n验证码：%s,5分钟内输入有效,请输入验证码完成%s,勿将验证码告诉其他人."
   validateUrl: @authcode.validateUrl@
   version: @authcode.version@
   expire: @authcode.expire@

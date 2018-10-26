@@ -103,7 +103,7 @@ public class AccountRegisterService {
   public void accountStatus(AccountStatusUpdateRequest request) throws Exception {
     AccountInfo accountInfo = accountExit(request.getAccount());
     /**变更帐号状态**/
-    accountInfo.setAccount(request.getStatus());
+    accountInfo.setStatus(request.getStatus());
     accountInfo.setUpdateTime(new Date());
     accountInfo.setVersion(accountInfo.getVersion() + 1);
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
@@ -140,7 +140,7 @@ public class AccountRegisterService {
     }
     /**检查验证标示是否存在**/
     String key =
-        authCodeService.getValidate_key() + request.getType() + "_" + request.getOldAccount();
+        authCodeService.getValidateKey() + request.getType() + "_" + request.getOldAccount();
     String validateId = stringRedisTemplate.opsForValue().get(key);
     if (StringUtils.isEmpty(validateId)) {
       throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
@@ -148,6 +148,7 @@ public class AccountRegisterService {
     if (!StringUtils.equals(request.getValidateId(), validateId)) {
       throw new BjcaBizException(ReturnCodeEnum.VALIDATE_ID_NOT_EXIT_ERROR);
     }
+    stringRedisTemplate.delete(key);
     AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
     validateRequest.setAuthCode(request.getAuthCode());
     validateRequest.setUserName(request.getAccount());
@@ -179,7 +180,7 @@ public class AccountRegisterService {
   public CertRegisterResponse registerByCert(RegisterCertRequest req) {
     //验证签名和证书
     verifySignAndCert.verifySignAndCert(req.getAppId(), req.getSign(), req.getSource(),
-        req.getUserCert());
+        req.getUserCert(), req.getSignAlgIdentifier(), req.getCertPolicyId());
     //获取证书唯一标识
     String certId = verifySignAndCert.getCertUid(req.getUserCert(), req.getAppId());
     //检查证书是否注册过

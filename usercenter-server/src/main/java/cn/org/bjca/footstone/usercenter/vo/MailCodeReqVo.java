@@ -14,4 +14,14 @@ public class MailCodeReqVo {
   private String plainText;
 
   private String htmlText;
+
+  private String trace_id;
+
+  private String third_trace_id;
+
+  private String appId;
+
+  private String templateId;
+
+  private String deviceId;
 }

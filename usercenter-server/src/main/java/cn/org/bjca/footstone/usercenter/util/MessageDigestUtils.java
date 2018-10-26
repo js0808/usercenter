@@ -1,13 +1,16 @@
 package cn.org.bjca.footstone.usercenter.util;
 
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.util.*;
 
 /**
  * Description:MD5、SHA1文摘和HMAC.
@@ -105,8 +108,8 @@ public class MessageDigestUtils {
    * @param aKey 密钥
    */
   public static String hmacSign(String aValue, String aKey) {
-    byte k_ipad[] = new byte[64];
-    byte k_opad[] = new byte[64];
+    byte kIpad[] = new byte[64];
+    byte kOpad[] = new byte[64];
     byte keyb[];
     byte value[];
     try {
@@ -117,18 +120,18 @@ public class MessageDigestUtils {
       value = aValue.getBytes();
     }
 
-    Arrays.fill(k_ipad, keyb.length, 64, (byte) 54);
-    Arrays.fill(k_opad, keyb.length, 64, (byte) 92);
+    Arrays.fill(kIpad, keyb.length, 64, (byte) 54);
+    Arrays.fill(kOpad, keyb.length, 64, (byte) 92);
     for (int i = 0; i < keyb.length; i++) {
-      k_ipad[i] = (byte) (keyb[i] ^ 0x36);
-      k_opad[i] = (byte) (keyb[i] ^ 0x5c);
+      kIpad[i] = (byte) (keyb[i] ^ 0x36);
+      kOpad[i] = (byte) (keyb[i] ^ 0x5c);
     }
     MessageDigest md = DigestUtils.getMd5Digest();
-    md.update(k_ipad);
+    md.update(kIpad);
     md.update(value);
     byte dg[] = md.digest();
     md.reset();
-    md.update(k_opad);
+    md.update(kOpad);
     md.update(dg, 0, 16);
     dg = md.digest();
     return Hex.encodeHexString(dg);

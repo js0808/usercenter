@@ -10,5 +10,6 @@ import lombok.Data;
 public class EntInfoQueryRequest {
 
   private String account;
+  private String name;
 
 }

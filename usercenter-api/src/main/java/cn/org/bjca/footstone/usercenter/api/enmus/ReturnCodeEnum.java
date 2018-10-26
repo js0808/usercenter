@@ -33,9 +33,10 @@ public enum ReturnCodeEnum {
   USER_OR_PWD_ERROR(60604020, "用户名或密码不正确"),
   USER_IS_LOCKED(60604021, "用户被锁定"),
   USER_TOKEN_WRONG(60604022, "用户TOKEN不正确"),
-  ENT_INFO_NOT_ENOUGH(60604023, "统一社会信用代码/工商营业执照号/组织机构号不能同时为空"),
+  UID_NULL_ERROR(60604023, "UID不能为空"),
   ENT_INFO_STATUS_ERROR(60604024, "企业信息状态异常"),
   VALIDATE_ID_NOT_EXIT_ERROR(60604025, "验证标识错误"),
+  USER_STATUS_WRONG(60604026, "用户已冻结或注销"),
   PATCHCA_GENERATE_ERROR(60604040, "生成验证码异常"),
   PATCHCA_VALIDATE_ERROR(60604041, "验证码验证错误"),
   PATCHCA_EXPIRE_ERROR(60604042, "验证码过期"),
@@ -48,7 +49,9 @@ public enum ReturnCodeEnum {
   IMAGES_UPLOAD_REMOTE_ERROR(60604049, "上传文件服务器异常"),
   IMAGES_DOWNLOAD_REMOTE_ERROR(60604050, "下载文件异常"),
   REAL_NAME_VERIFY_REQ_NOT_EXIST(60604051, "身份核实请求不存在"),
-  USER_NOT_EXIST(60604052, "用户不存在");
+  USER_NOT_EXIST(60604052, "用户不存在"),
+  CERT_NOT_REGISTE(60604053, "证书未注册"),
+  ALREADY_REAL_NAME_CHECKED(60604054, "用户名或企业名称已经实名认证");
 
   /**
    * The value.
