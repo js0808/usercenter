@@ -86,6 +86,7 @@ public class AccountRegisterService {
     if (info == null) {
       throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
     }
+    chechCertAccount(info);
     /**验证码验证**/
     AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
     validateRequest.setUserName(request.getAccount());
@@ -109,6 +110,12 @@ public class AccountRegisterService {
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 
+  private void chechCertAccount(AccountInfo accountInfo) {
+    if (StringUtils.equals(accountInfo.getAccountType(), AccountTypeEnum.CERT.value())) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_CERT_NO_PWD_ERROR);
+    }
+  }
+
   public void modifyPassword(ModifyPasswordRequest request) throws Exception {
     if (StringUtils.equals(request.getNewPassword(), request.getOldPassword())) {
       throw new BjcaBizException(ReturnCodeEnum.OLD_NEW_PWD_EQUALS_ERROR);
@@ -118,6 +125,8 @@ public class AccountRegisterService {
         .after(new Date())) {
       throw new BjcaBizException(ReturnCodeEnum.USER_IS_LOCKED);
     }
+    chechCertAccount(accountInfo);
+
     /**验证原密码**/
     boolean matches = PwdUtil.verify(accountInfo.getPassword(), request.getOldPassword());
     if (!matches) {
