@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class EmailCodeApplyRequest {
 
   @Email(message = "请输入正确的邮箱地址")
+  @NotBlank(message = "邮箱地址不能为空")
   private String email;
   @AuthCodeType
   private String type;

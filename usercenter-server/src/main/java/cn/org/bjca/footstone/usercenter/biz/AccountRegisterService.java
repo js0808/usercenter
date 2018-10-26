@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import cn.org.bjca.footstone.usercenter.api.enmus.AccountStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AccountTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
@@ -103,11 +104,18 @@ public class AccountRegisterService {
 
   public void accountStatus(AccountStatusUpdateRequest request) throws Exception {
     AccountInfo accountInfo = accountExit(request.getAccount());
+    checkAccountStatus(accountInfo);
     /**变更帐号状态**/
     accountInfo.setStatus(request.getStatus());
     accountInfo.setUpdateTime(new Date());
     accountInfo.setVersion(accountInfo.getVersion() + 1);
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
+  }
+
+  private void checkAccountStatus(AccountInfo accountInfo) {
+    if (StringUtils.equals(accountInfo.getStatus(), AccountStatusEnum.INVALID.value())) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_STATUS_ERROR);
+    }
   }
 
   private void chechCertAccount(AccountInfo accountInfo) {
