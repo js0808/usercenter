@@ -181,6 +181,7 @@ public class UserInfoService {
    */
   public UserInfoResponse modUser(Long uid, UserInfoVo userInfo) {
     log.info("请求实名认证变更{}", userInfo);
+    userInfo.setUid(uid);
     RealNameVerify verify = getVerify(userInfo);
 
     UserInfo old = getUserInfoWithUid(uid);
@@ -328,7 +329,7 @@ public class UserInfoService {
   public QueryUserInfoResponse getUserByAccount(UserInfoQueryVo queryVo) {
     String account = queryVo.getAccount();
     if (Strings.isNullOrEmpty(account)) {
-      return null;
+      throw new BaseException(RESOURCE_NOT_EXIST);
     }
     QueryUserInfoResponse rsp = getUidFromAccount(account);
     if (isNull(rsp)) {
