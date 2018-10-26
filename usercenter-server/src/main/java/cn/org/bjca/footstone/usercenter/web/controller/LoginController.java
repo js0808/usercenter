@@ -1,5 +1,7 @@
 package cn.org.bjca.footstone.usercenter.web.controller;
 
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.USER_TOKEN_WRONG;
+
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.facade.LoginFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.LoginCertRequest;
@@ -52,13 +54,14 @@ public class LoginController implements LoginFacade {
 
   @Override
   public ReturnResult<Void> logout(@Validated @RequestBody LogouRequest request) {
-    loginService.logout(request.getUid(), request.getToken());
-    return ReturnResult.success("OK");
+    BizResultVo bizResultVo = loginService.logout(request.getUid(), request.getToken());
+    return bizResultVo.isSuccess() ? ReturnResult.success("OK")
+        : ReturnResult.error(USER_TOKEN_WRONG);
   }
 
   @Override
   public ReturnResult<AccountInfoResponse> tokenInfo(@RequestParam Long uid,
-     @RequestParam String token) {
+      @RequestParam String token) {
     Pair<BizResultVo, AccountInfoResponse> result = loginService.tokenInfo(uid, token);
     if (result.getLeft().isSuccess()) {
       return ReturnResult.success(result.getRight());
