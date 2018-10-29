@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class UserInfoStatusVo {
 
-  @NotNull
+  @NotNull(message = "不能为空并且枚举值只能为 NORMAL, FREEZE,  INVALID")
   private UserInfoStatusEnum status;
   private String oper;
 }

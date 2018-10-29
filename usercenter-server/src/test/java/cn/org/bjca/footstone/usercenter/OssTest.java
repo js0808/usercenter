@@ -5,9 +5,7 @@ import com.google.common.collect.Maps;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.apache.http.HttpEntity;
@@ -186,5 +184,20 @@ public class OssTest {
     CloseableHttpResponse response = httpClient.execute(uploadFile);
     HttpEntity responseEntity = response.getEntity();
     System.out.println("response:" + EntityUtils.toString(responseEntity));
+  }
+
+  @Test
+  public void sign() {
+    HashMap<String, String> params = Maps.newHashMap();
+    params.put("appId", "APP_99A43C05454F4608B40D724521C36767");
+    params.put("deviceId", "DEV_049796F49CAC4B3FB8C7B72758B72E8F");
+    params.put("expire", "14000");
+    params.put("id", "b8a50fe9956d4c3e810d111351385cb3");
+    params.put("signAlgo", SignatureUtils.SIGN_ALGORITHMS_HMACSHA256);
+    params.put("version", "1.0");
+    String signStr = SignatureUtils
+        .signatureBean(params, SignatureUtils.SIGN_ALGORITHMS_HMACSHA256, "SRRGLvqRxECUoFbnP1CAGlmLLEr1cslI");
+    System.out.println(signStr);
+
   }
 }

@@ -99,7 +99,7 @@ public class UserController implements UserInfoFacade {
 
   @Override
   public ReturnResult<UserInfoResponse> modUserStatus(@PathVariable Long uid,
-      @RequestBody UserInfoStatusVo userInfoStatusVo) {
+      @Validated @RequestBody UserInfoStatusVo userInfoStatusVo) {
     MetricsClient metricsClient = MetricsClient.newInstance("对外服务", "个人状态变更");
     ReturnResult result;
     try {
