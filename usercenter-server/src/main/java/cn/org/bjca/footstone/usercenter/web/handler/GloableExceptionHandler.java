@@ -63,6 +63,7 @@ public class GloableExceptionHandler {
     return getResponseEntity(ex, request, returnCodeEnum);
   }
 
+  // 参数
   @ExceptionHandler({BindException.class})
   @ResponseBody
   public ReturnResult processValidationError(HttpServletResponse response, BindException ex) {
@@ -76,6 +77,7 @@ public class GloableExceptionHandler {
     return resultVo;
   }
 
+  // 参数
   @ExceptionHandler({ConstraintViolationException.class})
   @ResponseBody
   public ReturnResult processValidationError(HttpServletResponse response,
@@ -90,6 +92,7 @@ public class GloableExceptionHandler {
     return resultVo;
   }
 
+  // 参数
   @ExceptionHandler({MissingServletRequestParameterException.class})
   @ResponseBody
   public ReturnResult processValidationError(HttpServletResponse response,
@@ -103,6 +106,7 @@ public class GloableExceptionHandler {
     return resultVo;
   }
 
+  // 参数
   @ExceptionHandler({MethodArgumentTypeMismatchException.class})
   @ResponseBody
   public ReturnResult processValidationError(HttpServletResponse response,
@@ -117,7 +121,7 @@ public class GloableExceptionHandler {
     return resultVo;
   }
 
-
+  // 参数
   @ExceptionHandler({MethodArgumentNotValidException.class})
   public @ResponseBody
   Object argumentNotvalid(MethodArgumentNotValidException e, HttpServletRequest request) {

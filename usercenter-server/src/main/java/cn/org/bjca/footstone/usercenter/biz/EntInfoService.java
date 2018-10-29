@@ -238,7 +238,7 @@ public class EntInfoService {
       BeanCopy.beans(entInfo, resp).copy();
       return resp;
     } else {
-      return null;
+      throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
     }
   }
 

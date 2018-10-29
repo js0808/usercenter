@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import cn.org.bjca.footstone.usercenter.api.enmus.AccountStatusEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AccountTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
@@ -86,6 +87,7 @@ public class AccountRegisterService {
     if (info == null) {
       throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
     }
+    chechCertAccount(info);
     /**验证码验证**/
     AuthCodeValidateRequest validateRequest = new AuthCodeValidateRequest();
     validateRequest.setUserName(request.getAccount());
@@ -102,6 +104,7 @@ public class AccountRegisterService {
 
   public void accountStatus(AccountStatusUpdateRequest request) throws Exception {
     AccountInfo accountInfo = accountExit(request.getAccount());
+    checkAccountStatus(accountInfo);
     /**变更帐号状态**/
     accountInfo.setStatus(request.getStatus());
     accountInfo.setUpdateTime(new Date());
@@ -109,12 +112,29 @@ public class AccountRegisterService {
     accountInfoMapper.updateByPrimaryKeySelective(accountInfo);
   }
 
+  private void checkAccountStatus(AccountInfo accountInfo) {
+    if (StringUtils.equals(accountInfo.getStatus(), AccountStatusEnum.INVALID.value())) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_STATUS_ERROR);
+    }
+  }
+
+  private void chechCertAccount(AccountInfo accountInfo) {
+    if (StringUtils.equals(accountInfo.getAccountType(), AccountTypeEnum.CERT.value())) {
+      throw new BjcaBizException(ReturnCodeEnum.ACCOUNT_CERT_NO_PWD_ERROR);
+    }
+  }
+
   public void modifyPassword(ModifyPasswordRequest request) throws Exception {
+    if (StringUtils.equals(request.getNewPassword(), request.getOldPassword())) {
+      throw new BjcaBizException(ReturnCodeEnum.OLD_NEW_PWD_EQUALS_ERROR);
+    }
     AccountInfo accountInfo = accountExit(request.getAccount());
     if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
         .after(new Date())) {
       throw new BjcaBizException(ReturnCodeEnum.USER_IS_LOCKED);
     }
+    chechCertAccount(accountInfo);
+
     /**验证原密码**/
     boolean matches = PwdUtil.verify(accountInfo.getPassword(), request.getOldPassword());
     if (!matches) {

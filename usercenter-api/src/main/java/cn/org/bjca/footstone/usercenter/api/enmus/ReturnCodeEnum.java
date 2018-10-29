@@ -51,7 +51,10 @@ public enum ReturnCodeEnum {
   REAL_NAME_VERIFY_REQ_NOT_EXIST(60604051, "身份核实请求不存在"),
   USER_NOT_EXIST(60604052, "用户不存在"),
   CERT_NOT_REGISTE(60604053, "证书未注册"),
-  ALREADY_REAL_NAME_CHECKED(60604054, "用户名或企业名称已经实名认证");
+  ALREADY_REAL_NAME_CHECKED(60604054, "用户名或企业名称已经实名认证"),
+  OLD_NEW_PWD_EQUALS_ERROR(60604055, "新旧密码不能相同"),
+  ACCOUNT_CERT_NO_PWD_ERROR(60604056, "证书账号不能修改密码"),
+  ACCOUNT_STATUS_ERROR(60604057, "账号状态异常");
 
   /**
    * The value.
