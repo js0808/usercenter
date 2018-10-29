@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class EntInfoStatusRequest {
 
-  @NotNull
+  @NotNull(message = "不能为空并且枚举值只能为 NORMAL, FREEZE,  INVALID")
   private UserInfoStatusEnum status;
   private String oper;
 }
