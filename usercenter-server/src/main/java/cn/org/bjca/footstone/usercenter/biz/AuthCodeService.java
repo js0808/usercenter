@@ -84,6 +84,10 @@ public class AuthCodeService {
       log.info("data:[{}]", JSONObject.toJSONString(returnResult.getData()));
 
       AuthCodeApplyResponse response = responseEntity.getBody().getData();
+      AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
+      String key = redis_key + typeEnum.value() + "_" + request.getMobile();
+      stringRedisTemplate.opsForValue()
+          .set(key, typeEnum.value(), authCodeConfig.getExpire(), TimeUnit.SECONDS);
       return response;
     } else {
       log.error("status:[{}]", responseEntity.getStatusCode().value());
@@ -137,6 +141,12 @@ public class AuthCodeService {
   }
 
   public AuthCodeValidateResponse validate(AuthCodeValidateRequest request) throws Exception {
+    AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
+    String key = redis_key + typeEnum.value() + "_" + request.getUserName();
+    String redisValue = stringRedisTemplate.opsForValue().get(key);
+    if (StringUtils.isEmpty(redisValue)) {
+      throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_NOT_EXIT_ERROR);
+    }
     if (!isEmail(request.getUserName())) {
       CodeValidateReqVo send = new CodeValidateReqVo();
       send.setAppId(authCodeConfig.getAppId());
@@ -169,22 +179,16 @@ public class AuthCodeService {
             responseEntity.getBody().getMessage());
       }
     } else {
-      AuthCodeTypeEnum typeEnum = AuthCodeTypeEnum.findByValue(request.getType());
-      String key = redis_key + typeEnum.value() + "_" + request.getUserName();
-      String redisValue = stringRedisTemplate.opsForValue().get(key);
-      if (StringUtils.isEmpty(redisValue)) {
-        throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_NOT_EXIT_ERROR);
-      }
       if (!StringUtils.equals(redisValue, request.getAuthCode())) {
         throw new BjcaBizException(ReturnCodeEnum.AUTH_CODE_VALIDATE_ERROR);
       }
-      stringRedisTemplate.delete(key);
     }
+    stringRedisTemplate.delete(key);
     AuthCodeValidateResponse response = new AuthCodeValidateResponse();
     if (StringUtils.equals(AuthCodeTypeEnum.CHANGE.value(), request.getType())) {
-      String key = validate_key + request.getType() + "_" + request.getUserName();
+      String validatekey = validate_key + request.getType() + "_" + request.getUserName();
       String uuidValue = getUUID();
-      stringRedisTemplate.opsForValue().set(key, uuidValue, 10, TimeUnit.MINUTES);
+      stringRedisTemplate.opsForValue().set(validatekey, uuidValue, 10, TimeUnit.MINUTES);
       response.setValidateId(uuidValue);
     }
     return response;
