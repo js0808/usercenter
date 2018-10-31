@@ -208,6 +208,9 @@ public class LoginService {
     if (accountInfo == null) {
       return Pair.of(BizResultVo.of(false, CERT_NOT_REGISTE), null);
     }
+    if (!AccountStatusEnum.NORMAL.value().equals(accountInfo.getStatus())) {
+      return Pair.of(BizResultVo.of(false, USER_STATUS_WRONG), null);
+    }
     // 账号被锁定
     if (accountInfo.getIsLocked() && accountInfo.getLockedExpireTime()
         .after(new Date())) {
