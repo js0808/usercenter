@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface NotifyInfoMapperCustom {
 
-  int selectMinId();
+  Integer selectMinId();
 
   List<NotifyInfo> selectInitNotify(@Param("id") int id, @Param("selectLimit") int selectLimit);
 }

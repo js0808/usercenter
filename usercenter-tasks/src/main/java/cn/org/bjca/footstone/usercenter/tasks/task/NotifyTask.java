@@ -45,7 +45,11 @@ public class NotifyTask {
 
   @Scheduled(cron = "${bjca.task.cron-notify}")
   public void doNotify() {
-    int id = notifyInfoMapperCustom.selectMinId();
+    Integer id = notifyInfoMapperCustom.selectMinId();
+    if (id == null) {
+      log.info("id is null 没有待处理的记录");
+      return;
+    }
     while (true) {
       try {
         if (JobRunningStatus.isSuccess()) {

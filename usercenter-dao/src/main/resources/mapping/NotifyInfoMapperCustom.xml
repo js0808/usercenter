@@ -16,7 +16,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
   </resultMap>
 
-  <select id="selectMinId" resultType="integer">
+  <select id="selectMinId" resultType="java.lang.Integer">
     select min(id) from notify_info where notify_status='INIT' order by id
   </select>
 
