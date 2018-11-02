@@ -57,7 +57,6 @@ public class NotifyTask {
         List<NotifyInfo> notifyInfos = notifyInfoMapperCustom.selectInitNotify(id, selectLimit);
         log.info("发送用户中心通知，条数[{}]", notifyInfos.size());
         if (!CollectionUtils.isEmpty(notifyInfos)) {
-
           for (NotifyInfo notifyInfo : notifyInfos) {
             log.info("发送用户中心通知，UID[{}],用户类型[{}],通知类型[{}]", notifyInfo.getUid(),
                 notifyInfo.getUserType(),
@@ -88,7 +87,11 @@ public class NotifyTask {
                   notifyInfo.getUserType(), notifyInfo.getNotifyType());
             }
           }
-          id += selectLimit;
+          if (notifyInfos.size() < selectLimit) {
+            id += notifyInfos.size();
+          } else {
+            id += selectLimit;
+          }
         }
         Thread.sleep(5000);
       } catch (InterruptedException e) {
