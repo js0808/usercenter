@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class IdServiceBaseReqVo {
 
+  private String appId = null;
   private String userTransId = null;
   private String deviceId = null;
 }

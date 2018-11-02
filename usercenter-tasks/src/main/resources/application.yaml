@@ -21,10 +21,6 @@ spring:
         initial-size: @db.initial-size@
         max-active: @db.max-active@
         max-wait: @db.max-wait@
-  redis:
-        host: @redis.host@
-        port: @redis.port@
-        password: @redis.password@
   jackson:
     default-property-inclusion: non_null
     serialization:
@@ -57,6 +53,7 @@ bjca:
   task:
     cron-notify: @cron.notify@
     notify-max-num: @notify.max.num@
+    select-limit: @select.limit@
 kafka:
   bootstrap-servers: @kafka.bootstrap.servers@
   topic-notify: @kafka.topic.notify@

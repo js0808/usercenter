@@ -4,7 +4,7 @@ import org.slf4j.LoggerFactory;
 
 public class JobRunningStatus {
 
-  private static boolean success = true;
+  private static boolean success = false;
 
   public static boolean isSuccess() {
     return success;

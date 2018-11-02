@@ -4,6 +4,7 @@ import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayQueryRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EntPayRequest;
+import cn.org.bjca.footstone.usercenter.config.AuthCodeConfig;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
@@ -15,6 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +40,13 @@ public class EntRealNameVerify {
   @Value("${idservice.ent-pay-verify-query}")
   private String entPayVerifyQueryUrl = null;
 
+  @Autowired
+  private AuthCodeConfig config;
+
   public void checkEntBaseInfo(EntPayRequest entInfoRequest) {
     IdServiceCheckEntReqVo idServiceCheckEntReqVo = new IdServiceCheckEntReqVo();
+    idServiceCheckEntReqVo.setAppId(config.getAppId());
+    idServiceCheckEntReqVo.setDeviceId(config.getDeviceId());
     idServiceCheckEntReqVo.setEnterpriseName(entInfoRequest.getName());
     idServiceCheckEntReqVo.setLeagalPerson(entInfoRequest.getLegalName());
     idServiceCheckEntReqVo.setBusinessLicenseNo(entInfoRequest.getBizLicense());
@@ -87,6 +94,8 @@ public class EntRealNameVerify {
    */
   public String entPayVerify(String transId, EntPayRequest request) {
     IdServiceEntPayReqVo payReqVo = new IdServiceEntPayReqVo();
+    payReqVo.setDeviceId(config.getDeviceId());
+    payReqVo.setAppId(config.getAppId());
     payReqVo.setAccount(request.getBankAccount());
     payReqVo.setAccountName(request.getName());
     payReqVo.setAccountBank(request.getBankName());
@@ -131,6 +140,8 @@ public class EntRealNameVerify {
 
   public Map<String, Object> entPayQuery(String transId, EntPayQueryRequest request) {
     IdServiceEntPayQueryReqVo payQueryReqVo = new IdServiceEntPayQueryReqVo();
+    payQueryReqVo.setAppId(config.getAppId());
+    payQueryReqVo.setDeviceId(config.getDeviceId());
     payQueryReqVo.setUserTransId(transId);
     payQueryReqVo.setQueryTransId(request.getQueryTransId());
     payQueryReqVo.setVerifyCode(request.getVerifyCode());

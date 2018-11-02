@@ -16,7 +16,11 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
   </resultMap>
 
+  <select id="selectMinId" resultType="integer">
+    select min(id) from notify_info where notify_status='INIT' order by id
+  </select>
+
   <select id="selectInitNotify" resultMap="BaseResultMap">
-    select * from notify_info where notify_status='INIT' limit 0,200
+    select * from notify_info where id >= #{id} limit #{selectLimit}
   </select>
 </mapper>
