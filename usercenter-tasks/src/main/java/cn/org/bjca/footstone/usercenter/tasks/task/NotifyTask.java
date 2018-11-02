@@ -54,6 +54,7 @@ public class NotifyTask {
           log.info("doNotify没有得到锁，无法执行");
           return;
         }
+        log.info("查询开始记录id[{}]，查询数量[{}]", id, selectLimit);
         List<NotifyInfo> notifyInfos = notifyInfoMapperCustom.selectInitNotify(id, selectLimit);
         log.info("发送用户中心通知，条数[{}]", notifyInfos.size());
         if (!CollectionUtils.isEmpty(notifyInfos)) {
