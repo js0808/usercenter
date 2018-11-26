@@ -91,8 +91,6 @@ authcode:
   develop-id: "@msg-develop-id@"
   develop-key: "@msg-develop-key@"
 idservice:
-  user-name: @idservice.userName@
-  password: @idservice.password@
   ent-base: @idservice.ent.base@
   ent-pay-verify: @idservice.ent.payVerify@
   ent-pay-verify-query: @idservice.ent.payVerifyQuery@
