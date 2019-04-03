@@ -1,7 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
 import static cn.org.bjca.footstone.usercenter.util.RestUtils.isOk;
-import static cn.org.bjca.footstone.usercenter.util.RestUtils.post;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.enmus.AuthCodeTypeEnum;
@@ -13,17 +12,16 @@ import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeApplyResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AuthCodeValidateResponse;
 import cn.org.bjca.footstone.usercenter.config.AuthCodeConfig;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
-import cn.org.bjca.footstone.usercenter.util.RestUtils;
 import cn.org.bjca.footstone.usercenter.vo.AuthorCodeReqVo;
 import cn.org.bjca.footstone.usercenter.vo.CodeValidateReqVo;
 import cn.org.bjca.footstone.usercenter.vo.MailCodeReqVo;
 import com.alibaba.fastjson.JSONObject;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -41,6 +39,8 @@ public class AuthCodeService {
 
   private final String redis_key = "usercenter_";
   private final String validate_key = "validate_";
+  private final String developerId = "develop-id";
+  private final String developerKey = "develop-key";
 
   private final String rule_email = "^\\w+((-\\w+)|(\\.\\w+))*\\@[A-Za-z0-9]+((\\.|-)[A-Za-z0-9]+)*\\.[A-Za-z0-9]+$";
 
@@ -68,8 +68,8 @@ public class AuthCodeService {
     send.setSignAlgo(authCodeConfig.getSignAlgo());
     //添加白名单认证
     HttpHeaders headers = new HttpHeaders();
-    headers.add("develop-id", authCodeConfig.getDevelopId());
-    headers.add("develop-key", authCodeConfig.getDevelopKey());
+    headers.add(developerId, authCodeConfig.getDevelopId());
+    headers.add(developerKey, authCodeConfig.getDevelopKey());
     HttpEntity<AuthorCodeReqVo> entity = new HttpEntity<>(send, headers);
     ResponseEntity<ReturnResult<AuthCodeApplyResponse>> responseEntity = restTemplate
         .exchange(authCodeConfig.getCodeUrl(), HttpMethod.POST, entity,
@@ -115,8 +115,8 @@ public class AuthCodeService {
     send.setDeviceId(authCodeConfig.getDeviceId());
 
     HttpHeaders headers = new HttpHeaders();
-    headers.add("develop-id", authCodeConfig.getDevelopId());
-    headers.add("develop-key", authCodeConfig.getDevelopKey());
+    headers.add(developerId, authCodeConfig.getDevelopId());
+    headers.add(developerKey, authCodeConfig.getDevelopKey());
     HttpEntity<MailCodeReqVo> entity = new HttpEntity<>(send, headers);
 
     ResponseEntity<ReturnResult> responseEntity = restTemplate
@@ -201,9 +201,8 @@ public class AuthCodeService {
   }
 
   public String getFixLenthString(int strLength) {
-    Random rm = new Random();
     // 获得随机数
-    double pross = (1 + rm.nextDouble()) * Math.pow(10, strLength);
+    double pross = (1 + RandomUtils.nextDouble(0, Double.MAX_VALUE)) * Math.pow(10, strLength);
 
     // 返回固定的长度的随机数
     return String.valueOf(pross).substring(1, strLength + 1);

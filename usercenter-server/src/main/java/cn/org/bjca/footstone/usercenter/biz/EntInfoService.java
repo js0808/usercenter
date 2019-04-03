@@ -177,10 +177,7 @@ public class EntInfoService {
       throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
     //检查账号
-    AccountInfo account = getAccount(request.getUid());
-    if (isNull(account)) {
-      throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
-    }
+    getAccount(request.getUid());
     //查询企业名是否已经实名认证
     EntInfo checkEntInfo = getEntInfoByRealName(request.getName());
     if (!isNull(checkEntInfo)) {
@@ -354,9 +351,6 @@ public class EntInfoService {
   public void entPayQuery(EntPayQueryRequest request) {
     //检查账号
     AccountInfo account = getAccount(request.getUid());
-    if (isNull(account)) {
-      throw new BaseException(ReturnCodeEnum.ACCOUNT_NOT_EXIT_ERROR);
-    }
     //查询待验证status=""
     EntPayVerifyRequestExample example = new EntPayVerifyRequestExample();
     example.createCriteria().andUidEqualTo(account.getUid())
