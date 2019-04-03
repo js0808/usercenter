@@ -115,12 +115,12 @@ public class Base64 {
             if (F_DEBUG) {
                 System.out.println("val2 = " + val2);
                 System.out.println("k4   = " + (k << 4));
-                System.out.println("vak  = " + (val2 | (k << 4)));
+                System.out.println("vak  = " + ((val2 & 0xff) | (k << 4)));
             }
 
             encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[val1];
-            encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[val2 | (k << 4)];
-            encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[(l << 2) | val3];
+            encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[(val2 & 0xff) | (k << 4)];
+            encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[(l << 2) | (val3 & 0xff)];
             encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[b3 & 0x3f];
         }
 
@@ -150,7 +150,7 @@ public class Base64 {
                     : (byte) ((b2) >> 4 ^ 0xf0);
 
             encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[val1];
-            encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[val2 | (k << 4)];
+            encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[(val2 & 0xff) | (k << 4)];
             encodedData[encodedIndex++] = LOOK_UP_BASE_64_ALPHABET[l << 2];
             encodedData[encodedIndex++] = PAD;
         }
@@ -210,7 +210,7 @@ public class Base64 {
 
             decodedData[encodedIndex++] = (byte) (b1 << 2 | b2 >> 4);
             decodedData[encodedIndex++] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
-            decodedData[encodedIndex++] = (byte) (b3 << 6 | b4);
+            decodedData[encodedIndex++] = (byte) (b3 << 6 | (b4 & 0xff));
         }
 
         if (!isData((d1 = base64Data[dataIndex++]))
@@ -252,7 +252,7 @@ public class Base64 {
             b4 = BASE_64_ALPHABET[d4];
             decodedData[encodedIndex++] = (byte) (b1 << 2 | b2 >> 4);
             decodedData[encodedIndex++] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
-            decodedData[encodedIndex++] = (byte) (b3 << 6 | b4);
+            decodedData[encodedIndex++] = (byte) (b3 << 6 | (b4& 0xff));
 
         }
 

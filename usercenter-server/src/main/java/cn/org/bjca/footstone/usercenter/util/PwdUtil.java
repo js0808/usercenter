@@ -114,6 +114,9 @@ public class PwdUtil {
       }
     }
 
+    if (md == null) {
+      throw new RuntimeException("md is null");
+    }
     // 把用户输入的密码添加到摘要计算信息
     md.update(inputPWD.getBytes());
     // 把盐值添加到摘要计算信息

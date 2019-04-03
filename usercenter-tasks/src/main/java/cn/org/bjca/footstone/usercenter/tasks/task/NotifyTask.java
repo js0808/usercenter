@@ -101,6 +101,7 @@ public class NotifyTask {
         Thread.sleep(5000);
       } catch (InterruptedException e) {
         log.error("发送用户中心通知异常", e);
+        Thread.currentThread().interrupt();
       }
     }
   }
