@@ -6,4 +6,4 @@ build_master:
   script:
     - mvn clean verify -DskipTests org.sonarsource.scanner.maven:sonar-maven-plugin:3.6.0.1398:sonar -Dsonar.projectKey=${CI_PROJECT_NAME}:${CI_PROJECT_ID} -Dsonar.links.homepage=${CI_PROJECT_URL} -Dsonar.host.url=http://192.168.126.182:9000
   only:
-    - bugfix-20190403
+    - master
