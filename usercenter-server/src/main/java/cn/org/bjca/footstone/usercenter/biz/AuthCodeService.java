@@ -201,10 +201,7 @@ public class AuthCodeService {
   }
 
   public String getFixLenthString(int strLength) {
-    // 获得随机数
-    double pross = (1 + RandomUtils.nextDouble(0, Double.MAX_VALUE)) * Math.pow(10, strLength);
-
-    // 返回固定的长度的随机数
+    double pross = (1 + RandomUtils.nextDouble(0, 10)) * Math.pow(10, strLength);
     return String.valueOf(pross).substring(1, strLength + 1);
   }
 
