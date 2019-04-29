@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @ApiModel("短信验证码申请请求参数")
 public class AuthCodeApplyRequest {
 
-  @Pattern(regexp = "1[3|4|5|7|8][0-9]\\d{8}", message = "请输入正确的手机号码")
+  @Pattern(regexp = "1[3|4|5|6|7|8][0-9]\\d{8}", message = "请输入正确的手机号码")
   private String mobile;
   @AuthCodeType
   private String type;
