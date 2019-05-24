@@ -1,5 +1,6 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import static cn.org.bjca.footstone.usercenter.Conts.DELETE;
 import static cn.org.bjca.footstone.usercenter.Conts.SAVED;
 import static cn.org.bjca.footstone.usercenter.api.commons.Conts.SC_OK;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ERROR;
@@ -194,6 +195,10 @@ public class ImagesService {
     if (isNull(images)) {
       throw new BaseException(RESOURCE_NOT_EXIST);
     }
+    /**状态为DELETE也报不存在**/
+    if (images.getSaveStatus().equals(DELETE)) {
+      throw new BaseException(RESOURCE_NOT_EXIST);
+    }
     String outFileName = images.getOutFileName();
 
     HttpResponse response = doDownload(outFileName);
@@ -261,4 +266,17 @@ public class ImagesService {
     List<Images> images = imagesMapper.selectByExample(example);
     return images.isEmpty() ? null : images.get(0);
   }
+
+  public void deleteImage(String name) {
+    Images images = queryImages(name);
+    if (isNull(images)) {
+      throw new BaseException(RESOURCE_NOT_EXIST);
+    }
+    images.setSaveStatus(DELETE);
+    int row = imagesMapper.updateByPrimaryKeySelective(images);
+    if (row != 1) {
+      throw new BaseException(SQL_EXCEPTION);
+    }
+  }
+
 }
