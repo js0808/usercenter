@@ -31,8 +31,9 @@ public interface SecurityImageFacade {
   @RequestMapping(value = "/{name}", method = RequestMethod.GET)
   ResponseEntity download(@PathVariable String name);
 
-  @ApiOperation(value = "图片删除", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "GET", notes = "图片删除")
-  @RequestMapping(value = "/del/{name}", method = RequestMethod.GET)
+  @ApiOperation(value = "图片删除", produces = MediaType.APPLICATION_JSON_VALUE, httpMethod = "DELETE", notes = "图片删除")
+  @RequestMapping(value = "/{name}", method = RequestMethod.DELETE)
+  @ResponseBody
   ReturnResult deleteImage(@PathVariable String name);
 
 }
