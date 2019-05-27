@@ -110,3 +110,4 @@ signService:
 images:
   download-url: @bedrock-oss.download.url@
   upload-url: @bedrock-oss.upload.url@
+  delete-url: @bedrock-oss.delete.url@

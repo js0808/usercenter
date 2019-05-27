@@ -4,6 +4,7 @@ import static cn.org.bjca.footstone.usercenter.Conts.DELETE;
 import static cn.org.bjca.footstone.usercenter.Conts.SAVED;
 import static cn.org.bjca.footstone.usercenter.api.commons.Conts.SC_OK;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.ERROR;
+import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.IMAGES_DELETE_REMOTE_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.IMAGES_DOWNLOAD_REMOTE_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.IMAGES_UPLOAD_LOCAL_ERROR;
 import static cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum.IMAGES_UPLOAD_READ_ERROR;
@@ -46,6 +47,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
@@ -73,6 +75,7 @@ public class ImagesService {
 
   private String downloadUrl;
   private String uploadUrl;
+  private String deleteUrl;
 
   @Autowired
   private ImagesMapper imagesMapper;
@@ -267,6 +270,21 @@ public class ImagesService {
     return images.isEmpty() ? null : images.get(0);
   }
 
+  public void deleteImage(String name) {
+    Images images = queryImages(name, SAVED);
+    if (isNull(images)) {
+      throw new BaseException(RESOURCE_NOT_EXIST);
+    }
+    // bedrock delete
+    doDelete(images.getOutFileName());
+    // save db 修改状态
+    images.setSaveStatus(DELETE);
+    int row = imagesMapper.updateByPrimaryKeySelective(images);
+    if (row != 1) {
+      throw new BaseException(SQL_EXCEPTION);
+    }
+  }
+
   private Images queryImages(String name, String saveStatus) {
     ImagesExample example = new ImagesExample();
     example.createCriteria().andNameEqualTo(name).andSaveStatusEqualTo(saveStatus);
@@ -274,15 +292,38 @@ public class ImagesService {
     return images.isEmpty() ? null : images.get(0);
   }
 
-  public void deleteImage(String name) {
-    Images images = queryImages(name, SAVED);
-    if (isNull(images)) {
-      throw new BaseException(RESOURCE_NOT_EXIST);
+  private void doDelete(String outFileName) {
+    HttpDelete request = createDeleteRequest(outFileName);
+    HttpResponse response = null;
+    try {
+      response = httpClient.execute(request);
+      HttpEntity entity = response.getEntity();
+      int responseCode = response.getStatusLine().getStatusCode();
+      if (responseCode != HttpStatus.SC_OK) {
+        log.error(EntityUtils.toString(entity));
+      }
+    } catch (IOException e) {
+      log.error("请求 {} 异常", request);
+      throw new BaseException(IMAGES_DELETE_REMOTE_ERROR, e);
     }
-    images.setSaveStatus(DELETE);
-    int row = imagesMapper.updateByPrimaryKeySelective(images);
-    if (row != 1) {
-      throw new BaseException(SQL_EXCEPTION);
+  }
+
+  private HttpDelete createDeleteRequest(String outFileName) {
+    URIBuilder builder = null;
+    try {
+      builder = new URIBuilder(deleteUrl);
+      HashMap<String, String> params = createParam();
+      params.put("id", outFileName);
+      String signStr = SignatureUtils
+          .signatureBean(params, SignatureUtils.SIGN_ALGORITHMS_HMACSHA256, config.getSignKey());
+      params.put("signature", signStr);
+      for (Entry<String, String> entry : params.entrySet()) {
+        builder.setParameter(entry.getKey(), entry.getValue());
+      }
+      return new HttpDelete(builder.build());
+    } catch (URISyntaxException e) {
+      log.error("创建删除请求异常!", e);
+      throw new BaseException(ERROR, e);
     }
   }
 
