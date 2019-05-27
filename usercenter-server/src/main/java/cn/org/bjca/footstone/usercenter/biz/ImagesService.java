@@ -267,8 +267,15 @@ public class ImagesService {
     return images.isEmpty() ? null : images.get(0);
   }
 
+  private Images queryImages(String name, String saveStatus) {
+    ImagesExample example = new ImagesExample();
+    example.createCriteria().andNameEqualTo(name).andSaveStatusEqualTo(saveStatus);
+    List<Images> images = imagesMapper.selectByExample(example);
+    return images.isEmpty() ? null : images.get(0);
+  }
+
   public void deleteImage(String name) {
-    Images images = queryImages(name);
+    Images images = queryImages(name, SAVED);
     if (isNull(images)) {
       throw new BaseException(RESOURCE_NOT_EXIST);
     }

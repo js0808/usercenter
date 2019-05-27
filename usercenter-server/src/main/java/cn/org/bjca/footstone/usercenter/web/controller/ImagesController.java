@@ -7,6 +7,7 @@ import cn.org.bjca.footstone.usercenter.api.facade.SecurityImageFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ImageUploadRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.ImageUploadResponse;
 import cn.org.bjca.footstone.usercenter.biz.ImagesService;
+import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class ImagesController implements SecurityImageFacade {
       imagesService.deleteImage(name);
       metrics.sr_incrSuccess();
       return ReturnResult.success("success");
-    } catch (BjcaBizException ex) {
+    } catch (BaseException ex) {
       log.error("deleteImage 异常信息", ex);
       throw ex;
     } catch (Exception e) {
