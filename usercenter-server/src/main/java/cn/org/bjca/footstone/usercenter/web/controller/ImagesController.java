@@ -2,13 +2,11 @@ package cn.org.bjca.footstone.usercenter.web.controller;
 
 import cn.org.bjca.footstone.metrics.client.metrics.MetricsClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
-import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
 import cn.org.bjca.footstone.usercenter.api.facade.SecurityImageFacade;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ImageUploadRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.ImageUploadResponse;
 import cn.org.bjca.footstone.usercenter.biz.ImagesService;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
-import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -73,9 +71,6 @@ public class ImagesController implements SecurityImageFacade {
     } catch (BaseException ex) {
       log.error("deleteImage 异常信息", ex);
       throw ex;
-    } catch (Exception e) {
-      log.error("deleteImage 异常信息", e);
-      throw new BjcaBizException(ReturnCodeEnum.ERROR);
     } finally {
       metrics.qps().rt().sr_incrTotal();
     }

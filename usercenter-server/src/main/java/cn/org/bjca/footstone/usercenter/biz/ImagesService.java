@@ -25,6 +25,7 @@ import cn.org.bjca.footstone.usercenter.dao.model.ImagesExample;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
 import cn.org.bjca.footstone.usercenter.util.CleanupInputStreamResource;
 import cn.org.bjca.footstone.usercenter.util.FileSecurityUtil;
+import cn.org.bjca.footstone.usercenter.util.HttpDeleteWithBody;
 import cn.org.bjca.footstone.usercenter.util.SignatureUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -40,6 +41,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -47,11 +49,11 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
@@ -198,8 +200,8 @@ public class ImagesService {
     if (isNull(images)) {
       throw new BaseException(RESOURCE_NOT_EXIST);
     }
-    /**状态为DELETE也报不存在**/
-    if (images.getSaveStatus().equals(DELETE)) {
+    // 状态为DELETE也报不存在
+    if (Objects.equals(images.getSaveStatus(), DELETE)) {
       throw new BaseException(RESOURCE_NOT_EXIST);
     }
     String outFileName = images.getOutFileName();
@@ -293,14 +295,15 @@ public class ImagesService {
   }
 
   private void doDelete(String outFileName) {
-    HttpDelete request = createDeleteRequest(outFileName);
+    HttpDeleteWithBody request = createDeleteRequest(outFileName);
     HttpResponse response = null;
     try {
       response = httpClient.execute(request);
-      HttpEntity entity = response.getEntity();
-      int responseCode = response.getStatusLine().getStatusCode();
-      if (responseCode != HttpStatus.SC_OK) {
-        log.error(EntityUtils.toString(entity));
+      String res = EntityUtils.toString(response.getEntity());
+      ReturnResult returnResult = JSON.parseObject(res, ReturnResult.class);
+      if (returnResult.getStatus() != SC_OK) {
+        log.error("oss 错误，返回 {} ", res);
+        throw new BaseException(IMAGES_DELETE_REMOTE_ERROR);
       }
     } catch (IOException e) {
       log.error("请求 {} 异常", request);
@@ -308,23 +311,18 @@ public class ImagesService {
     }
   }
 
-  private HttpDelete createDeleteRequest(String outFileName) {
-    URIBuilder builder = null;
-    try {
-      builder = new URIBuilder(deleteUrl);
-      HashMap<String, String> params = createParam();
-      params.put("id", outFileName);
-      String signStr = SignatureUtils
-          .signatureBean(params, SignatureUtils.SIGN_ALGORITHMS_HMACSHA256, config.getSignKey());
-      params.put("signature", signStr);
-      for (Entry<String, String> entry : params.entrySet()) {
-        builder.setParameter(entry.getKey(), entry.getValue());
-      }
-      return new HttpDelete(builder.build());
-    } catch (URISyntaxException e) {
-      log.error("创建删除请求异常!", e);
-      throw new BaseException(ERROR, e);
-    }
+  private HttpDeleteWithBody createDeleteRequest(String outFileName) {
+    HashMap<String, String> params = createParam();
+    params.put("id", outFileName);
+    String signStr = SignatureUtils
+        .signatureBean(params, SignatureUtils.SIGN_ALGORITHMS_HMACSHA256, config.getSignKey());
+    params.put("signature", signStr);
+    HttpDeleteWithBody httpDelete = new HttpDeleteWithBody(deleteUrl);
+    httpDelete.addHeader("Content-Type", "application/json;charset=UTF-8");
+    StringEntity stringEntity = new StringEntity(JSON.toJSONString(params), "UTF-8");
+    stringEntity.setContentEncoding("UTF-8");
+    httpDelete.setEntity(stringEntity);
+    return httpDelete;
   }
 
 }
