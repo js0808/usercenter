@@ -23,7 +23,7 @@
     <metrics-ump-client.version>1.0.0</metrics-ump-client.version>
     <commons.lang.version>3.4</commons.lang.version>
     <commons.codec.version>1.10</commons.codec.version>
-    <httpcomponents.version>4.3.6</httpcomponents.version>
+    <httpcomponents.version>4.5.8</httpcomponents.version>
     <bouncycastle.version>1.46</bouncycastle.version>
   </properties>
 
