@@ -1,6 +1,9 @@
 package cn.org.bjca.footstone.usercenter.config;
 
+import cn.bjca.typhon.client.api.TyphonClient;
+import javax.annotation.PostConstruct;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Component;
  * @Author:baoqb
  * @Date:18/8/14
  */
+@Slf4j
 @Data
 @Component
 @ConfigurationProperties(prefix = "authcode")
@@ -28,4 +32,17 @@ public class AuthCodeConfig {
   private String fromName;
   private String developId;
   private String developKey;
+
+
+  @PostConstruct
+  public void init() {
+    TyphonClient.getInstance().getProperties("application").registerListener(
+        propertyChangeEvent -> {
+          log.info("authcode. 发生变化 {}", propertyChangeEvent.getChangeItems());
+        }, "authcode.app-id", "authcode.template-id",
+        "authcode.codeUrl", "authcode.emailUrl",
+        "authcode.emailUrl", "authcode.emailBody",
+        "authcode.validateUrl", "authcode.expire", "authcode.deviceId", "authcode.fromName");
+  }
+
 }

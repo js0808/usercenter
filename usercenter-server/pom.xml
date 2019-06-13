@@ -46,6 +46,16 @@
       <version>2.2.0</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>cn.bjca.footstone</groupId>
+      <artifactId>typhon-apollo</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>cn.bjca.footstone</groupId>
+      <artifactId>typhon-spring</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <profiles>
