@@ -40,9 +40,11 @@ public class AuthCodeConfig {
         propertyChangeEvent -> {
           log.info("authcode. 发生变化 {}", propertyChangeEvent.getChangeItems());
         }, "authcode.app-id", "authcode.template-id",
-        "authcode.codeUrl", "authcode.emailUrl",
+        "authcode.codeUrl", "authcode.sign-key",
         "authcode.emailUrl", "authcode.emailBody",
-        "authcode.validateUrl", "authcode.expire", "authcode.deviceId", "authcode.fromName");
+        "authcode.validateUrl", "authcode.expire",
+        "authcode.deviceId", "authcode.fromName",
+        "authcode.develop-id", "authcode.develop-key");
   }
 
 }
