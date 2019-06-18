@@ -15,6 +15,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 
+import cn.bjca.typhon.client.api.TyphonClient;
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ImageUploadRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.ImageUploadResponse;
@@ -42,6 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
+import javax.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -85,6 +87,14 @@ public class ImagesService {
   private CloseableHttpClient httpClient;
   @Autowired
   private AuthCodeConfig config;
+
+  @PostConstruct
+  public void init() {
+    TyphonClient.getInstance().getProperties("application").registerListener(
+        propertyChangeEvent -> {
+          log.info("images. 发生变化 {}", propertyChangeEvent.getChangeItems());
+        }, "images.download-url", "images.upload-url", "images.delete-url");
+  }
 
   public ImageUploadResponse upload(ImageUploadRequest request) {
     //save to db

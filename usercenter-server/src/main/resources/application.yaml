@@ -75,39 +75,3 @@ swagger:
   title: bjca-usercenter
   description: Starter for swagger 2.x
   version: ${project.version}
-authcode:
-  app-id: @authcode.appId@
-  template-id: @authcode.templateId@
-  sign-algo: @authcode.signAlgo@
-  sign-key: @authcode.signKey@
-  codeUrl: @authcode.codeUrl@
-  emailUrl: @authcode.emailUrl@
-  emailBody: "亲爱的%s用户您好,\n验证码：%s,5分钟内输入有效,请输入验证码完成%s,勿将验证码告诉其他人."
-  validateUrl: @authcode.validateUrl@
-  version: @authcode.version@
-  expire: @authcode.expire@
-  deviceId: @authcode.deviceId@
-  fromName: @authcode.fromName@
-  develop-id: "@msg-develop-id@"
-  develop-key: "@msg-develop-key@"
-idservice:
-  ent-base: @idservice.ent.base@
-  ent-pay-verify: @idservice.ent.payVerify@
-  ent-pay-verify-query: @idservice.ent.payVerifyQuery@
-usercenter:
-  username: ${idservice.userName}
-  password: ${idservice.password}
-  bank4: @bank4.url@
-account:
-  login:
-    max-attempts: @max-attempts@
-    attempts-duration-minutes: @attempts-duration-minutes@
-    locked-expire-minutes: @locked-expire-minutes@
-    token-expire-minutes: @token-expire-minutes@
-signService:
-  verifySign-url: @verifySign.url@
-  parseCertUid-url: @parseCertUid.url@
-images:
-  download-url: @bedrock-oss.download.url@
-  upload-url: @bedrock-oss.upload.url@
-  delete-url: @bedrock-oss.delete.url@
