@@ -1,6 +1,7 @@
 package cn.org.bjca.footstone.usercenter.web.controller;
 
 import cn.org.bjca.footstone.usercenter.api.commons.web.ReturnResult;
+import cn.org.bjca.footstone.usercenter.biz.AuthCodeService;
 import cn.org.bjca.footstone.usercenter.biz.ImagesService;
 import cn.org.bjca.footstone.usercenter.biz.realname.EntRealNameVerify;
 import cn.org.bjca.footstone.usercenter.biz.realname.impl.BankCard4Verify;
@@ -34,6 +35,8 @@ public class ApolloTestController {
   private VerifySignCertService verifySignCertService;
   @Autowired
   private ImagesService imagesService;
+  @Autowired
+  private AuthCodeService authCodeService;
 
   @RequestMapping(value = "/apollotest", method = RequestMethod.POST)
   @ResponseBody

@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -53,8 +54,13 @@ public class AuthCodeService {
   @Autowired
   private RestTemplate restTemplate;
 
-  public AuthCodeApplyResponse codeApply(AuthCodeApplyRequest request) throws Exception {
+  @Value("${code.button:false}")
+  private boolean codeButton;
 
+  public AuthCodeApplyResponse codeApply(AuthCodeApplyRequest request) throws Exception {
+    if (codeButton) {
+      return null;
+    }
     /**组装请求参数**/
     AuthorCodeReqVo send = new AuthorCodeReqVo();
     send.setVersion(authCodeConfig.getVersion());
@@ -98,7 +104,9 @@ public class AuthCodeService {
   }
 
   public void emailCodeApply(EmailCodeApplyRequest request) throws Exception {
-
+    if (codeButton) {
+      return;
+    }
     /**组装请求参数**/
     MailCodeReqVo send = new MailCodeReqVo();
     send.setSubject(request.getSubject());
