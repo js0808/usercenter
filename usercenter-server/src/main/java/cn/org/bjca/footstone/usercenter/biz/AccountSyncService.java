@@ -44,6 +44,11 @@ public class AccountSyncService {
   private AccountInfoMapper accountInfoMapper;
 
   public AccountSyncResponse syncAccount(AccountSyncRequest request) {
+    if (request.getEid() == null || request.getEid() < 1) {
+      log.warn("sync account ,eid {} is ", request.getEid());
+      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
+
+    }
     AccountSyncResponse response = new AccountSyncResponse();
     EntInfo entInfo = entInfoMapper.selectByPrimaryKey(request.getEid());
     if (entInfo == null) {

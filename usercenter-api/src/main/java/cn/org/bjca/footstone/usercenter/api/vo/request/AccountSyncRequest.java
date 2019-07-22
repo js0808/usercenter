@@ -1,5 +1,7 @@
 package cn.org.bjca.footstone.usercenter.api.vo.request;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -19,7 +21,6 @@ public class AccountSyncRequest {
   /**
    * 企业id
    */
-  @NotBlank(message = "企业id不能为空")
   private Integer eid;
 
   /**
@@ -61,4 +62,12 @@ public class AccountSyncRequest {
   @Length(max = 64)
   private String appId;
 
+  public static void main(String[] args) throws Exception {
+
+    System.out.println(
+        JSON.toJSONString(new AccountSyncRequest(), SerializerFeature.PrettyFormat,
+            SerializerFeature.WriteNullStringAsEmpty));
+  }
 }
+
+
