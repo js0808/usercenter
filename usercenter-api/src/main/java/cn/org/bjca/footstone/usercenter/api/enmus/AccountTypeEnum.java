@@ -12,7 +12,9 @@ public enum AccountTypeEnum {
 
   MOBILE("MOBILE", "手机号"),
   EMAIL("EMAIL", "邮箱"),
-  CERT("CERT", "证书");
+  CERT("CERT", "证书"),
+  OTHER("OTHER", "其他"),//通过接口同步过来的数据
+  ;
 
   /**
    * The value.

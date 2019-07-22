@@ -13,7 +13,9 @@ public enum RealNameTypeEnum {
   ID_CARD_AND_FACE("ID_CARD_AND_FACE", "身份证和人脸"),
   BANK_CARD3("BANK_CARD3", "银行卡号3要素"),
   BANK_CARD4("BANK_CARD4", "银行卡号4要素"),
-  ENT_PAY("ENT_PAY", "企业打款");
+  ENT_PAY("ENT_PAY", "企业打款"),
+  OTHER("OTHER", "其他"),//各业务内部同步数据新增
+  ;
 
   /**
    * The value.
