@@ -74,7 +74,7 @@ public enum AccountStatusEnum {
 
     public static AccountStatusEnum findByValue(String value) {
         for (AccountStatusEnum test : AccountStatusEnum.values()) {
-            if (value.equals(test.value)) {
+            if (test.value.equals(value)) {
                 return test;
             }
         }

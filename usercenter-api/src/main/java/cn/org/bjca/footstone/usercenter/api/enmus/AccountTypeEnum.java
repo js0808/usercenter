@@ -76,7 +76,7 @@ public enum AccountTypeEnum {
 
   public static AccountTypeEnum findByValue(String value) {
     for (AccountTypeEnum test : AccountTypeEnum.values()) {
-      if (value.equals(test.value)) {
+      if (test.value.equals(value)) {
         return test;
       }
     }

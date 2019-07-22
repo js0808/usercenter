@@ -7,5 +7,15 @@ package cn.org.bjca.footstone.usercenter.api.enmus;
 public enum UserTypeEnum {
 
   USER, //个人
-  ENT   //企业
+  ENT,   //企业
+  ;
+
+  public static UserTypeEnum findByName(String name) {
+    for (UserTypeEnum test : UserTypeEnum.values()) {
+      if (test.name().equals(name)) {
+        return test;
+      }
+    }
+    return null;
+  }
 }

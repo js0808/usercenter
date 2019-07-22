@@ -1,7 +1,10 @@
 package cn.org.bjca.footstone.usercenter.biz;
 
+import cn.org.bjca.footstone.usercenter.api.enmus.AccountStatusEnum;
+import cn.org.bjca.footstone.usercenter.api.enmus.AccountTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.enmus.ReturnCodeEnum;
+import cn.org.bjca.footstone.usercenter.api.enmus.UserTypeEnum;
 import cn.org.bjca.footstone.usercenter.api.vo.request.AccountSyncRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.EnterpriseSyncRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountSyncResponse;
@@ -19,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -72,12 +74,25 @@ public class AccountSyncService {
       record.setUid(SnowFlake.next());
       record.setVersion(1);
     }
+    AccountTypeEnum accountTypeEnum = AccountTypeEnum.findByValue(request.getAccountType());
+    if (accountTypeEnum == null) {
+      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
+    }
     record.setAccountType(request.getAccountType());
     record.setAccount(request.getAccount());
     String password = PwdUtil.cipher(request.getPassword());
     record.setPassword(password);
+
+    AccountStatusEnum accountStatusEnum = AccountStatusEnum.findByValue(request.getStatus());
+    if (accountStatusEnum == null) {
+      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
+    }
     record.setStatus(request.getStatus());
     record.setRealnameId(request.getEid());
+    UserTypeEnum userTypeEnum = UserTypeEnum.findByName(request.getUserType());
+    if (userTypeEnum == null) {
+      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
+    }
     record.setUserType(request.getUserType());
     record.setIsLocked(false);
     record.setAppId(request.getAppId());
@@ -117,9 +132,11 @@ public class AccountSyncService {
     entInfo.setLegalName(request.getLegalName());
     entInfo.setLegalIdNum(request.getLegalidNum());
     entInfo.setRealNameFlag(request.getRealNameFlag());
-    entInfo.setRealNameType(
-        StringUtils.isEmpty(request.getRealNameType()) ? RealNameTypeEnum.OTHER.getDesc()
-            : request.getRealNameType());
+    RealNameTypeEnum byName = RealNameTypeEnum.findByName(request.getRealNameType());
+    if (byName == null) {
+      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
+    }
+    entInfo.setRealNameType(request.getRealNameType());
     entInfo.setReviewFlag(request.getReviewFlag());
     entInfo.setBizLicenseImageUrl(request.getBizLicenseImageUrl());
     entInfo.setOrgCodeImageUrl(request.getOrgCodeImageUrl());
@@ -130,6 +147,10 @@ public class AccountSyncService {
     entInfo.setBankName(request.getBankName());
     entInfo.setBankAddressCode(request.getBankAddressCode());
     entInfo.setAppId(request.getAppId());
+    AccountStatusEnum accountStatusEnum = AccountStatusEnum.findByName(request.getStatus());
+    if (accountStatusEnum == null) {
+      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
+    }
     entInfo.setStatus(request.getStatus());
     entInfo.setOper(request.getOper());
     int result = 0;
