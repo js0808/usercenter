@@ -89,7 +89,7 @@ public class AccountSyncService {
   public EntSyncResponse syncEnt(EnterpriseSyncRequest request) {
     EntSyncResponse response = null;
     EntInfoExample entInfoExample = new EntInfoExample();
-    entInfoExample.createCriteria().andNameEqualTo(request.getName()).andRealNameFlagEqualTo(1);
+    entInfoExample.createCriteria().andNameEqualTo(request.getName());
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
     boolean ifExists = false;
     if (!CollectionUtils.isEmpty(entInfoList)) {

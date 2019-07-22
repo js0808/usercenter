@@ -42,6 +42,7 @@ public class EnterpriseSyncRequest {
   /**
    * 是否人工审核 0未人工审核、1人工审核
    */
+
   private Integer reviewFlag;
   private String bizLicenseImageUrl;
   private String orgCodeImageUrl;
@@ -60,6 +61,8 @@ public class EnterpriseSyncRequest {
 
 
   public static void main(String[] args) throws Exception {
-    System.out.println(JSON.toJSONString(new EnterpriseSyncRequest(), SerializerFeature.PrettyFormat,SerializerFeature.WriteNullStringAsEmpty));
+    System.out.println(
+        JSON.toJSONString(new EnterpriseSyncRequest(), SerializerFeature.PrettyFormat,
+            SerializerFeature.WriteNullStringAsEmpty));
   }
 }
