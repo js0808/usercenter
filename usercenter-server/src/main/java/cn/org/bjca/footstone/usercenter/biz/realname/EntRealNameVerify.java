@@ -53,7 +53,7 @@ public class EntRealNameVerify {
     idServiceCheckEntReqVo.setUnCreditCode(entInfoRequest.getSocialCreditCode());
     idServiceCheckEntReqVo.setUnitCode(entInfoRequest.getOrgCode());
     //TYPE=1--企业名称
-    idServiceCheckEntReqVo.setKeywordType("1");
+    idServiceCheckEntReqVo.setKeywordType("ENTERPRISENAME");
     idServiceCheckEntReqVo.setUserTransId(String.valueOf(SnowFlake.next()));
     String reqJson = JSONObject.toJSONString(idServiceCheckEntReqVo);
 
