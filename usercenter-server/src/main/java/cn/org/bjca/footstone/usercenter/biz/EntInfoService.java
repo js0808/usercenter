@@ -95,6 +95,7 @@ public class EntInfoService {
     EntInfo updateEntInfo = new EntInfo();
     updateEntInfo.setId(entInfoOld.getId());
     updateEntInfo.setVersion(entInfoOld.getVersion());
+
     updateEntInfo.setHeadImgUrl(entInfoBaseRequest.getHeadImgUrl());
     updateEntInfo.setPhone(entInfoBaseRequest.getPhone());
     updateEntInfo.setOper(entInfoBaseRequest.getOper());
@@ -116,6 +117,7 @@ public class EntInfoService {
     EntInfo updateEntInfo = new EntInfo();
     updateEntInfo.setId(entInfoOld.getId());
     updateEntInfo.setVersion(entInfoOld.getVersion());
+
     updateEntInfo.setStatus(entInfoStatusRequest.getStatus().toString());
     updateEntInfo.setOper(entInfoStatusRequest.getOper());
     updateEntInfoAndIncrementVersion(updateEntInfo);
@@ -356,13 +358,14 @@ public class EntInfoService {
     //更新企业用户实名信息
     EntInfo updateEntInfo = new EntInfo();
     updateEntInfo.setId(entInfo.getId());
+    updateEntInfo.setVersion(entInfo.getVersion());
+
     updateEntInfo.setRealNameType(RealNameTypeEnum.ENT_PAY.value());
     updateEntInfo.setAccountName(verifyRequest.getAccountName());
     updateEntInfo.setBankAccount(verifyRequest.getBankAccount());
     updateEntInfo.setBankName(verifyRequest.getBankName());
     updateEntInfo.setBankAddressCode(verifyRequest.getBankAddressCode());
     updateEntInfo.setRealNameFlag(1);
-    updateEntInfo.setVersion(entInfo.getVersion());
 
     updateEntInfoAndIncrementVersion(updateEntInfo);
   }
