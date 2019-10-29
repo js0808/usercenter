@@ -39,6 +39,7 @@ import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -96,11 +97,8 @@ public class EntInfoService {
     updateEntInfo.setHeadImgUrl(entInfoBaseRequest.getHeadImgUrl());
     updateEntInfo.setPhone(entInfoBaseRequest.getPhone());
     updateEntInfo.setOper(entInfoBaseRequest.getOper());
-    updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
-    int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
-    if (result != 1) {
-      throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
-    }
+    updateEntInfoAndIncrementVersion(updateEntInfo);
+
     //保存历史
     saveHistory(entInfoOld);
     //保存notify
@@ -118,11 +116,7 @@ public class EntInfoService {
     updateEntInfo.setId(entInfoOld.getId());
     updateEntInfo.setStatus(entInfoStatusRequest.getStatus().toString());
     updateEntInfo.setOper(entInfoStatusRequest.getOper());
-    updateEntInfo.setVersion(entInfoOld.getVersion() + 1);
-    int result = entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
-    if (result != 1) {
-      throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
-    }
+    updateEntInfoAndIncrementVersion(updateEntInfo);
     //保存历史
     saveHistory(entInfoOld);
     //保存notify
@@ -275,11 +269,12 @@ public class EntInfoService {
     notifyInfoMapper.insertSelective(notifyInfo);
   }
 
-  private String processEntPay(int id, EntPayRequest request) {
+  private String processEntPay(int id, int realNameRecordVersion, EntPayRequest request) {
     String transId = String.valueOf(SnowFlake.next());
     EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
     verifyRequest.setUid(request.getUid());
     verifyRequest.setRealNameId(id);
+    verifyRequest.setRealNameRecordVersion(realNameRecordVersion);
     verifyRequest.setAccountName(request.getName());
     verifyRequest.setBankAccount(request.getBankAccount());
     verifyRequest.setBankName(request.getBankName());
@@ -295,6 +290,7 @@ public class EntInfoService {
   /**
    * 发起打款认证
    */
+  @Transactional(rollbackFor = Exception.class)
   public EntPayResponse entPay(EntPayRequest request) {
     checkRealNameParam(request);
     //uid查询企业用户
@@ -308,7 +304,7 @@ public class EntInfoService {
       entInfoMapper.insertSelective(newEntInfo);
       //调用身份核实-企业信息认证
       entRealNameVerify.checkEntBaseInfo(request);
-      String idsTransId = processEntPay(newEntInfo.getId(), request);
+      String idsTransId = processEntPay(newEntInfo.getId(), entInfo.getVersion(), request);
       return EntPayResponse.builder().queryTransId(idsTransId).build();
     } else {
       //保存历史
@@ -318,11 +314,35 @@ public class EntInfoService {
       BeanCopy.beans(request, entInfo).copy();
       //重置实名标识
       entInfo.setRealNameFlag(0);
-      entInfoMapper.updateByPrimaryKeySelective(entInfo);
+      /** 更新企业信息 */
+      updateEntInfoAndIncrementVersion(entInfo);
+
       //调用身份核实-企业信息认证
       entRealNameVerify.checkEntBaseInfo(request);
-      String idsTransId = processEntPay(entInfo.getId(), request);
+      String idsTransId = processEntPay(entInfo.getId(),entInfo.getVersion(), request);
       return EntPayResponse.builder().queryTransId(idsTransId).build();
+    }
+  }
+
+  /**
+   * 更新企业信息并使用version做乐观锁
+   * @param record 目标记录
+   */
+  private void updateEntInfoAndIncrementVersion(EntInfo record) {
+    /** example */
+    int oldVersion = record.getVersion();
+    EntInfoExample example = new EntInfoExample();
+    example.createCriteria()
+        .andIdEqualTo(record.getId())
+        .andVersionEqualTo(oldVersion);
+    /** record */
+    int newVersion = oldVersion + 1;
+    record.setVersion(newVersion);
+
+    final int rows = entInfoMapper.updateByExampleSelective(record, example);
+    if (0 == rows) {
+      log.error("更新EntInfo失败，oldVersion:{},record:{}", oldVersion, record);
+      throw new BaseException(ReturnCodeEnum.RESOURCE_NOT_EXIST);
     }
   }
 
@@ -334,20 +354,20 @@ public class EntInfoService {
     //更新企业用户实名信息
     EntInfo updateEntInfo = new EntInfo();
     updateEntInfo.setId(entInfo.getId());
-    updateEntInfo
-        .setRealNameType(RealNameTypeEnum.ENT_PAY.value());
+    updateEntInfo.setRealNameType(RealNameTypeEnum.ENT_PAY.value());
     updateEntInfo.setAccountName(verifyRequest.getAccountName());
     updateEntInfo.setBankAccount(verifyRequest.getBankAccount());
     updateEntInfo.setBankName(verifyRequest.getBankName());
     updateEntInfo.setBankAddressCode(verifyRequest.getBankAddressCode());
-    updateEntInfo.setVersion(entInfo.getVersion() + 1);
     updateEntInfo.setRealNameFlag(1);
-    entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
+
+    updateEntInfoAndIncrementVersion(updateEntInfo);
   }
 
   /**
    * 使用附言中的验证码，验证企业打款，验证通过后用户实名认证通过
    */
+  @Transactional(rollbackFor = Exception.class)
   public void entPayQuery(EntPayQueryRequest request) {
     //检查账号
     AccountInfo account = getAccount(request.getUid());
@@ -358,33 +378,41 @@ public class EntInfoService {
     List<EntPayVerifyRequest> oldPayReqs = verifyRequestMapper.selectByExample(example);
     if (CollectionUtils.isEmpty(oldPayReqs)) {
       throw new BaseException(ReturnCodeEnum.REAL_NAME_VERIFY_REQ_NOT_EXIST);
-    } else {
-      EntPayVerifyRequest oldPayReq = oldPayReqs.get(0);
-      //id查询企业用户
-      EntInfo entInfo = getEntInfo(oldPayReq.getRealNameId());
-      if (entInfo.getRealNameFlag() == 1) {
-        throw new BaseException(ReturnCodeEnum.ALREADY_REAL_NAME_CHECKED);
-      }
-      String transId = String.valueOf(SnowFlake.next());
-      //查询验证码是否正确
-      Map<String, Object> resultMap = entRealNameVerify.entPayQuery(transId, request);
-      EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
-      Integer status = (Integer) resultMap.get("status");
-      String message = (String) resultMap.get("message");
-      verifyRequest.setStatus(String.valueOf(status));
-      verifyRequest.setMessage(message);
-      verifyRequest.setId(oldPayReq.getId());
-      //更新打款申请日志
-      verifyRequestMapper.updateByPrimaryKeySelective(verifyRequest);
-      //返回
-      if (status != IdServiceBaseRespVo.OK) {
-        throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, message);
-      } else {
-        //更新企业打款用户实名信息
-        updateEntPayRealName(entInfo, oldPayReq);
-        //更新账号表real name id
-        bindRealNameId(account, entInfo);
-      }
     }
+    /** 打款认证请求信息 */
+    EntPayVerifyRequest oldPayReq = oldPayReqs.get(0);
+    //id查询企业用户
+    EntInfo entInfo = getEntInfo(oldPayReq.getRealNameId());
+    /** 企业信息已变更？ EntInfo.version =?= EntPayVerifyRequest.realNameRecordVersion */
+    if (Objects.nonNull(oldPayReq.getRealNameRecordVersion()) && Objects.nonNull(entInfo.getVersion())
+        && oldPayReq.getRealNameRecordVersion().compareTo(entInfo.getVersion()) != 0) {
+      throw new BaseException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "企业信息已经变更");
+    }
+    /** 已认证？ */
+    if (entInfo.getRealNameFlag() == 1) {
+      throw new BaseException(ReturnCodeEnum.ALREADY_REAL_NAME_CHECKED);
+    }
+
+    String transId = String.valueOf(SnowFlake.next());
+    //查询验证码是否正确
+    Map<String, Object> resultMap = entRealNameVerify.entPayQuery(transId, request);
+    EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
+    Integer status = (Integer) resultMap.get("status");
+    String message = (String) resultMap.get("message");
+    verifyRequest.setStatus(String.valueOf(status));
+    verifyRequest.setMessage(message);
+    verifyRequest.setId(oldPayReq.getId());
+    verifyRequest.setVersion(oldPayReq.getVersion() + 1);
+    //更新打款申请日志
+    verifyRequestMapper.updateByPrimaryKeySelective(verifyRequest);
+    //返回
+    if (status != IdServiceBaseRespVo.OK) {
+      throw new BaseException(ReturnCodeEnum.ID_SERVICE_ERROR, message);
+    }
+
+    //更新企业打款用户实名信息
+    updateEntPayRealName(entInfo, oldPayReq);
+    //更新账号表real name id
+    bindRealNameId(account, entInfo);
   }
 }

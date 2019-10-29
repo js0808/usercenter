@@ -23,8 +23,7 @@ public interface EntPayVerifyRequestMapper {
 
     EntPayVerifyRequest selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") EntPayVerifyRequest record,
-        @Param("example") EntPayVerifyRequestExample example);
+    int updateByExampleSelective(@Param("record") EntPayVerifyRequest record, @Param("example") EntPayVerifyRequestExample example);
 
     int updateByExample(@Param("record") EntPayVerifyRequest record, @Param("example") EntPayVerifyRequestExample example);
 
