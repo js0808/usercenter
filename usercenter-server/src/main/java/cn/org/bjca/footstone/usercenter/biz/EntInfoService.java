@@ -272,7 +272,7 @@ public class EntInfoService {
     notifyInfoMapper.insertSelective(notifyInfo);
   }
 
-  private String processEntPay(int id, int realNameRecordVersion, EntPayRequest request) {
+  private String processEntPay(int id, EntPayRequest request) {
     String transId = String.valueOf(SnowFlake.next());
     EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
     verifyRequest.setUid(request.getUid());
