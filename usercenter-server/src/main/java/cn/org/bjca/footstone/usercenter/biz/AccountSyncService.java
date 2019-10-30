@@ -109,7 +109,11 @@ public class AccountSyncService {
   public EntSyncResponse syncEnt(EnterpriseSyncRequest request) {
     EntSyncResponse response = null;
     EntInfoExample entInfoExample = new EntInfoExample();
-    entInfoExample.createCriteria().andNameEqualTo(request.getName());
+    /**
+     *  通过同步接口过来的企业默认是已实名状态，但是有通过其他方式录入进来的企业信息（名称相同），还在走审核流程，
+     *  所以实名状态为未实名，所以需要返回已实名的企业信息。
+     */
+    entInfoExample.createCriteria().andNameEqualTo(request.getName()).andRealNameFlagEqualTo(1);
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
     boolean ifExists = false;
     if (!CollectionUtils.isEmpty(entInfoList)) {
