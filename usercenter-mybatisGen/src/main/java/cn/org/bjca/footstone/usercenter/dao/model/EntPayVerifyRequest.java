@@ -8,8 +8,6 @@ public class EntPayVerifyRequest implements Serializable {
 
     private Integer realNameId;
 
-    private Integer realNameRecordVersion;
-
     private Long uid;
 
     private String accountName;
@@ -54,14 +52,6 @@ public class EntPayVerifyRequest implements Serializable {
 
     public void setRealNameId(Integer realNameId) {
         this.realNameId = realNameId;
-    }
-
-    public Integer getRealNameRecordVersion() {
-        return realNameRecordVersion;
-    }
-
-    public void setRealNameRecordVersion(Integer realNameRecordVersion) {
-        this.realNameRecordVersion = realNameRecordVersion;
     }
 
     public Long getUid() {

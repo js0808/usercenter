@@ -39,7 +39,6 @@ import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -278,7 +277,6 @@ public class EntInfoService {
     EntPayVerifyRequest verifyRequest = new EntPayVerifyRequest();
     verifyRequest.setUid(request.getUid());
     verifyRequest.setRealNameId(id);
-    verifyRequest.setRealNameRecordVersion(realNameRecordVersion);
     verifyRequest.setAccountName(request.getName());
     verifyRequest.setBankAccount(request.getBankAccount());
     verifyRequest.setBankName(request.getBankName());
@@ -306,10 +304,8 @@ public class EntInfoService {
       EntInfo newEntInfo = new EntInfo();
       BeanCopy.beans(request, newEntInfo).copy();
       entInfoMapper.insertSelective(newEntInfo);
-      //调用身份核实-企业信息认证
-      entRealNameVerify.checkEntBaseInfo(request);
-      String idsTransId = processEntPay(newEntInfo.getId(), entInfo.getVersion(), request);
-      return EntPayResponse.builder().queryTransId(idsTransId).build();
+
+      entInfo = newEntInfo;
     } else {
       //保存历史
       saveHistory(entInfo);
@@ -320,12 +316,27 @@ public class EntInfoService {
       entInfo.setRealNameFlag(0);
       /** 更新企业信息 */
       updateEntInfoAndIncrementVersion(entInfo);
-
-      //调用身份核实-企业信息认证
-      entRealNameVerify.checkEntBaseInfo(request);
-      String idsTransId = processEntPay(entInfo.getId(),entInfo.getVersion(), request);
-      return EntPayResponse.builder().queryTransId(idsTransId).build();
     }
+    //调用身份核实-企业信息认证
+    entRealNameVerify.checkEntBaseInfo(request);
+    String idsTransId = processEntPay(entInfo.getId(),entInfo.getVersion(), request);
+    /** transId更新入EntInfo */
+    updateEntInfoTransId(entInfo, idsTransId);
+    return EntPayResponse.builder().queryTransId(idsTransId).build();
+  }
+
+  /**
+   * 更新 企业的trans
+   * @param entInfo
+   * @param idsTransId
+   */
+  private void updateEntInfoTransId(EntInfo entInfo, String idsTransId) {
+    EntInfo po = new EntInfo();
+    po.setId(entInfo.getId());
+    po.setVersion(entInfo.getVersion());
+    po.setRealNameIdsTransId(idsTransId);
+
+    updateEntInfoAndIncrementVersion(po);
   }
 
   /**
@@ -389,16 +400,15 @@ public class EntInfoService {
     EntPayVerifyRequest oldPayReq = oldPayReqs.get(0);
     //id查询企业用户
     EntInfo entInfo = getEntInfo(oldPayReq.getRealNameId());
-    /** 企业信息已变更？ EntInfo.version =?= EntPayVerifyRequest.realNameRecordVersion */
-    if (Objects.nonNull(oldPayReq.getRealNameRecordVersion()) && Objects.nonNull(entInfo.getVersion())
-        && oldPayReq.getRealNameRecordVersion().compareTo(entInfo.getVersion()) != 0) {
-      throw new BaseException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "企业信息已经变更");
-    }
     /** 已认证？ */
     if (entInfo.getRealNameFlag() == 1) {
       throw new BaseException(ReturnCodeEnum.ALREADY_REAL_NAME_CHECKED);
     }
-
+    /** 绑定了transId，但不匹配 */
+    if (StringUtils.isNotBlank(entInfo.getRealNameIdsTransId())
+        && !request.getQueryTransId().equals(entInfo.getRealNameIdsTransId())) {
+      throw new BaseException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "企业信息已经变更");
+    }
     String transId = String.valueOf(SnowFlake.next());
     //查询验证码是否正确
     Map<String, Object> resultMap = entRealNameVerify.entPayQuery(transId, request);

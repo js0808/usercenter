@@ -91,11 +91,6 @@ public class EntPayVerifyRequestExample {
         return this;
     }
 
-    public EntPayVerifyRequestExample sumRealNameRecordVersion() {
-        this.sumCol="real_name_record_version";
-        return this;
-    }
-
     public EntPayVerifyRequestExample sumUid() {
         this.sumCol="uid";
         return this;
@@ -341,66 +336,6 @@ public class EntPayVerifyRequestExample {
 
         public Criteria andRealNameIdNotBetween(Integer value1, Integer value2) {
             addCriterion("real_name_id not between", value1, value2, "realNameId");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionIsNull() {
-            addCriterion("real_name_record_version is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionIsNotNull() {
-            addCriterion("real_name_record_version is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionEqualTo(Integer value) {
-            addCriterion("real_name_record_version =", value, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionNotEqualTo(Integer value) {
-            addCriterion("real_name_record_version <>", value, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionGreaterThan(Integer value) {
-            addCriterion("real_name_record_version >", value, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionGreaterThanOrEqualTo(Integer value) {
-            addCriterion("real_name_record_version >=", value, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionLessThan(Integer value) {
-            addCriterion("real_name_record_version <", value, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionLessThanOrEqualTo(Integer value) {
-            addCriterion("real_name_record_version <=", value, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionIn(List<Integer> values) {
-            addCriterion("real_name_record_version in", values, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionNotIn(List<Integer> values) {
-            addCriterion("real_name_record_version not in", values, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionBetween(Integer value1, Integer value2) {
-            addCriterion("real_name_record_version between", value1, value2, "realNameRecordVersion");
-            return (Criteria) this;
-        }
-
-        public Criteria andRealNameRecordVersionNotBetween(Integer value1, Integer value2) {
-            addCriterion("real_name_record_version not between", value1, value2, "realNameRecordVersion");
             return (Criteria) this;
         }
 
