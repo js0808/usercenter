@@ -319,7 +319,7 @@ public class EntInfoService {
     }
     //调用身份核实-企业信息认证
     entRealNameVerify.checkEntBaseInfo(request);
-    String idsTransId = processEntPay(entInfo.getId(),entInfo.getVersion(), request);
+    String idsTransId = processEntPay(entInfo.getId(), request);
     /** transId更新入EntInfo */
     updateEntInfoTransId(entInfo, idsTransId);
     return EntPayResponse.builder().queryTransId(idsTransId).build();
