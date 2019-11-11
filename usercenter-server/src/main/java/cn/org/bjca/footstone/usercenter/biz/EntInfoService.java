@@ -332,7 +332,7 @@ public class EntInfoService {
     final Long entUID = Optional.ofNullable(accountByRealNameId).map(AccountInfo::getUid).orElse(null);
     if (Objects.isNull(accountByRealNameId) || requestUID.compareTo(accountByRealNameId.getUid()) != 0) {
       log.error("实名认证的企业UID不匹配。入参UID:{},企业相关UID:{}", requestUID, entUID);
-      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "UID不匹配");
+      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "入参UID和企业UID不匹配");
     }
   }
 
