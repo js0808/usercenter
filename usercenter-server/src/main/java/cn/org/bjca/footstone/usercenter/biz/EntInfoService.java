@@ -22,6 +22,7 @@ import cn.org.bjca.footstone.usercenter.dao.mapper.EntInfoMapperCustom;
 import cn.org.bjca.footstone.usercenter.dao.mapper.EntPayVerifyRequestMapper;
 import cn.org.bjca.footstone.usercenter.dao.mapper.NotifyInfoMapper;
 import cn.org.bjca.footstone.usercenter.dao.model.AccountInfo;
+import cn.org.bjca.footstone.usercenter.dao.model.AccountInfoExample;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfo;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoAccountJoin;
 import cn.org.bjca.footstone.usercenter.dao.model.EntInfoExample;
@@ -30,6 +31,7 @@ import cn.org.bjca.footstone.usercenter.dao.model.EntPayVerifyRequest;
 import cn.org.bjca.footstone.usercenter.dao.model.EntPayVerifyRequestExample;
 import cn.org.bjca.footstone.usercenter.dao.model.NotifyInfo;
 import cn.org.bjca.footstone.usercenter.exceptions.BaseException;
+import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import cn.org.bjca.footstone.usercenter.vo.IdServiceBaseRespVo;
 import cn.org.bjca.footstone.usercenter.vo.NotifyInfoDataVo;
@@ -39,13 +41,15 @@ import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * @description:企业信息管理
@@ -141,15 +145,6 @@ public class EntInfoService {
     return entInfoMapperCustom.selectByUid(uid);
   }
 
-
-  private EntInfo getEntInfoByName(String name) {
-    EntInfoExample entInfoExample = new EntInfoExample();
-    entInfoExample.createCriteria().andNameEqualTo(name);
-
-    List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
-    return entInfoList.isEmpty() ? null : entInfoList.get(0);
-  }
-
   private EntInfo getEntInfoByRealName(String name) {
     EntInfoExample entInfoExample = new EntInfoExample();
     entInfoExample.createCriteria().andNameEqualTo(name).andRealNameFlagEqualTo(1);
@@ -173,13 +168,12 @@ public class EntInfoService {
     if (!StringUtils.equals(request.getRealNameType(), RealNameTypeEnum.ENT_PAY.value())) {
       throw new BaseException(ReturnCodeEnum.REALNAME_TYPE_ERROR);
     }
+    /** 检查企业标志 */
+    if (StringUtils.isBlank(request.getSocialCreditCode()) && StringUtils.isBlank(request.getOldName())) {
+      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "统一社会信用代码和原企业名称都为空");
+    }
     //检查账号
     getAccount(request.getUid());
-    //查询企业名是否已经实名认证
-    EntInfo checkEntInfo = getEntInfoByRealName(request.getName());
-    if (!isNull(checkEntInfo)) {
-      throw new BaseException(ReturnCodeEnum.ALREADY_REAL_NAME_CHECKED);
-    }
   }
 
   /**
@@ -295,34 +289,99 @@ public class EntInfoService {
   @Transactional(rollbackFor = Exception.class)
   public EntPayResponse entPay(EntPayRequest request) {
     checkRealNameParam(request);
-    //uid查询企业用户
-    EntInfo entInfo = getEntInfoByUid(request.getUid());
+    EntInfo existsEnt = getExistsEnt(request.getSocialCreditCode(), request.getOldName());
 
     //第一次做实名认证
-    if (isNull(entInfo)) {
+    if (isNull(existsEnt)) {
       //保存ent info
       EntInfo newEntInfo = new EntInfo();
       BeanCopy.beans(request, newEntInfo).copy();
       entInfoMapper.insertSelective(newEntInfo);
 
-      entInfo = newEntInfo;
+      existsEnt = newEntInfo;
     } else {
+      /** Ent 的 UID 和入参 UID 匹配？*/
+      validSameUID(request.getUid(), existsEnt.getId());
+
       //保存历史
-      saveHistory(entInfo);
+      saveHistory(existsEnt);
       //保存notify
       saveUpdateNotifyInfo(request.getUid());
-      BeanCopy.beans(request, entInfo).copy();
+      BeanCopy.beans(request, existsEnt).copy();
       //重置实名标识
-      entInfo.setRealNameFlag(0);
+      existsEnt.setRealNameFlag(0);
       /** 更新企业信息 */
-      updateEntInfoAndIncrementVersion(entInfo);
+      updateEntInfoAndIncrementVersion(existsEnt);
     }
     //调用身份核实-企业信息认证
     entRealNameVerify.checkEntBaseInfo(request);
-    String idsTransId = processEntPay(entInfo.getId(), request);
-    /** transId更新入EntInfo */
-    updateEntInfoTransId(entInfo, idsTransId);
+    String idsTransId = processEntPay(existsEnt.getId(), request);
+    /** Ent 绑定企业打款TransId */
+    bindEntInfoTransId(existsEnt, idsTransId);
     return EntPayResponse.builder().queryTransId(idsTransId).build();
+  }
+
+  /**
+   * 验证入参UID和企业UID是否一致
+   * @param requestUID NotBlank
+   * @param entID NotNull
+   */
+  private void validSameUID(Long requestUID, Integer entID) {
+
+    final AccountInfo accountByRealNameId = getAccountByRealNameId(entID);
+    final Long entUID = Optional.ofNullable(accountByRealNameId).map(AccountInfo::getUid).orElse(null);
+    if (Objects.isNull(accountByRealNameId) || requestUID.compareTo(accountByRealNameId.getUid()) != 0) {
+      log.error("实名认证的企业UID不匹配。入参UID:{},企业相关UID:{}", requestUID, entUID);
+      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "UID不匹配");
+    }
+  }
+
+  /**
+   * 企业ID认证过的Account
+   * @param entId
+   * @return AccountInfo
+   */
+  private AccountInfo getAccountByRealNameId(Integer entId) {
+    if (isNull(entId)) {
+      return null;
+    }
+    final AccountInfoExample accountInfoExample = new AccountInfoExample();
+    accountInfoExample.createCriteria().andRealnameIdEqualTo(entId);
+    final List<AccountInfo> accountInfos = accountInfoMapper.selectByExample(accountInfoExample);
+
+    return CollectionUtils.isEmpty(accountInfos) ? null : accountInfos.get(0);
+  }
+
+  /**
+   * 查找已存在的企业信息
+   * @param socialCreditCode
+   * @param oldName
+   * @return EntInfo
+   */
+  private EntInfo getExistsEnt(String socialCreditCode, String oldName) {
+    EntInfoExample example = new EntInfoExample();
+    /** 信用代码查 */
+    example.createCriteria().andSocialCreditCodeEqualTo(socialCreditCode);
+    List<EntInfo> entInfos = entInfoMapper.selectByExample(example);
+
+    /** 修改前的企业name查 */
+    if (CollectionUtils.isEmpty(entInfos) && StringUtils.isNotBlank(oldName)) {
+      example = new EntInfoExample();
+      example.createCriteria().andNameEqualTo(oldName);
+      entInfos = entInfoMapper.selectByExample(example);
+    }
+
+    if (CollectionUtils.isEmpty(entInfos)) {
+      log.error("查找企业信息，未找到历史记录。socialCreditCode:{},oldName:{}", socialCreditCode, oldName);
+      return null;
+    }
+
+    if (CollectionUtils.size(entInfos) > 1) {
+      log.error("查找企业信息，发现多条记录。socialCreditCode:{},oldName:{}", socialCreditCode, oldName);
+      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "找到匹配的多条记录");
+    }
+
+    return entInfos.get(0);
   }
 
   /**
@@ -330,7 +389,7 @@ public class EntInfoService {
    * @param entInfo
    * @param idsTransId
    */
-  private void updateEntInfoTransId(EntInfo entInfo, String idsTransId) {
+  private void bindEntInfoTransId(EntInfo entInfo, String idsTransId) {
     EntInfo po = new EntInfo();
     po.setId(entInfo.getId());
     po.setVersion(entInfo.getVersion());
