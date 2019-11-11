@@ -42,7 +42,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -300,7 +299,7 @@ public class EntInfoService {
 
       existsEnt = newEntInfo;
     } else {
-      /** Ent 的 UID 和入参 UID 匹配？*/
+      /** 已实名的Ent UID 和入参 UID 匹配？*/
       validSameUID(request.getUid(), existsEnt.getId());
 
       //保存历史
@@ -327,9 +326,14 @@ public class EntInfoService {
    * @param entID NotNull
    */
   private void validSameUID(Long requestUID, Integer entID) {
-
     final AccountInfo accountByRealNameId = getAccountByRealNameId(entID);
-    final Long entUID = Optional.ofNullable(accountByRealNameId).map(AccountInfo::getUid).orElse(null);
+    /** 已存在的企业信息，但是没有实名认证过 */
+    if (Objects.isNull(accountByRealNameId)) {
+      log.error("企业还没有通过实名认证。入参UID:{}", requestUID);
+      return;
+    }
+
+    final Long entUID = accountByRealNameId.getUid();
     if (Objects.isNull(accountByRealNameId) || requestUID.compareTo(accountByRealNameId.getUid()) != 0) {
       log.error("实名认证的企业UID不匹配。入参UID:{},企业相关UID:{}", requestUID, entUID);
       throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "入参UID和企业UID不匹配");
