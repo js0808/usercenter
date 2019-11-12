@@ -285,11 +285,8 @@ public class EntInfoService {
   /**
    * 发起打款认证
    */
-  @Transactional(rollbackFor = Exception.class)
   public EntPayResponse entPay(EntPayRequest request) {
     checkRealNameParam(request);
-    //调用身份核实-企业信息认证
-    entRealNameVerify.checkEntBaseInfo(request);
 
     EntInfo existsEnt = getExistsEnt(request.getSocialCreditCode(), request.getOldName());
 
@@ -313,10 +310,12 @@ public class EntInfoService {
       BeanCopy.beans(request, existsEnt).copy();
       //重置实名标识
       existsEnt.setRealNameFlag(0);
+      existsEnt.setVersion(existsEnt.getVersion() + 1);
       /** 更新企业信息 */
-      updateEntInfoAndIncrementVersion(existsEnt);
+      entInfoMapper.updateByPrimaryKeySelective(existsEnt);
     }
-
+    //调用身份核实-企业信息认证
+    entRealNameVerify.checkEntBaseInfo(request);
     String idsTransId = processEntPay(existsEnt.getId(), request);
     /** Ent 绑定企业打款TransId */
     bindEntInfoTransId(existsEnt, idsTransId);
@@ -400,10 +399,9 @@ public class EntInfoService {
   private void bindEntInfoTransId(EntInfo entInfo, String idsTransId) {
     EntInfo po = new EntInfo();
     po.setId(entInfo.getId());
-    po.setVersion(entInfo.getVersion());
     po.setRealNameIdsTransId(idsTransId);
-
-    updateEntInfoAndIncrementVersion(po);
+    po.setVersion(entInfo.getVersion() + 1);
+    entInfoMapper.updateByPrimaryKeySelective(entInfo);
   }
 
   /**
@@ -436,16 +434,14 @@ public class EntInfoService {
     //更新企业用户实名信息
     EntInfo updateEntInfo = new EntInfo();
     updateEntInfo.setId(entInfo.getId());
-    updateEntInfo.setVersion(entInfo.getVersion());
-
     updateEntInfo.setRealNameType(RealNameTypeEnum.ENT_PAY.value());
     updateEntInfo.setAccountName(verifyRequest.getAccountName());
     updateEntInfo.setBankAccount(verifyRequest.getBankAccount());
     updateEntInfo.setBankName(verifyRequest.getBankName());
     updateEntInfo.setBankAddressCode(verifyRequest.getBankAddressCode());
+    updateEntInfo.setVersion(entInfo.getVersion() + 1);
     updateEntInfo.setRealNameFlag(1);
-
-    updateEntInfoAndIncrementVersion(updateEntInfo);
+    entInfoMapper.updateByPrimaryKeySelective(updateEntInfo);
   }
 
   /**
