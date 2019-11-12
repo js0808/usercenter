@@ -396,12 +396,12 @@ public class EntInfoService {
    * @param entInfo
    * @param idsTransId
    */
-  private void bindEntInfoTransId(EntInfo entInfo, String idsTransId) {
+  private void bindEntInfoTransId(final EntInfo entInfo,final String idsTransId) {
     EntInfo po = new EntInfo();
     po.setId(entInfo.getId());
     po.setRealNameIdsTransId(idsTransId);
     po.setVersion(entInfo.getVersion() + 1);
-    entInfoMapper.updateByPrimaryKeySelective(entInfo);
+    entInfoMapper.updateByPrimaryKeySelective(po);
   }
 
   /**
