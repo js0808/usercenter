@@ -371,7 +371,8 @@ public class EntInfoService {
     /** 修改前的企业name查 */
     if (CollectionUtils.isEmpty(entInfos) && StringUtils.isNotBlank(oldName)) {
       example = new EntInfoExample();
-      example.createCriteria().andNameEqualTo(oldName);
+      /** 同步来的企业，实名类型为OTHER */
+      example.createCriteria().andRealNameTypeEqualTo(RealNameTypeEnum.OTHER.value()).andNameEqualTo(oldName);
       entInfos = entInfoMapper.selectByExample(example);
     }
 
