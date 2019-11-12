@@ -288,6 +288,9 @@ public class EntInfoService {
   @Transactional(rollbackFor = Exception.class)
   public EntPayResponse entPay(EntPayRequest request) {
     checkRealNameParam(request);
+    //调用身份核实-企业信息认证
+    entRealNameVerify.checkEntBaseInfo(request);
+
     EntInfo existsEnt = getExistsEnt(request.getSocialCreditCode(), request.getOldName());
 
     //第一次做实名认证
@@ -313,8 +316,7 @@ public class EntInfoService {
       /** 更新企业信息 */
       updateEntInfoAndIncrementVersion(existsEnt);
     }
-    //调用身份核实-企业信息认证
-    entRealNameVerify.checkEntBaseInfo(request);
+
     String idsTransId = processEntPay(existsEnt.getId(), request);
     /** Ent 绑定企业打款TransId */
     bindEntInfoTransId(existsEnt, idsTransId);
@@ -449,7 +451,6 @@ public class EntInfoService {
   /**
    * 使用附言中的验证码，验证企业打款，验证通过后用户实名认证通过
    */
-  @Transactional(rollbackFor = Exception.class)
   public void entPayQuery(EntPayQueryRequest request) {
     //检查账号
     AccountInfo account = getAccount(request.getUid());
