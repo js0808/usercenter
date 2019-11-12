@@ -369,7 +369,7 @@ public class EntInfoService {
     example.createCriteria().andSocialCreditCodeEqualTo(socialCreditCode);
     List<EntInfo> entInfos = entInfoMapper.selectByExample(example);
 
-    /** 修改前的企业name查 */
+    /** SocialCreditCode找不到，用oldName（修改前的企业name）查 */
     if (CollectionUtils.isEmpty(entInfos) && StringUtils.isNotBlank(oldName)) {
       example = new EntInfoExample();
       /** 同步来的企业，实名类型为OTHER */
