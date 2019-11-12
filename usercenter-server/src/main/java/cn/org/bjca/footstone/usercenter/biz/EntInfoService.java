@@ -294,6 +294,7 @@ public class EntInfoService {
     if (isNull(existsEnt)) {
       //保存ent info
       EntInfo newEntInfo = new EntInfo();
+      newEntInfo.setVersion(1);
       BeanCopy.beans(request, newEntInfo).copy();
       entInfoMapper.insertSelective(newEntInfo);
 
@@ -334,9 +335,9 @@ public class EntInfoService {
     }
 
     final Long entUID = accountByRealNameId.getUid();
-    if (Objects.isNull(accountByRealNameId) || requestUID.compareTo(accountByRealNameId.getUid()) != 0) {
+    if (requestUID.compareTo(entUID) != 0) {
       log.error("实名认证的企业UID不匹配。入参UID:{},企业相关UID:{}", requestUID, entUID);
-      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "入参UID和企业UID不匹配");
+      throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "入参UID"+requestUID+"和企业UID"+entUID+"不匹配");
     }
   }
 
