@@ -3,3 +3,6 @@ ADD COLUMN `real_name_ids_trans_id` varchar(64) NOT NULL DEFAULT '' COMMENT '身
 
 ALTER TABLE `usercenter`.`ent_info`
 MODIFY COLUMN `update_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) AFTER `create_time`;
+
+ALTER TABLE `usercenter`.`ent_info`
+ADD INDEX `idx_social_credit_code`(`social_credit_code`);
