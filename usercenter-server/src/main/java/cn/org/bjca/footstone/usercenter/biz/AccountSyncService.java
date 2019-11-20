@@ -140,6 +140,7 @@ public class AccountSyncService {
     entInfo.setRealNameFlag(request.getRealNameFlag());
     RealNameTypeEnum byName = RealNameTypeEnum.findByName(request.getRealNameType());
     if (byName == null) {
+      log.warn("realNameType {} cannot be find", request.getRealNameType());
       throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
     }
     entInfo.setRealNameType(request.getRealNameType());
@@ -155,6 +156,7 @@ public class AccountSyncService {
     entInfo.setAppId(request.getAppId());
     AccountStatusEnum accountStatusEnum = AccountStatusEnum.findByName(request.getStatus());
     if (accountStatusEnum == null) {
+      log.warn("accountStatusEnum {} cannot be find", request.getStatus());
       throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
     }
     entInfo.setStatus(request.getStatus());
