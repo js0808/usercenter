@@ -119,13 +119,12 @@ public class AccountSyncService {
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
     boolean ifExists = false;
     if (!CollectionUtils.isEmpty(entInfoList)) {
+      ifExists = true;
       if (!request.getAppId()
           .equals(entInfoList.get(0).getAppId())) {//如果库里已经有这个企业名称了，但不是同一个appId，则不允许修改，直接返回
         response = new EntSyncResponse();
         response.setEid(entInfoList.get(0).getId());
         return response;
-      } else {
-        ifExists = true;
       }
     }
     EntInfo entInfo = new EntInfo();
@@ -164,7 +163,7 @@ public class AccountSyncService {
     int result = 0;
     if (ifExists) {
       entInfo.setId(entInfoList.get(0).getId());
-      entInfo.setVersion(entInfoList.get(0).getId() + 1);
+      entInfo.setVersion(entInfoList.get(0).getVersion() + 1);
       result = entInfoMapper.updateByPrimaryKeySelective(entInfo);
     } else {
       entInfo.setVersion(1);
