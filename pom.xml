@@ -25,6 +25,7 @@
     <commons.codec.version>1.10</commons.codec.version>
     <httpcomponents.version>4.5.8</httpcomponents.version>
     <bouncycastle.version>1.46</bouncycastle.version>
+    <fastjson.version>1.2.62</fastjson.version>
   </properties>
 
   <modules>

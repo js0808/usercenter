@@ -24,6 +24,10 @@ public class EntPayRequest extends EntInfoBaseRequest {
   @Length(max = 64)
   private String realNameType = null;
 
+  @ApiModelProperty(value = "原企业名称")
+  @Length(max = 255)
+  private String oldName;
+
   @ApiModelProperty(value = "企业名称", required = true)
   @NotBlank
   @Length(max = 255)
