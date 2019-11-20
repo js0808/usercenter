@@ -117,6 +117,7 @@ public class AccountSyncService {
          */
         .andRealNameFlagEqualTo(1);
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
+    log.info("entInfoList size = {}", entInfoList == null ? 0 : entInfoList.size());
     boolean ifExists = false;
     if (!CollectionUtils.isEmpty(entInfoList)) {
       ifExists = true;
@@ -127,6 +128,7 @@ public class AccountSyncService {
         return response;
       }
     }
+    log.info("ifExists = {}", ifExists);
     EntInfo entInfo = new EntInfo();
     entInfo.setHeadImgUrl(request.getHeadImgUrl());
     entInfo.setName(request.getName());
