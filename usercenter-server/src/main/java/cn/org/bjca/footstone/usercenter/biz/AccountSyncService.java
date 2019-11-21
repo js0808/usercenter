@@ -138,13 +138,8 @@ public class AccountSyncService {
     entInfo.setSocialCreditCode(request.getSocialCreditCode());
     entInfo.setLegalName(request.getLegalName());
     entInfo.setLegalIdNum(request.getLegalidNum());
-    entInfo.setRealNameFlag(request.getRealNameFlag());
-    RealNameTypeEnum byName = RealNameTypeEnum.findByName(request.getRealNameType());
-    if (byName == null) {
-      log.warn("realNameType {} cannot be find", request.getRealNameType());
-      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
-    }
-    entInfo.setRealNameType(request.getRealNameType());
+    entInfo.setRealNameFlag(1);
+    entInfo.setRealNameType(RealNameTypeEnum.OTHER.value());
     entInfo.setReviewFlag(request.getReviewFlag());
     entInfo.setBizLicenseImageUrl(request.getBizLicenseImageUrl());
     entInfo.setOrgCodeImageUrl(request.getOrgCodeImageUrl());

@@ -49,8 +49,6 @@ public class AccountSyncServiceTest extends BaseTest {
     request.setSocialCreditCode("");
     request.setLegalName("");
     request.setLegalidNum("");
-    request.setRealNameFlag(1);
-    request.setRealNameType("");
     request.setReviewFlag(1);
     request.setBizLicenseImageUrl("");
     request.setOrgCodeImageUrl("");
