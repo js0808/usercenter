@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -59,7 +60,12 @@ public class GloableExceptionHandler {
       log.error("异常信息:", ex);
       return new ReturnResult(ReturnCodeEnum.SQL_EXCEPTION.value(),
           ReturnCodeEnum.SQL_EXCEPTION.getDesc());
+    } else if (ex instanceof HttpMessageNotReadableException){
+      log.error("返回异常 {} {}",ReturnCodeEnum.REQ_PARAM_ERR,ex);
+      log.error("异常信息:", ex);
+      return new ReturnResult(ReturnCodeEnum.REQ_PARAM_ERR.value(),ReturnCodeEnum.REQ_PARAM_ERR.getDesc());
     }
+
     return getResponseEntity(ex, request, returnCodeEnum);
   }
 

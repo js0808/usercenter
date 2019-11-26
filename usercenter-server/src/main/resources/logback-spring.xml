@@ -28,13 +28,13 @@
     </appender>
 
     <appender name="async_all_log" class="ch.qos.logback.classic.AsyncAppender">
-
         <discardingThreshold>0</discardingThreshold>
         <queueSize>1024</queueSize>
         <appender-ref ref="all_log"/>
     </appender>
+    
     <root level="INFO">
-        <appender-ref ref="all_log"/>
+        <appender-ref ref="async_all_log"/>
         <!--<appender-ref ref="STDOUT"/>-->
     </root>
 </configuration>

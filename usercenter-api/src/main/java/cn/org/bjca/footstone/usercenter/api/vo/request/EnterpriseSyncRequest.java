@@ -31,14 +31,7 @@ public class EnterpriseSyncRequest {
   private String socialCreditCode;
   private String legalName;
   private String legalidNum;
-  /**
-   * 是否实名 1、实名，0未实名
-   */
-  private Integer realNameFlag;
-  /**
-   * @see cn.org.bjca.footstone.usercenter.api.enmus.RealNameTypeEnum
-   */
-  private String realNameType;
+
   /**
    * 是否人工审核 0未人工审核、1人工审核
    */

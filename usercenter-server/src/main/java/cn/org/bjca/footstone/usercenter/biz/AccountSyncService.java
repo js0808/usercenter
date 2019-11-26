@@ -109,19 +109,26 @@ public class AccountSyncService {
   public EntSyncResponse syncEnt(EnterpriseSyncRequest request) {
     EntSyncResponse response = null;
     EntInfoExample entInfoExample = new EntInfoExample();
-    entInfoExample.createCriteria().andNameEqualTo(request.getName());
+
+    entInfoExample.createCriteria().andNameEqualTo(request.getName())
+        /**
+         *  通过同步接口过来的企业默认是已实名状态，但是有通过其他方式录入进来的企业信息（名称相同），还在走审核流程，
+         *  所以实名状态为未实名，所以如果有的话，需要返回已实名的企业信息。
+         */
+        .andRealNameFlagEqualTo(1);
     List<EntInfo> entInfoList = entInfoMapper.selectByExample(entInfoExample);
+    log.info("entInfoList size = {}", entInfoList == null ? 0 : entInfoList.size());
     boolean ifExists = false;
     if (!CollectionUtils.isEmpty(entInfoList)) {
+      ifExists = true;
       if (!request.getAppId()
-          .equals(entInfoList.get(0).getAppId())) {//如果库里已经有这个企业名称了，但是不是一个appid，则不允许修改，直接返回
+          .equals(entInfoList.get(0).getAppId())) {//如果库里已经有这个企业名称了，但不是同一个appId，则不允许修改，直接返回
         response = new EntSyncResponse();
         response.setEid(entInfoList.get(0).getId());
         return response;
-      } else {
-        ifExists = true;
       }
     }
+    log.info("ifExists = {}", ifExists);
     EntInfo entInfo = new EntInfo();
     entInfo.setHeadImgUrl(request.getHeadImgUrl());
     entInfo.setName(request.getName());
@@ -131,12 +138,8 @@ public class AccountSyncService {
     entInfo.setSocialCreditCode(request.getSocialCreditCode());
     entInfo.setLegalName(request.getLegalName());
     entInfo.setLegalIdNum(request.getLegalidNum());
-    entInfo.setRealNameFlag(request.getRealNameFlag());
-    RealNameTypeEnum byName = RealNameTypeEnum.findByName(request.getRealNameType());
-    if (byName == null) {
-      throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
-    }
-    entInfo.setRealNameType(request.getRealNameType());
+    entInfo.setRealNameFlag(1);
+    entInfo.setRealNameType(RealNameTypeEnum.OTHER.value());
     entInfo.setReviewFlag(request.getReviewFlag());
     entInfo.setBizLicenseImageUrl(request.getBizLicenseImageUrl());
     entInfo.setOrgCodeImageUrl(request.getOrgCodeImageUrl());
@@ -149,6 +152,7 @@ public class AccountSyncService {
     entInfo.setAppId(request.getAppId());
     AccountStatusEnum accountStatusEnum = AccountStatusEnum.findByName(request.getStatus());
     if (accountStatusEnum == null) {
+      log.warn("accountStatusEnum {} cannot be find", request.getStatus());
       throw new BjcaBizException(ReturnCodeEnum.REQ_PARAM_ERR);
     }
     entInfo.setStatus(request.getStatus());
@@ -156,7 +160,7 @@ public class AccountSyncService {
     int result = 0;
     if (ifExists) {
       entInfo.setId(entInfoList.get(0).getId());
-      entInfo.setVersion(entInfoList.get(0).getId() + 1);
+      entInfo.setVersion(entInfoList.get(0).getVersion() + 1);
       result = entInfoMapper.updateByPrimaryKeySelective(entInfo);
     } else {
       entInfo.setVersion(1);
