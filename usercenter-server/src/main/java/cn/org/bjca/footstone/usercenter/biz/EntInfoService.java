@@ -42,7 +42,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -387,19 +386,13 @@ public class EntInfoService {
     /**
      * 已实名企业
      */
-    final List<EntInfo> realNames = entInfos.stream().filter(entInfo -> Objects.nonNull(entInfo.getRealNameFlag()))
-        .filter(entInfo -> entInfo.getRealNameFlag().intValue() == 1)
-        .collect(Collectors.toList());
-    final int realNameSize = CollectionUtils.size(realNames);
-    if (realNameSize > 1) {
+    final long realNameCount = entInfos.stream().filter(entInfo -> Objects.nonNull(entInfo.getRealNameFlag()))
+        .filter(entInfo -> entInfo.getRealNameFlag().intValue() == 1).count();
+    if (realNameCount > 1) {
       log.error("查找企业信息，发现多条已实名记录。socialCreditCode:{},oldName:{}", socialCreditCode, oldName);
       throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "找到匹配的多条记录");
     }
-    if (realNameSize == 1) {
-      //如果恰好有一条实名认证记录，返回
-      return realNames.get(0);
-    }
-    //如果实名记录为空，取最后一条未实名认证的记录返回
+
     return entInfos.get(CollectionUtils.size(entInfos) - 1);
   }
 
