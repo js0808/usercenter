@@ -383,12 +383,17 @@ public class EntInfoService {
       return null;
     }
 
-    if (CollectionUtils.size(entInfos) > 1) {
-      log.error("查找企业信息，发现多条记录。socialCreditCode:{},oldName:{}", socialCreditCode, oldName);
+    /**
+     * 已实名企业
+     */
+    final long realNameCount = entInfos.stream().filter(entInfo -> Objects.nonNull(entInfo.getRealNameFlag()))
+        .filter(entInfo -> entInfo.getRealNameFlag().intValue() == 1).count();
+    if (realNameCount > 1) {
+      log.error("查找企业信息，发现多条已实名记录。socialCreditCode:{},oldName:{}", socialCreditCode, oldName);
       throw new BjcaBizException(ReturnCodeEnum.REALNAME_PARAM_ERROR, "找到匹配的多条记录");
     }
 
-    return entInfos.get(0);
+    return entInfos.get(CollectionUtils.size(entInfos) - 1);
   }
 
   /**
