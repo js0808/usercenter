@@ -39,6 +39,7 @@ spring:
     host: @redis.host@
     port: @redis.port@
     password: @redis.password@
+    database: @redis.database@
     pool:
       max-active: 16
       max-idle: 16
