@@ -43,8 +43,10 @@ import com.google.common.base.Strings;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import jodd.bean.BeanCopy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -68,6 +70,11 @@ public class UserInfoService {
 
   private static final BeanCopier USERINFO2HISTORY = BeanCopier
       .create(UserInfo.class, UserInfoHistory.class, false);
+
+  private static final BeanCopier USERINFOACCOUNTJOIN2RESPONSE = BeanCopier
+      .create(UserInfoAccountJoin.class, QueryUserInfoResponse.class, false);
+
+
   @Autowired
   private DataSourceTransactionManager transactionManager;
 
@@ -344,7 +351,7 @@ public class UserInfoService {
       return null;
     }
     QueryUserInfoResponse rsp = new QueryUserInfoResponse();
-    USERINFO2RESPONSE.copy(userInfo, rsp, null);
+    USERINFOACCOUNTJOIN2RESPONSE.copy(userInfo, rsp, null);
     return rsp;
   }
 }
