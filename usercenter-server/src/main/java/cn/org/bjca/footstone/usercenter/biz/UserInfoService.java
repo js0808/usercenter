@@ -68,6 +68,11 @@ public class UserInfoService {
 
   private static final BeanCopier USERINFO2HISTORY = BeanCopier
       .create(UserInfo.class, UserInfoHistory.class, false);
+
+  private static final BeanCopier USERINFOACCOUNTJOIN2RESPONSE = BeanCopier
+      .create(UserInfoAccountJoin.class, QueryUserInfoResponse.class, false);
+
+
   @Autowired
   private DataSourceTransactionManager transactionManager;
 
@@ -344,7 +349,7 @@ public class UserInfoService {
       return null;
     }
     QueryUserInfoResponse rsp = new QueryUserInfoResponse();
-    USERINFO2RESPONSE.copy(userInfo, rsp, null);
+    USERINFOACCOUNTJOIN2RESPONSE.copy(userInfo, rsp, null);
     return rsp;
   }
 }
