@@ -1,5 +1,6 @@
 #!/bin/bash
 
+runOnBackground=${2:-true}
 APP_NAME="bjca-app-usercenter"
 
 #取当前目录
@@ -71,9 +72,14 @@ start(){
 				echo "$APP_NAME is already running."
 				exit 1
 		else
-	    	cd $APP_PATH
+	    		cd $APP_PATH
+			if [ "$runOnBackground" = "true" ]; then
 				nohup java $JAVA_OPTS -cp $CLASS_PATH -jar $DEFAULT_JAR $APP_NAME > $LOG_PATH/$APP_NAME-console.log 2>&1 &
 				echo "$APP_NAME is started."
+			else
+				java $JAVA_OPTS -cp $CLASS_PATH -jar $DEFAULT_JAR $APP_NAME
+ 
+			fi
 		fi
 }
 
