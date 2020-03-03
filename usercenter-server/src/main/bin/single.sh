@@ -9,7 +9,7 @@ HOME_PATH="$HOME"
 
 
 # 使用到的基本变量
-APP_BASE_PATH:=`cd "$(dirname "$0")"; cd ..; pwd`
+APP_BASE_PATH=`cd "$(dirname "$0")"; cd ..; pwd`
 PIDFILEDIR="$HOME_PATH/.back/${APP_NAME}"
 APP_PIDFILE="$PIDFILEDIR/pid"
 
