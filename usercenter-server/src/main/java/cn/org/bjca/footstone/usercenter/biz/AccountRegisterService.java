@@ -12,6 +12,7 @@ import cn.org.bjca.footstone.usercenter.api.vo.request.ModifyPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.RegisterCertRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.request.ResetPasswordRequest;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountCheckResponse;
+import cn.org.bjca.footstone.usercenter.api.vo.response.AccountInfoCheckResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.AccountRegisterResponse;
 import cn.org.bjca.footstone.usercenter.api.vo.response.CertRegisterResponse;
 import cn.org.bjca.footstone.usercenter.biz.signverify.VerifySignCertService;
@@ -21,8 +22,10 @@ import cn.org.bjca.footstone.usercenter.exceptions.BjcaBizException;
 import cn.org.bjca.footstone.usercenter.util.PwdUtil;
 import cn.org.bjca.footstone.usercenter.util.SnowFlake;
 import java.util.Date;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.LockedException;
@@ -221,7 +224,12 @@ public class AccountRegisterService {
 
   public AccountCheckResponse accountInfo(String account) {
     AccountInfo accountInfo = accountInfoService.findAccountInfoByAccount(account);
-    return (accountInfo == null) ? AccountCheckResponse.of(false, null)
-        : AccountCheckResponse.of(true, accountInfo.getAccount());
+    if (Objects.isNull(accountInfo)) {
+      return AccountCheckResponse.of(false, null, null);
+    }
+
+    final AccountInfoCheckResponse accountInfoResponse = new AccountInfoCheckResponse();
+    BeanUtils.copyProperties(accountInfo, accountInfoResponse);
+    return AccountCheckResponse.of(true, accountInfo.getAccount(), accountInfoResponse);
   }
 }
