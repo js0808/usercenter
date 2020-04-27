@@ -1,6 +1,6 @@
 #!/bin/bash
 
-runOnBackground=${2:-true}
+runOnBackground=${runOnBackground:-true}
 APP_NAME="bjca-app-usercenter"
 
 #取当前目录
